@@ -1,0 +1,80 @@
+page{
+  background-color: #ADD8E6;
+}
+.top_container{
+  background-color: #00BFFF;
+  height: 300rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 30rpx;
+  border-radius: 10rpx;
+}
+.creat_container{
+  height: 150rpx;
+  width: 150rpx;
+  margin-top: 100rpx;
+  margin-left: 20rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.creat_scan_image{
+  height: 90rpx;
+  width: 90rpx;
+}
+.scan_container{
+  height: 150rpx;
+  width: 150rpx;
+  margin-top: 100rpx;
+  margin-left:410rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.activity_container{
+  background-color: 	#D4F2E7;
+  border-radius: 10rpx;
+  height: 150rpx;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 30rpx;
+}
+.activity_text{
+  font-size: 60rpx;
+}
+
+.bottom_container{
+  border-radius: 15rpx;
+  background-color: 	#008080;
+  position: fixed;
+  bottom: 0;
+  height: 140rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+.navigation_cell{
+  width: 33%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-style:solid;
+}
+.navigation_image{
+  margin-top: 10rpx;
+  height: 70rpx;
+  width: 70rpx;
+}
+.navigation_text{
+  font-size: 40rpx;
+  font-weight: 545;
+}

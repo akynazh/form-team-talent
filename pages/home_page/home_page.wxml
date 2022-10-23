@@ -1,0 +1,30 @@
+<!--当前剩余任务：文字-->
+<view class="top_container">
+  <view class="current_task">当前剩余任务:</view>
+</view>
+
+
+<!--任务列表样式-->
+<block wx:if="{{my_task_number!=0}}" wx:for="{{my_task}}" >
+  <view class="task_container" bindtap="ToGroupDetail" data-task="{{item}}">
+    <view class="task_text">{{item.name}}</view>
+  </view>
+</block>
+
+<!--底部导航栏-->
+<view class="bottom_container">
+  <view class="navigation_cell" bindtap="ToHomePage">
+    <image class="navigation_image" src="/image_resources/home_page.png"></image>
+    <view class="navigation_text">主页</view>
+  </view>
+
+  <view class="navigation_cell" bindtap="ToActivityPage">
+    <image class="navigation_image" src="/image_resources/activity_page.png"></image>
+    <view class="navigation_text">活动</view>
+  </view>
+
+  <view class="navigation_cell" bindtap="ToMePage">
+    <image class="navigation_image" src="/image_resources/me_page.png"></image>
+    <view class="navigation_text">我的</view>
+  </view>
+</view>
