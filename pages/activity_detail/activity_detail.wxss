@@ -1,0 +1,106 @@
+page{
+  background-color: 	#D4F2E7;
+}
+.top_container{
+  background-color: 	#20B2AA;
+  height: 80rpx;
+  width: 100%;
+  padding-top: 70rpx;
+  padding-left: 60rpx;
+  border-radius: 10rpx;
+}
+.return_button{
+  height: 40rpx;
+  width: 25rpx;
+}
+.information_container{
+  width: 680rpx;
+  padding-left: 30rpx;
+  padding-right: 30rpx;
+  padding-bottom: 50rpx;
+  padding-top: 50rpx;
+}
+.name_QR_container{
+  display: flex;
+  flex-direction: row;
+}
+.activity_theme{
+  margin-left: 50rpx;
+  font-size: 60rpx;
+  font-weight: 600;
+}
+.QR_code{
+  position: absolute;
+  right: 100rpx;
+  height: 100rpx;
+  width: 100rpx;
+}
+.activity_holder{
+  display: flex;
+  flex-direction: row;
+  margin-top: 20rpx;
+  margin-left: 50rpx;
+}
+.activity_holder_text{
+  font-size: 40rpx;
+}
+.activity_text{
+  margin-left: 50rpx;
+  margin-top: 40rpx;
+  font-size: 50rpx;
+  font-weight: 500;
+}
+.activity_content{
+  margin-top: 10rpx;
+  margin-left: 50rpx;
+  margin-bottom: 40rpx;
+  margin-right: 30rpx;
+  padding: 15rpx;
+  border-style: solid;
+  border-radius: 10rpx;
+}
+.group_contaier{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.add_group{
+  height:100rpx;
+  width: 100rpx;
+  margin-top: 50rpx;
+  margin-left: 300rpx;
+}
+.group_information{
+  margin-top: 50rpx;
+  margin-left: 50rpx;
+  margin-right: 30rpx;
+}
+.group_information{
+  display: flex;
+  flex-direction: row;
+  border-style: solid;
+  border-radius: 10rpx;
+  height: 100rpx;
+  font-size: 45rpx;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+.group_name{
+  margin-left: 20rpx;
+}
+.gourp_person_number{
+  position: absolute;
+  right: 100rpx;
+}
+.comple_buttom{
+  margin-top: 300rpx;
+  margin-left: 490rpx;
+  margin-bottom: 100rpx;
+  margin-right: 20rpx;
+  text-align: center;
+  border-style: solid;
+  border-radius: 10rpx;
+  font-size: 50rpx;
+  font-weight: 700;
+  padding: 10rpx;
+}

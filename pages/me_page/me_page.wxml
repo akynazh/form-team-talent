@@ -1,0 +1,36 @@
+<!--顶部头像与昵称-->
+<view class="top_container" >
+  <view class="portrait_contianer">
+    <image class="portrait_image" src="{{me_avatar}}"></image>
+  </view>
+  <view class="nickname_text">{{me_name}}</view>
+</view>
+
+<!--服务事项-->
+<view class="service_container" bindtap="ToPersonInformation">
+  <view class="service_text">修改个人信息</view>
+</view>
+
+<!--
+<view class="service_container">
+  <view class="service_text">我的小组</view>
+</view>
+-->
+
+<!--底部导航栏-->
+<view class="bottom_container" bindtap="ToHomePage">
+  <view class="navigation_cell">
+    <image class="navigation_image" src="/image_resources/home_page.png"></image>
+    <view class="navigation_text">主页</view>
+  </view>
+
+  <view class="navigation_cell" bindtap="ToActivityPage">
+    <image class="navigation_image" src="/image_resources/activity_page.png"></image>
+    <view class="navigation_text">活动</view>
+  </view>
+
+  <view class="navigation_cell" bindtap="ToMePage">
+    <image class="navigation_image" src="/image_resources/me_page.png"></image>
+    <view class="navigation_text">我的</view>
+  </view>
+</view>
