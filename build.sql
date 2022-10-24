@@ -1,6 +1,6 @@
-CREATE DATABASE form_group_talent;
+CREATE DATABASE form_team_talent;
 
-USE form_group_talent;
+USE form_team_talent;
 
 DROP TABLE IF EXISTS t_user;
 CREATE TABLE t_user (
