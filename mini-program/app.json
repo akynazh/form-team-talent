@@ -7,8 +7,7 @@
     "pages/activity_creat/activity_creat",
     "pages/person_information/person_information",
     "pages/activity_detail/activity_detail",
-    "pages/group_detail/group_detail",
-    "pages/auth/auth"
+    "pages/group_detail/group_detail"
   ],
   "window": {
     "backgroundTextStyle": "light",

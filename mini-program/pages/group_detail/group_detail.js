@@ -1,12 +1,8 @@
 // pages/group_detail/group_detail.js
 
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-    group_talk:null,/**（未做）设置云端数据为默认值 */
+    group_talk:null,
     group_leader:'xyz',
     group_id:'s777',
     group_name:'weixinxiaoch',

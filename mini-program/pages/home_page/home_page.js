@@ -1,6 +1,5 @@
 // pages/home_page/home_page.js
 const app = getApp()
-const {auth} = require('../../utils/auth')
 const {toMePage, toHomePage, toActivityPage} = require('../../utils/nav')
 
 Page({
