@@ -1,9 +1,5 @@
 // pages/person_information/person_information.js
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
     me_name:'wft',/*(未做)进入页面时设置为云端值 */
     me_student_number:'sds',

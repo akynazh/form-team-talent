@@ -1,2 +1,2 @@
-
-<button bindtap="getInfo" class="position">授权登录</button>
+<!--pages/auth/auth.wxml-->
+<text>pages/auth/auth.wxml</text>

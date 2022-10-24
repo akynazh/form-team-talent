@@ -1,6 +1,5 @@
 // pages/activity_creat/activity_creat.js
 Page({
-
   /**
    * 页面的初始数据
    */

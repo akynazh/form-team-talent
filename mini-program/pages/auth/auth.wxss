@@ -1,4 +1,0 @@
-/* pages/auth/auth.wxss */
-.position{
-  margin-top: 500rpx;
-}
