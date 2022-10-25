@@ -8,12 +8,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 @Data
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("t_group")
-public class Group {
+public class Group implements Serializable {
     @TableId(type = IdType.AUTO)
     private Long g_id;
     private String g_name;

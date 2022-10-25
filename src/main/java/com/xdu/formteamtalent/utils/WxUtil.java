@@ -1,5 +1,6 @@
 package com.xdu.formteamtalent.utils;
 
+import cn.hutool.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -8,18 +9,40 @@ import java.util.Map;
 
 @Component
 public class WxUtil {
-    private final String getOpenIdUrl = "https://api.weixin.qq.com/sns/jscode2session";
-    @Value("wx.appId")
-    private String appId;
-    @Value("wx.appSecret")
-    private String appSecret;
+    private static String getOpenIdUrl;
+    private static String appId;
+    private static String appSecret;
 
-    public String getOpenId(String code) {
+    @Value("${wx.appId}")
+    public void setAppId(String appId) {
+        WxUtil.appId = appId;
+    }
+    @Value("${wx.appSecret}")
+    public void setAppSecret(String appSecret) {
+        WxUtil.appSecret = appSecret;
+    }
+
+    @Value("${wx.getOpenIdUrl}")
+    public void setGetOpenIdUrl(String getOpenIdUrl) {
+        WxUtil.getOpenIdUrl = getOpenIdUrl;
+    }
+
+    /**
+     * 获取openId
+     * @param code wx.login()之后获取得到的code
+     * @return openid
+     */
+    public static String getOpenId(String code) {
         Map<String, String> params = new HashMap<>();
         params.put("appid", appId);
         params.put("secret", appSecret);
         params.put("js_code", code);
         params.put("grant_type", "authorization_code");
-        return OkHttpUtil.get(getOpenIdUrl, params);
+        JSONObject jsonObject = OkHttpUtil.get(getOpenIdUrl, params);
+        if (jsonObject != null) {
+            return (String) jsonObject.get("openid");
+        } else {
+            return null;
+        }
     }
 }
