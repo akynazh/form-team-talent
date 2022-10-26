@@ -29,10 +29,10 @@ server:
 
 wx:
   appId: wx2321b1cd8170b56e
-  appSecret: f391ea6aaf8ba743249e5957cbff87da
+  appSecret: 0b6c5138b800294b355c3da49824613d
   getOpenIdUrl: https://api.weixin.qq.com/sns/jscode2session
 
 auth:
   jwt:
-    secret: dasfjlsajdlkeeawrljawr213jfsad
+    secret: xdudasfjlsajdlkeeawrljawr213jfsadafd
     expire: 43200

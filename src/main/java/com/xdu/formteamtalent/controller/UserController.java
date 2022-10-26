@@ -43,7 +43,7 @@ public class UserController {
 
     @PostMapping("/api/user/auth")
     public RestfulResponse auth(@RequestParam("code") String code, HttpServletResponse resp) {
-        String openId = WxUtil.getOpenId(code);
+        String openId = WxUtil.getOpenIdByCode(code);
         if (openId != null) {
             User user = userService.getOne(new QueryWrapper<User>().eq("u_open_id", openId));
             if (user == null) {
@@ -61,11 +61,8 @@ public class UserController {
     @PostMapping("/api/user/update")
     @RequiresAuthentication
     public RestfulResponse update(User user) {
-        Subject subject = SecurityUtils.getSubject();
-        Object principal = subject.getPrincipal();
-        AccountProfile profile = JSONUtil.parse(principal).toBean(AccountProfile.class);
         UpdateWrapper<User> wrapper = new UpdateWrapper<>();
-        wrapper.eq("u_open_id", profile.getU_open_id());
+        wrapper.eq("u_open_id", WxUtil.getOpenId());
         if (userService.update(user, wrapper)) {
             return RestfulResponse.success();
         } else {

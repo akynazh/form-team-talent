@@ -43,3 +43,6 @@ replay_pid*
 *.iml
 .idea
 out
+
+application.yaml
+application.properties

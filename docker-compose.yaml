@@ -1,0 +1,32 @@
+version: '2.4.1'
+services:
+  mysql-server:
+    image: mysql:8
+    container_name: mysql-server
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: '658766@Jzh'
+    volumes: # 需要挂载的文件卷，用于容器与主机之间共享文件
+      - /docker/mysql/data:/var/lib/mysql # 数据挂载
+      - /docker/mysql/conf:/etc/mysql/conf.d # 配置挂载
+      - /docker/mysql/init:/docker-entrypoint-initdb.d # 初始化sql挂载
+    restart: always
+    command: # docker run {args}
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      --explicit_defaults_for_timestamp=true
+      --lower_case_table_names=1
+  form-team-talent:
+    container_name: form-team-talent
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - /docker/app/form-team-talent:/docker/app/form-team-talent
+    depends_on:
+      - mysql-server
+    ports:
+      - 8080:8080
+    restart: always
