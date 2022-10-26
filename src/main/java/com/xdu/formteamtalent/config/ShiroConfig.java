@@ -21,7 +21,6 @@ import java.util.Map;
 @Configuration
 public class ShiroConfig {
     final JwtFilter jwtFilter;
-    private int expire;
 
     @Autowired
     public ShiroConfig(JwtFilter jwtFilter) {

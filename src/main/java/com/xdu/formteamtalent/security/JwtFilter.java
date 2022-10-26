@@ -21,17 +21,8 @@ import java.io.IOException;
 
 @Component
 public class JwtFilter extends AuthenticatingFilter {
-    private JwtUtil jwtUtil;
-
-    @Autowired
-    public void setJwtUtils(JwtUtil jwtUtil) {
-        this.jwtUtil = jwtUtil;
-    }
-
     /**
-     * @description: 拦截用户请求
-     * @author Jiang Zhihang
-     * @date 2022/2/5 0:28
+     * 拦截用户请求
      */
     @Override
     protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
@@ -42,8 +33,8 @@ public class JwtFilter extends AuthenticatingFilter {
             return true;
         } else { // 如果有token，则进行校验
             // 校验token
-            Claims claims = jwtUtil.getClaimsByToken(token);
-            if (claims == null || jwtUtil.isTokenExpired(claims.getExpiration())) {
+            Claims claims = JwtUtil.getClaimsByToken(token);
+            if (claims == null || JwtUtil.isTokenExpired(claims.getExpiration())) {
                 throw new ExpiredCredentialsException("token已经失效，请重新登录");
             }
             // 继续继续校验，校验成功则登录成功
@@ -52,9 +43,7 @@ public class JwtFilter extends AuthenticatingFilter {
     }
 
     /**
-     * @description: 把请求头中的token生成到JwtToken类中
-     * @author Jiang Zhihang
-     * @date 2022/2/5 0:28
+     * 把请求头中的token生成到JwtToken类中
      */
     @Override
     protected AuthenticationToken createToken(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
@@ -67,9 +56,7 @@ public class JwtFilter extends AuthenticatingFilter {
     }
 
     /**
-     * @description: 登录失败返回错误消息
-     * @author Jiang Zhihang
-     * @date 2022/2/5 17:25
+     * 登录失败返回错误消息
      */
     @Override
     protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException e, ServletRequest request, ServletResponse response) {
@@ -84,9 +71,7 @@ public class JwtFilter extends AuthenticatingFilter {
     }
 
     /**
-     * @description: 用于支持跨域
-     * @author Jiang Zhihang
-     * @date 2022/2/5 0:30
+     * 用于支持跨域
      */
     @Override
     protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {

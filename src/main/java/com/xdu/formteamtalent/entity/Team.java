@@ -14,12 +14,14 @@ import java.io.Serializable;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("t_group_task")
-public class Task implements Serializable {
+@TableName("t_team")
+public class Team implements Serializable {
     @TableId(type = IdType.AUTO)
-    private Long id;
     private Long t_id;
+    private Long a_id;
+    private String t_name;
+    private String t_leader_id;
     private String t_desc;
-    private Long g_id;
-    private Long u_id;
+    private Integer t_is_public;
+    private String t_qrcode_url;
 }

@@ -28,11 +28,21 @@ server:
   port: 8080
 
 wx:
+<<<<<<<< HEAD:target/classes/application.pub.yaml
   appId: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
   appSecret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+========
+  appId: wx2321b1cd8170b56e
+  appSecret: 4fec11577d828eb6f03a5ef06a1b7eca
+>>>>>>>> ff9a6e8 (初步完成各个单元的增删改查操作):target/classes/application.yaml
   getOpenIdUrl: https://api.weixin.qq.com/sns/jscode2session
 
 auth:
   jwt:
+<<<<<<<< HEAD:target/classes/application.pub.yaml
     secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     expire: xxxxxxxxxxxxxxxxx
+========
+    secret: xdudasfjlsaj2139dasjwerjawr213jfsadafd
+    expire: 43200
+>>>>>>>> ff9a6e8 (初步完成各个单元的增删改查操作):target/classes/application.yaml

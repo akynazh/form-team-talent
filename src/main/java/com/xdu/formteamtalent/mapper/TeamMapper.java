@@ -1,7 +1,7 @@
 package com.xdu.formteamtalent.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.xdu.formteamtalent.entity.User;
+import com.xdu.formteamtalent.entity.Team;
 
-public interface UserMapper extends BaseMapper<User> {
+public interface TeamMapper extends BaseMapper<Team> {
 }

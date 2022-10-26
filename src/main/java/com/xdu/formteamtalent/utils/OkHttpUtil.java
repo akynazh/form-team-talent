@@ -22,7 +22,6 @@ public class OkHttpUtil {
         StringBuilder sb = new StringBuilder(url);
         boolean firstFlag = true;
         for (Map.Entry<String, String> entry : params.entrySet()) {
-            System.out.println(entry.getValue());
             if (firstFlag) {
                 sb.append("?").append(entry.getKey()).append("=").append(entry.getValue());
                 firstFlag = false;

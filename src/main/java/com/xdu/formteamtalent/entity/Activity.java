@@ -19,8 +19,10 @@ public class Activity implements Serializable {
     @TableId(type = IdType.AUTO)
     private Long a_id;
     private String a_name;
-    private Long a_holder_id;
+    private String a_holder_id;
     private String a_desc;
+    private String a_start_date;
     private String a_end_date;
     private Integer a_is_public;
+    private String a_qrcode_url;
 }

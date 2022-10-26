@@ -14,39 +14,37 @@ CREATE TABLE t_user (
 DROP TABLE IF EXISTS t_activity;
 CREATE TABLE t_activity (
     a_id BIGINT AUTO_INCREMENT,
-    a_name VARCHAR(255),
-    a_holder_id BIGINT,
+    a_name VARCHAR(255) NOT NULL,
+    a_holder_id VARCHAR(255) NOT NULL,
     a_desc VARCHAR(1024),
+    a_start_date VARCHAR(128),
     a_end_date VARCHAR(128),
     a_is_public INT,
-    PRIMARY KEY(a_id)
+    a_qrcode_url VARCHAR(1024),
+    PRIMARY KEY(a_id),
+    FOREIGN KEY (a_holder_id) REFERENCES t_user(u_open_id)
 );
 
-DROP TABLE IF EXISTS t_group;
-CREATE TABLE t_group (
-    g_id BIGINT AUTO_INCREMENT,
-    g_name VARCHAR(255),
-    g_leader_id BIGINT,
-    g_desc VARCHAR(1024),
-    a_id BIGINT,
-    PRIMARY KEY(g_id)
+DROP TABLE IF EXISTS t_team;
+CREATE TABLE t_team (
+    t_id BIGINT AUTO_INCREMENT,
+    a_id BIGINT NOT NULL,
+    t_name VARCHAR(255) NOT NULL,
+    t_leader_id VARCHAR(255) NOT NULL,
+    t_desc VARCHAR(1024),
+    t_is_public INT,
+    t_qrcode_url VARCHAR(1024),
+    PRIMARY KEY(t_id),
+    FOREIGN KEY (t_leader_id) REFERENCES t_user(u_open_id),
+    FOREIGN KEY (a_id) REFERENCES t_activity(a_id)
 );
 
-DROP TABLE IF EXISTS t_group_task;
-CREATE TABLE t_group_task (
-    id BIGINT AUTO_INCREMENT,
-    t_id BIGINT,
-    t_desc VARCHAR(255),
-    g_id BIGINT,
-    u_id BIGINT,
-    PRIMARY KEY (id)
-);
-
-DROP TABLE IF EXISTS t_join_info;
-CREATE TABLE t_join_info (
-    id BIGINT AUTO_INCREMENT,
-    u_id BIGINT,
-    a_id BIGINT,
-    g_id BIGINT,
-    PRIMARY KEY (id)
+DROP TABLE IF EXISTS t_user_team;
+CREATE TABLE t_user_team (
+   id BIGINT AUTO_INCREMENT,
+   u_id VARCHAR(255) NOT NULL,
+   t_id BIGINT NOT NULL,
+   PRIMARY KEY (id),
+   FOREIGN KEY (u_id) REFERENCES t_user(u_open_id),
+   FOREIGN KEY (t_id) REFERENCES t_team(t_id)
 );

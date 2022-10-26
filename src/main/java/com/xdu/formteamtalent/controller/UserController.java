@@ -1,47 +1,37 @@
 package com.xdu.formteamtalent.controller;
 
-import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import com.xdu.formteamtalent.entity.RestfulResponse;
-import com.xdu.formteamtalent.entity.User;
-import com.xdu.formteamtalent.security.AccountProfile;
+import com.xdu.formteamtalent.entity.*;
+import com.xdu.formteamtalent.service.ActivityService;
+import com.xdu.formteamtalent.service.TeamService;
 import com.xdu.formteamtalent.service.UserService;
+import com.xdu.formteamtalent.service.UserTeamService;
 import com.xdu.formteamtalent.utils.JwtUtil;
 import com.xdu.formteamtalent.utils.WxUtil;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 
 @RestController
+@RequestMapping("/api/user")
 public class UserController {
     private UserService userService;
-    private JwtUtil jwtUtil;
+    private UserTeamService userTeamService;
+
+    @Autowired
+    public void setUserTeamService(UserTeamService userTeamService) {
+        this.userTeamService = userTeamService;
+    }
 
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
 
-    @Autowired
-    public void setJwtUtil(JwtUtil jwtUtil) {
-        this.jwtUtil = jwtUtil;
-    }
-
-    @GetMapping("/test")
-    public RestfulResponse test() {
-        User one = userService.getOne(new QueryWrapper<User>().eq("u_open_id", "sadjfklasdjfkasjd"));
-        return RestfulResponse.success(one);
-    }
-
-    @PostMapping("/api/user/auth")
+    @PostMapping("/auth")
     public RestfulResponse auth(@RequestParam("code") String code, HttpServletResponse resp) {
         String openId = WxUtil.getOpenIdByCode(code);
         if (openId != null) {
@@ -49,24 +39,49 @@ public class UserController {
             if (user == null) {
                 userService.save(new User(openId));
             }
-            String token = jwtUtil.createToken(openId);
+            String token = JwtUtil.createToken(openId);
             resp.setHeader("auth", token);
             resp.setHeader("Access-Control-Expose-Headers", "auth");
             return RestfulResponse.success();
         } else {
-            return RestfulResponse.fail_502();
+            return RestfulResponse.fail_500();
         }
     }
 
-    @PostMapping("/api/user/update")
+    @PostMapping("/update")
     @RequiresAuthentication
-    public RestfulResponse update(User user) {
+    public RestfulResponse update(@RequestBody  User user) {
         UpdateWrapper<User> wrapper = new UpdateWrapper<>();
         wrapper.eq("u_open_id", WxUtil.getOpenId());
-        if (userService.update(user, wrapper)) {
-            return RestfulResponse.success();
-        } else {
-            return RestfulResponse.fail_502();
-        }
+        userService.update(user, wrapper);
+        return RestfulResponse.success();
+    }
+
+    /**
+     * 加入某个小组
+     * @param t_id 小组id
+     */
+    @PostMapping("/join/team")
+    @RequiresAuthentication
+    public RestfulResponse joinTeam(@RequestParam("t_id") Long t_id) {
+        UserTeam userTeam = new UserTeam();
+        userTeam.setU_id(WxUtil.getOpenId());
+        userTeam.setT_id(t_id);
+        userTeamService.save(userTeam);
+        return RestfulResponse.success();
+    }
+
+    /**
+     * 退出某个小组
+     * @param t_id 小组id
+     */
+    @PostMapping("/leave/team")
+    @RequiresAuthentication
+    public RestfulResponse leaveTeam(@RequestParam("t_id") Long t_id) {
+        QueryWrapper<UserTeam> wrapper = new QueryWrapper<>();
+        wrapper.eq("t_id", t_id);
+        wrapper.eq("u_id", WxUtil.getOpenId());
+        userTeamService.remove(wrapper);
+        return RestfulResponse.success();
     }
 }

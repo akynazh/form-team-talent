@@ -14,12 +14,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AccountRealm extends AuthorizingRealm {
-    private final JwtUtil jwtUtil;
     private final UserService userService;
 
     @Autowired
-    public AccountRealm(JwtUtil jwtUtil, UserService userService) {
-        this.jwtUtil = jwtUtil;
+    public AccountRealm(UserService userService) {
         this.userService = userService;
     }
 
@@ -37,8 +35,9 @@ public class AccountRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         JwtToken jwtToken = (JwtToken) authenticationToken;
-        Claims claims = jwtUtil.getClaimsByToken((String) jwtToken.getPrincipal());
+        Claims claims = JwtUtil.getClaimsByToken((String) jwtToken.getPrincipal());
 
+        assert claims != null;
         String u_open_id = claims.getSubject();
         User user = userService.getOne(new QueryWrapper<User>().eq("u_open_id", u_open_id));
         if (user == null) {
