@@ -1,13 +1,8 @@
 {
   "pages": [
-    "pages/home_page/home_page",
-    "pages/activity_page/activity_page",
-    "pages/me_page/me_page",
-    "pages/group_creat/group_creat",
-    "pages/activity_creat/activity_creat",
-    "pages/person_information/person_information",
-    "pages/activity_detail/activity_detail",
-    "pages/group_detail/group_detail"
+    "pages/page_home/page_home",
+    "pages/page_activity/activity/activity",
+    "pages/page_me/page_me"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -1,0 +1,16 @@
+<block>
+  <view class="bottom_container">
+    <view class="navigation_cell" id="1" bindtap="nav_to_page">
+      <image class="navigation_image" src="/image/home_page.png"></image>
+      <view class="navigation_text">主页</view>
+    </view>
+    <view class="navigation_cell" id="2" bindtap="nav_to_page">
+      <image class="navigation_image" src="/image/activity_page.png"></image>
+      <view class="navigation_text">活动</view>
+    </view>
+    <view class="navigation_cell" id="3" bindtap="nav_to_page">
+      <image class="navigation_image" src="/image/me_page.png"></image>
+      <view class="navigation_text">个人</view>
+    </view>
+  </view>
+</block>

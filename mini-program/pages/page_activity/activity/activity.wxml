@@ -1,0 +1,11 @@
+<block>
+  <view class="top_container"></view>
+</block>
+<block wx:for="{{activities}}" wx:key="a_id">
+  <view class="a_container" bindtap="toActivityDetail">
+    <view class="a_name">{{item.a_name}}</view>
+    <view class="a_end_date">截止时间：{{item.a_end_date}}</view>
+  </view>
+</block>
+
+<nav></nav>

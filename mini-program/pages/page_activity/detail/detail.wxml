@@ -1,0 +1,47 @@
+<!--返回箭头-->
+<view class="top_container">
+	<image class="return_button" src="/image_resources/return_image.png" bindtap="return_button"></image>
+</view>
+
+<view class="information_container">
+
+	<view class="name_QR_container">
+		<view class="activity_theme">{{name}}</view>
+		<image class="QR_code" src="{{QRcode}}"></image>
+	</view>
+
+	<view class="activity_holder">
+		<view class="activity_holder_text">活动主办人: </view>
+		<view class="activity_holder_text">{{holder}}</view>
+	</view>
+
+	<view class="activity_text">活动内容：</view>
+	<view class="activity_content">{{content}}]</view>
+
+	<view class="activity_text">活动要求：</view>
+	<view class="activity_content">{{requirement}}</view>
+
+	<text class="activity_text">小组人数限制：</text>
+	<text class="activity_text">{{humannumber}}</text>
+	<text class="activity_text">人</text>
+
+	<text class="activity_text">截止日期：</text>
+	<text class="activity_text">{{endTime}}</text>
+
+	<view class="group_contaier">
+		<view class="activity_text">分组情况:</view>
+		<image class="add_group" src="/image_resources/creat_image.png" bindtap="ToGroupCreat"></image>
+	</view>
+
+	<block wx:for="{{group}}" wx:for-index="idx">
+		<view class="group_information">
+			<view class="group_name" bindtap="ToGroupDetail" data-id="{{idx}}">{{item.group_name}}</view>
+		</view>
+	</block>
+
+
+</view>
+
+<view class="comple_buttom" bindtap="deleteActivity">结束活动</view>
+
+<nav></nav>

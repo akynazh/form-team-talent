@@ -1,14 +1,11 @@
 // app.js
+
 App({
   globalData: {
     userInfo: null,
-    openid:null
+    islogin: false,
+    serverUrl: "http://127.0.0.1:8080"
   },
   onLaunch() {
-    wx.login({
-      success(res) {
-        console.log(res)
-      }
-    })
   }
 })
