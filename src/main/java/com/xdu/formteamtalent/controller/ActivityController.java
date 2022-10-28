@@ -11,7 +11,10 @@ import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/activity")
@@ -39,7 +42,7 @@ public class ActivityController {
 
     @PostMapping("/remove")
     @RequiresAuthentication
-    public RestfulResponse removeActivity(@RequestParam("a_id") Long a_id) {
+    public RestfulResponse removeActivity(@RequestParam("a_id") String a_id) {
         QueryWrapper<Activity> wrapper = new QueryWrapper<>();
         wrapper.eq("a_holder_id", WxUtil.getOpenId());
         wrapper.eq("a_id", a_id);
@@ -66,24 +69,28 @@ public class ActivityController {
     }
 
     @GetMapping("/get/pub")
-    public RestfulResponse getPublicActivity(@RequestBody Activity activity) {
-        QueryWrapper<Activity> wrapper = new QueryWrapper<>();
-        wrapper.eq("a_is_public", 1);
-        List<Activity> list = activityService.list(wrapper);
-        return RestfulResponse.success(list);
+    public RestfulResponse getPublicActivity() {
+        List<Activity> list = activityService.list(new QueryWrapper<Activity>().eq("a_is_public", 1));
+        // 获取还未结束的活动
+        List<Activity> activities = list.stream()
+                .filter(a -> {
+                    String a_end_date = a.getA_end_date();
+                    long end_timestamp = Timestamp.valueOf(a_end_date).getTime() / 1000;
+                    long current_timestamp = System.currentTimeMillis() / 1000;
+                    return end_timestamp <= current_timestamp;
+                }).collect(Collectors.toList());
+        return RestfulResponse.success(activities);
     }
 
     @GetMapping("/get/my")
     @RequiresAuthentication
     public RestfulResponse getMyActivity() {
-        QueryWrapper<Activity> wrapper = new QueryWrapper<>();
-        wrapper.eq("a_holder_id", WxUtil.getOpenId());
-        List<Activity> list = activityService.list(wrapper);
+        List<Activity> list = activityService.list(new QueryWrapper<Activity>().eq("a_holder_id", WxUtil.getOpenId()));
         return RestfulResponse.success(list);
     }
 
     /**
-     * 工具活动id获取该活动对应的team
+     * 根据活动id获取该活动对应的team
      * @param a_id 活动id
      */
     @GetMapping("/get/team")

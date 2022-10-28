@@ -12,10 +12,11 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("t_user_team")
-public class UserTeam {
+@TableName("t_uat")
+public class UAT {
     @TableId(type = IdType.AUTO)
     private Long id;
     private String u_id;
-    private Long t_id;
+    private String a_id;
+    private String t_id;
 }

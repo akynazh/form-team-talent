@@ -3,10 +3,8 @@ package com.xdu.formteamtalent.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.xdu.formteamtalent.entity.*;
-import com.xdu.formteamtalent.service.ActivityService;
-import com.xdu.formteamtalent.service.TeamService;
 import com.xdu.formteamtalent.service.UserService;
-import com.xdu.formteamtalent.service.UserTeamService;
+import com.xdu.formteamtalent.service.UATService;
 import com.xdu.formteamtalent.utils.JwtUtil;
 import com.xdu.formteamtalent.utils.WxUtil;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -19,11 +17,11 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping("/api/user")
 public class UserController {
     private UserService userService;
-    private UserTeamService userTeamService;
+    private UATService uatService;
 
     @Autowired
-    public void setUserTeamService(UserTeamService userTeamService) {
-        this.userTeamService = userTeamService;
+    public void setUatService(UATService uatService) {
+        this.uatService = uatService;
     }
 
     @Autowired
@@ -63,11 +61,12 @@ public class UserController {
      */
     @PostMapping("/join/team")
     @RequiresAuthentication
-    public RestfulResponse joinTeam(@RequestParam("t_id") Long t_id) {
-        UserTeam userTeam = new UserTeam();
-        userTeam.setU_id(WxUtil.getOpenId());
-        userTeam.setT_id(t_id);
-        userTeamService.save(userTeam);
+    public RestfulResponse joinTeam(@RequestParam("t_id") String t_id, @RequestParam("a_id") String a_id) {
+        UAT uat = new UAT();
+        uat.setU_id(WxUtil.getOpenId());
+        uat.setA_id(a_id);
+        uat.setT_id(t_id);
+        uatService.save(uat);
         return RestfulResponse.success();
     }
 
@@ -77,11 +76,11 @@ public class UserController {
      */
     @PostMapping("/leave/team")
     @RequiresAuthentication
-    public RestfulResponse leaveTeam(@RequestParam("t_id") Long t_id) {
-        QueryWrapper<UserTeam> wrapper = new QueryWrapper<>();
+    public RestfulResponse leaveTeam(@RequestParam("t_id") String t_id) {
+        QueryWrapper<UAT> wrapper = new QueryWrapper<>();
         wrapper.eq("t_id", t_id);
         wrapper.eq("u_id", WxUtil.getOpenId());
-        userTeamService.remove(wrapper);
+        uatService.remove(wrapper);
         return RestfulResponse.success();
     }
 }
