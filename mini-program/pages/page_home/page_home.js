@@ -1,5 +1,7 @@
 // pages/home_page/home_page.js
 const app = getApp();
+const {route} = require("../../utils/route")
+const {alert_fail} = require("../../utils/util")
 
 Page({
   data: {

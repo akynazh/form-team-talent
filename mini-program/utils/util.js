@@ -1,3 +1,9 @@
+module.exports = {
+  formatTime,
+  formatNumber,
+  alert_fail,
+}
+
 const formatTime = date => {
   const year = date.getFullYear()
   const month = date.getMonth() + 1
@@ -14,6 +20,12 @@ const formatNumber = n => {
   return n[1] ? n : `0${n}`
 }
 
-module.exports = {
-  formatTime
+function alert_fail(title, content) {
+  wx.showModal({
+    title: title,
+    content: content,
+    showCancel: false,
+    confirmText: "确定",
+    confirmColor: "#00BFFF",
+  })
 }
