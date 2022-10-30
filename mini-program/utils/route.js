@@ -10,7 +10,6 @@ function auth(page_url) {
   wx.login({
     success(res1) {
       let token = wx.getStorageSync('auth') || "";
-      console.log(token)
       let my_header = token != "" ? {"auth": token} : {}
       wx.request({
         url: `${base_url}/api/user/auth?code=${res1.code}`,

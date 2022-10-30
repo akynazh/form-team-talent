@@ -1,12 +1,12 @@
 <!--顶部头像与昵称-->
 <view class="input_theme">姓名</view>
-<textarea placeholder="{{u_name}}" class="input_text_small" bindinput="getName"></textarea>
+<textarea model:value="{{u_name}}" class="input_text_small" bindinput="getName"></textarea>
 
 <view class="input_theme">学号</view>
-<textarea placeholder="{{u_stu_num}}" class="input_text_small" bindinput="getStuNumber"></textarea>
+<textarea model:value="{{u_stu_num}}" class="input_text_small" bindinput="getStuNumber"></textarea>
 
 <view class="input_theme">学校</view>
-<textarea placeholder="{{u_school}}" class="input_text_small" bindinput="getSchool"></textarea>
+<textarea model:value="{{u_school}}" class="input_text_small" bindinput="getSchool"></textarea>
 
 
 <view class="cancle_save_container">
