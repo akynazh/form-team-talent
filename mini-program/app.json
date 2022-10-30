@@ -1,8 +1,9 @@
 {
   "pages": [
     "pages/page_home/page_home",
+    "pages/page_me/page_me",
     "pages/page_activity/activity/activity",
-    "pages/page_me/page_me"
+    "pages/page_group/group/group"
   ],
   "window": {
     "backgroundTextStyle": "light",

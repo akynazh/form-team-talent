@@ -1,4 +1,5 @@
 const app = getApp()
+const {auth} = require("../../../utils/auth")
 
 // pages/page_common/navigator.js
 Component({
@@ -13,7 +14,7 @@ Component({
       else if (idx == "2") page_url = "/pages/page_activity/activity/activity";
       else if (idx == "3") page_url = "/pages/page_me/page_me";
       if (idx != "1" && !app.globalData.islogin) {
-        // auth(page_url)
+        auth(page_url)
         wx.navigateTo({
           url: page_url,
         })

@@ -1,14 +1,16 @@
-// pages/me_page/me_page.js
+// 获取应用实例
+const app = getApp()
 
 Page({
-  data: {
-    me_avatar: null,/**云端储存头像地址 */
-    me_name:"wangfeiy",
-    /**（未做）建议这里默认值设置成微信头像和微信昵称 */
-  },
-  /**修改个人信息跳转 */
-  ToPersonInformation(){
-    wx.navigateTo({
-    })
-  },
+	data: {
+		u_name: "江志航",
+		u_stu_num: "2000adsfjdsak",
+		u_school: "北雷村男子职业技术学校"
+	},
+	onLoad() {
+
+	},
+	update_info() {
+		console.log("update info")
+	}
 })

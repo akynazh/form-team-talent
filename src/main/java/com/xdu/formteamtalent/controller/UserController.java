@@ -3,15 +3,17 @@ package com.xdu.formteamtalent.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.xdu.formteamtalent.entity.*;
+import com.xdu.formteamtalent.global.RestfulResponse;
 import com.xdu.formteamtalent.service.UserService;
 import com.xdu.formteamtalent.service.UATService;
 import com.xdu.formteamtalent.utils.JwtUtil;
 import com.xdu.formteamtalent.utils.WxUtil;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/api/user")
@@ -30,10 +32,10 @@ public class UserController {
     }
 
     @PostMapping("/auth")
-    public RestfulResponse auth(@RequestParam("code") String code, HttpServletResponse resp) {
+    public RestfulResponse auth(HttpServletRequest request, @RequestParam("code") String code, HttpServletResponse resp) {
         String openId = WxUtil.getOpenIdByCode(code);
         if (openId != null) {
-            User user = userService.getOne(new QueryWrapper<User>().eq("u_open_id", openId));
+            User user = userService.getOne(new QueryWrapper<User>().eq("u_id", openId));
             if (user == null) {
                 userService.save(new User(openId));
             }
@@ -47,10 +49,9 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    @RequiresAuthentication
-    public RestfulResponse update(@RequestBody  User user) {
+    public RestfulResponse update(HttpServletRequest request, @RequestBody  User user) {
         UpdateWrapper<User> wrapper = new UpdateWrapper<>();
-        wrapper.eq("u_open_id", WxUtil.getOpenId());
+        wrapper.eq("u_id", WxUtil.getOpenId(request));
         userService.update(user, wrapper);
         return RestfulResponse.success();
     }
@@ -60,10 +61,10 @@ public class UserController {
      * @param t_id 小组id
      */
     @PostMapping("/join/team")
-    @RequiresAuthentication
-    public RestfulResponse joinTeam(@RequestParam("t_id") String t_id, @RequestParam("a_id") String a_id) {
+
+    public RestfulResponse joinTeam(HttpServletRequest request, @RequestParam("t_id") String t_id, @RequestParam("a_id") String a_id) {
         UAT uat = new UAT();
-        uat.setU_id(WxUtil.getOpenId());
+        uat.setU_id(WxUtil.getOpenId(request));
         uat.setA_id(a_id);
         uat.setT_id(t_id);
         uatService.save(uat);
@@ -75,12 +76,19 @@ public class UserController {
      * @param t_id 小组id
      */
     @PostMapping("/leave/team")
-    @RequiresAuthentication
-    public RestfulResponse leaveTeam(@RequestParam("t_id") String t_id) {
+
+    public RestfulResponse leaveTeam(HttpServletRequest request, @RequestParam("t_id") String t_id) {
         QueryWrapper<UAT> wrapper = new QueryWrapper<>();
         wrapper.eq("t_id", t_id);
-        wrapper.eq("u_id", WxUtil.getOpenId());
+        wrapper.eq("u_id", WxUtil.getOpenId(request));
         uatService.remove(wrapper);
         return RestfulResponse.success();
+    }
+
+    @GetMapping("/get/info")
+    public RestfulResponse getUserInfo(HttpServletRequest request) {
+        User user = userService.getOne(new QueryWrapper<User>().eq("u_id", WxUtil.getOpenId(request)));
+        user.setU_id("");
+        return RestfulResponse.success(user);
     }
 }

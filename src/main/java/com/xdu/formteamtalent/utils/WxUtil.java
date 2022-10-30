@@ -1,12 +1,12 @@
 package com.xdu.formteamtalent.utils;
 
+import cn.hutool.http.HttpRequest;
 import cn.hutool.json.JSONObject;
-import cn.hutool.json.JSONUtil;
-import com.xdu.formteamtalent.security.AccountProfile;
-import org.apache.shiro.SecurityUtils;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,12 +49,9 @@ public class WxUtil {
         }
     }
 
-    /**
-     * 通过认证后，获取openid
-     */
-    public static String getOpenId() {
-        Object principal = SecurityUtils.getSubject().getPrincipal();
-        AccountProfile profile = JSONUtil.parse(principal).toBean(AccountProfile.class);
-        return profile.getU_open_id();
+    public static String getOpenId(HttpServletRequest request) {
+        String token = request.getHeader("auth");
+        Claims claims = JwtUtil.getClaimsByToken(token);
+        return (String)claims.getSubject();
     }
 }

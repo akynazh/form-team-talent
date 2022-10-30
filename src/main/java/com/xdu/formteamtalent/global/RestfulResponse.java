@@ -1,4 +1,4 @@
-package com.xdu.formteamtalent.entity;
+package com.xdu.formteamtalent.global;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

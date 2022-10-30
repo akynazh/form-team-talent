@@ -1,38 +1,15 @@
 <!--顶部头像与昵称-->
-<view class="top_container" >
-  <view class="portrait_contianer">
-    <image class="portrait_image" src="{{me_avatar}}"></image>
-  </view>
-  <view class="nickname_text">{{me_name}}</view>
-</view>
-<view class="title_text">修改个人信息</view>
-
 <view class="input_theme">姓名</view>
-<textarea placeholder="{{me_name}}" class="input_text_small" bindinput="getName"></textarea>
+<textarea placeholder="{{u_name}}" class="input_text_small" bindinput="getName"></textarea>
 
 <view class="input_theme">学号</view>
-<textarea placeholder="{{me_student_number}}" class="input_text_small"  bindinput="getStuNumber"></textarea>
-
-<view class="input_theme">年级</view>
-<textarea placeholder="{{me_grade}}" class="input_text_small"  bindinput="getGrade"></textarea>
+<textarea placeholder="{{u_stu_num}}" class="input_text_small" bindinput="getStuNumber"></textarea>
 
 <view class="input_theme">学校</view>
-<textarea placeholder="{{me_school}}" class="input_text_small" bindinput="getSchool"></textarea>
+<textarea placeholder="{{u_school}}" class="input_text_small" bindinput="getSchool"></textarea>
 
 
 <view class="cancle_save_container">
-  <view class="cancle_button" bindtap="Cancle">取消</view>
-  <view class="save_button" bindtap="Save">保存</view>
+	<view class="save_button" bindtap="update_info">更新</view>
 </view>
-<!--服务事项-->
-<view class="service_container" bindtap="ToPersonInformation">
-  <view class="service_text">修改个人信息</view>
-</view>
-
-<!--
-<view class="service_container">
-  <view class="service_text">我的小组</view>
-</view>
--->
-
 <nav></nav>

@@ -2,17 +2,16 @@ package com.xdu.formteamtalent.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xdu.formteamtalent.entity.Activity;
-import com.xdu.formteamtalent.entity.RestfulResponse;
+import com.xdu.formteamtalent.global.RestfulResponse;
 import com.xdu.formteamtalent.entity.Team;
 import com.xdu.formteamtalent.service.ActivityService;
 import com.xdu.formteamtalent.service.TeamService;
 import com.xdu.formteamtalent.utils.WxUtil;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,18 +32,18 @@ public class ActivityController {
     }
 
     @PostMapping("/add")
-    @RequiresAuthentication
-    public RestfulResponse addActivity(@RequestBody  Activity activity) {
-        activity.setA_holder_id(WxUtil.getOpenId());
+
+    public RestfulResponse addActivity(HttpServletRequest request, @RequestBody  Activity activity) {
+        activity.setA_holder_id(WxUtil.getOpenId(request));
         activityService.save(activity);
         return RestfulResponse.success(activity);
     }
 
     @PostMapping("/remove")
-    @RequiresAuthentication
-    public RestfulResponse removeActivity(@RequestParam("a_id") String a_id) {
+
+    public RestfulResponse removeActivity(HttpServletRequest request, @RequestParam("a_id") String a_id) {
         QueryWrapper<Activity> wrapper = new QueryWrapper<>();
-        wrapper.eq("a_holder_id", WxUtil.getOpenId());
+        wrapper.eq("a_holder_id", WxUtil.getOpenId(request));
         wrapper.eq("a_id", a_id);
         if (activityService.getOne(wrapper) != null) {
             activityService.removeById(a_id);
@@ -55,10 +54,10 @@ public class ActivityController {
     }
 
     @PostMapping("/update")
-    @RequiresAuthentication
-    public RestfulResponse updateActivity(@RequestBody Activity activity) {
+
+    public RestfulResponse updateActivity(HttpServletRequest request, @RequestBody Activity activity) {
         QueryWrapper<Activity> wrapper = new QueryWrapper<>();
-        wrapper.eq("a_holder_id", WxUtil.getOpenId());
+        wrapper.eq("a_holder_id", WxUtil.getOpenId(request));
         wrapper.eq("a_id", activity.getA_id());
         if (activityService.getOne(wrapper) != null) {
             activityService.updateById(activity);
@@ -83,9 +82,9 @@ public class ActivityController {
     }
 
     @GetMapping("/get/my")
-    @RequiresAuthentication
-    public RestfulResponse getMyActivity() {
-        List<Activity> list = activityService.list(new QueryWrapper<Activity>().eq("a_holder_id", WxUtil.getOpenId()));
+
+    public RestfulResponse getMyActivity(HttpServletRequest request) {
+        List<Activity> list = activityService.list(new QueryWrapper<Activity>().eq("a_holder_id", WxUtil.getOpenId(request)));
         return RestfulResponse.success(list);
     }
 
@@ -94,7 +93,7 @@ public class ActivityController {
      * @param a_id 活动id
      */
     @GetMapping("/get/team")
-    @RequiresAuthentication
+
     public RestfulResponse getActivityTeam(@RequestParam("a_id") Long a_id) {
         QueryWrapper<Team> wrapper = new QueryWrapper<>();
         wrapper.eq("a_id", a_id);

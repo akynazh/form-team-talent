@@ -1,13 +1,14 @@
-<block class="top_container">
-  <view class="title">我的活动</view>
-  <view bindtap="create_activity">
-    <view>创建活动</view>
-    <image class="new_image" src="/image/creat_image.png" />
-  </view>
-  <view>
-    <view>扫一扫</view>
-    <image class="new_image" src="/image/scan_image.png" />
-  </view>
-</block>
+<view class="top_container">
+</view>
+
+<view bindtap="create_activity">
+  <view>创建活动</view>
+  <image class="new_image" src="/image/creat_image.png" />
+</view>
+
+<view bindtap="scan_qrcode">
+  <view>扫一扫</view>
+  <image class="new_image" src="/image/scan_image.png" />
+</view>
 
 <nav></nav>

@@ -1,8 +1,6 @@
-package com.xdu.formteamtalent.exception;
+package com.xdu.formteamtalent.global;
 
-import com.xdu.formteamtalent.entity.RestfulResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.ShiroException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,12 +11,6 @@ import java.util.List;
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler(ShiroException.class)
-    public RestfulResponse handler(ShiroException e) {
-        log.error("身份验证异常: {}", e.getMessage());
-        return RestfulResponse.fail(401, e.getMessage());
-    }
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public RestfulResponse handler(MethodArgumentNotValidException e) {
         List<ObjectError> allErrors = e.getBindingResult().getAllErrors();

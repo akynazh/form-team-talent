@@ -2,5 +2,14 @@
 const app = getApp();
 
 Page({
-  data: {}
+  data: {
+
+  },
+  create_activity() {
+    console.log("create activity")
+  },
+  scan_qrcode() {
+    console.log("scan qrcode")
+  }
+  
 })

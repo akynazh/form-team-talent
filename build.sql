@@ -4,11 +4,11 @@ USE form_team_talent;
 
 DROP TABLE IF EXISTS t_user;
 CREATE TABLE t_user (
-    u_open_id VARCHAR(255),
+    u_id VARCHAR(255),
     u_name VARCHAR(255),
     u_stu_num VARCHAR(64),
     u_school VARCHAR(255),
-    PRIMARY KEY(u_open_id)
+    PRIMARY KEY(u_id)
 );
 
 DROP TABLE IF EXISTS t_activity;
@@ -21,7 +21,7 @@ CREATE TABLE t_activity (
     a_is_public INT,
     a_qrcode_url VARCHAR(1024),
     PRIMARY KEY(a_id),
-    FOREIGN KEY (a_holder_id) REFERENCES t_user(u_open_id)
+    FOREIGN KEY (a_holder_id) REFERENCES t_user(u_id)
 );
 
 DROP TABLE IF EXISTS t_team;
@@ -32,7 +32,7 @@ CREATE TABLE t_team (
     t_leader_id VARCHAR(255) NOT NULL,
     t_desc VARCHAR(1024),
     PRIMARY KEY(t_id),
-    FOREIGN KEY (t_leader_id) REFERENCES t_user(u_open_id),
+    FOREIGN KEY (t_leader_id) REFERENCES t_user(u_id),
     FOREIGN KEY (a_id) REFERENCES t_activity(a_id)
 );
 
@@ -43,7 +43,7 @@ CREATE TABLE t_uat (
    a_id VARCHAR(255) NOT NULL,
    t_id VARCHAR(255) NOT NULL,
    PRIMARY KEY (id),
-   FOREIGN KEY (u_id) REFERENCES t_user(u_open_id),
+   FOREIGN KEY (u_id) REFERENCES t_user(u_id),
    FOREIGN KEY (a_id) REFERENCES t_activity(a_id),
    FOREIGN KEY (t_id) REFERENCES t_team(t_id)
 );
