@@ -23,5 +23,5 @@ public class Activity implements Serializable {
     private String a_desc;
     private String a_end_date;
     private Integer a_is_public;
-    private String a_qrcode_url;
+    private String a_qrcode_path;
 }

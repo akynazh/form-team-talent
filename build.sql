@@ -19,7 +19,7 @@ CREATE TABLE t_activity (
     a_desc VARCHAR(1024),
     a_end_date VARCHAR(128),
     a_is_public INT,
-    a_qrcode_url VARCHAR(1024),
+    a_qrcode_path VARCHAR(1024),
     PRIMARY KEY(a_id),
     FOREIGN KEY (a_holder_id) REFERENCES t_user(u_id)
 );
@@ -47,3 +47,9 @@ CREATE TABLE t_uat (
    FOREIGN KEY (a_id) REFERENCES t_activity(a_id),
    FOREIGN KEY (t_id) REFERENCES t_team(t_id)
 );
+
+ALTER DATABASE form_team_talent DEFAULT CHAR SET utf8;
+ALTER TABLE t_user CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
+ALTER TABLE t_team CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
+ALTER TABLE t_activity CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
+ALTER TABLE t_uat CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;

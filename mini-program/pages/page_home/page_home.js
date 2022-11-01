@@ -1,15 +1,19 @@
-// pages/home_page/home_page.js
-const app = getApp();
-const {route} = require("../../utils/route")
-const {alert_fail} = require("../../utils/util")
+const app = getApp()
+const base_url = app.globalData.base_url;
+import * as util from "../../utils/util";
 
 Page({
   data: {
 
   },
-  create_activity() {
-    console.log("create activity")
+  to_create_activity() {
+    util.route("/pages/page_activity/create/create");
   },
+
+  view_public_activity() {
+    util.route("/pages/page_activity/public/public")
+  },
+  
   scan_qrcode() {
     console.log("scan qrcode")
   }

@@ -8,7 +8,6 @@
 <view class="input_theme">学校</view>
 <textarea model:value="{{u_school}}" class="input_text_small" bindinput="getSchool"></textarea>
 
-
 <view class="cancle_save_container">
 	<view class="save_button" bindtap="update_info">更新</view>
 </view>

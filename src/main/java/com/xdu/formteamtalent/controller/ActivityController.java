@@ -1,5 +1,8 @@
 package com.xdu.formteamtalent.controller;
 
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.extra.qrcode.QrCodeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xdu.formteamtalent.entity.Activity;
 import com.xdu.formteamtalent.global.RestfulResponse;
@@ -32,10 +35,16 @@ public class ActivityController {
     }
 
     @PostMapping("/add")
-
-    public RestfulResponse addActivity(HttpServletRequest request, @RequestBody  Activity activity) {
+    public RestfulResponse addActivity(HttpServletRequest request, @RequestBody Activity activity) {
+        String a_id = IdUtil.simpleUUID();
+        String a_qrcode_url = "localhost:8080/api/activity/get/" + a_id;
+        String a_qrcode_path = "static/activity/" + a_id + ".jpg";
+        QrCodeUtil.generate(a_qrcode_url, 300, 300, FileUtil.file(a_qrcode_path));
         activity.setA_holder_id(WxUtil.getOpenId(request));
+        activity.setA_id(a_id);
+        activity.setA_qrcode_path(a_qrcode_path);
         activityService.save(activity);
+        activity.setA_desc("");
         return RestfulResponse.success(activity);
     }
 
@@ -54,7 +63,6 @@ public class ActivityController {
     }
 
     @PostMapping("/update")
-
     public RestfulResponse updateActivity(HttpServletRequest request, @RequestBody Activity activity) {
         QueryWrapper<Activity> wrapper = new QueryWrapper<>();
         wrapper.eq("a_holder_id", WxUtil.getOpenId(request));
@@ -79,6 +87,12 @@ public class ActivityController {
                     return end_timestamp <= current_timestamp;
                 }).collect(Collectors.toList());
         return RestfulResponse.success(activities);
+    }
+
+    @GetMapping("/get/id/{a_id}")
+    public RestfulResponse getActivityById(@PathVariable String a_id) {
+        Activity activity = activityService.getOne(new QueryWrapper<Activity>().eq("a_id", a_id));
+        return RestfulResponse.success(activity);
     }
 
     @GetMapping("/get/my")

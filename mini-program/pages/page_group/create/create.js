@@ -1,7 +1,8 @@
+const app = getApp()
+const base_url = app.globalData.base_url;
+import * as util from "../../../utils/util";
+
 Page({
-  /**
-   * 页面的初始数据
-   */
   data: {
     a_id: "" /**从活动界面进入时导入 */,
     g_leader_id: "",
@@ -10,7 +11,6 @@ Page({
     task_number: 0,
     task_name: [],
   },
-  /*获取并更改LeaderName和 GroupGoal*/
   getGroupName(e) {
     this.setData({
       GroupName: e.detail.value,

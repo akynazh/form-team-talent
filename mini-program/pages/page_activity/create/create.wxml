@@ -2,37 +2,25 @@
 
 
 <view class="input_theme">活动题目</view>
-<textarea placeholder="例如：思政小组展示 " class="input_text_small" bindinput="GetName"></textarea>
-
-<view class="input_theme">活动主办人</view>
-<textarea placeholder="请输入活动主办人" class="input_text_small" bindinput="GetHolder"></textarea>
+<textarea placeholder="例如：思政小组展示 " class="input_text_small" model:value="{{a_name}}"></textarea>
 
 <view class="input_theme">活动内容</view>
-<textarea placeholder="请输入活动内容" class="input_text_big" bindinput="GetContent"></textarea>
-
-<view class="input_theme">活动要求</view>
-<textarea placeholder="请输入活动要求" class="input_text_big" bindinput="GetRequirment"></textarea>
-
-<view class="input_theme">小组人数限制</view>
-<picker bindchange="numberselect" value="{{index}}" range="{{numberarray}}">
-  <view class="picker">当前选择：{{humannumber}}</view>
-</picker>
+<textarea placeholder="请输入活动内容" class="input_text_big" model:value="{{a_desc}}"></textarea>
 
 <view class="input_theme">活动截止日期</view>
-<picker bindchange="dateselect" mode="date" value="{{date}}" start="2022-01-01" end="2050-12-31">
-  <view class="picker">当前选择：{{enddate}}</view>
+<picker mode="date" value="{{a_end_date}}" start="2022-01-25" end="2200-09-01" bindchange="bindDateChange">
+    <view class="picker">
+      当前选择: {{a_end_date}}
+    </view>
 </picker>
 
 <view class="contaier">
   <view class="input_theme">活动是否公开</view>
   <checkbox-group bindchange="publicChange">
-    <checkbox checked="{{isPublic}}"  class="checkbox" ></checkbox>
+    <checkbox value="{{a_is_public}}"  class="checkbox"></checkbox>
     </checkbox-group>
 </view>
 
 <view class="cancle_save_container">
-  <view class="cancle_button" bindtap="Cancle">取消</view>
-  <view class="save_button" bindtap="Save">保存</view>
+  <view class="save_button" bindtap="create_activity">提交</view>
 </view>
-
-<nav></nav>

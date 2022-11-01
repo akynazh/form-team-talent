@@ -1,118 +1,46 @@
-// pages/activity_creat/activity_creat.js
+const app = getApp()
+const base_url = app.globalData.base_url;
+import * as util from "../../../utils/util";
+
 Page({
   data: {
-    a_id: "" /**进入时创建 */,
-    a_name: "",
-    a_holder_id: "",
+    a_name: "sadf",
     a_desc: "",
     a_end_date: "",
-    a_is_public: false,
-    qr_code: null /**进入时创建 */,
+    a_is_public: 0,
   },
-  GetName(e) {
+  bindDateChange(e) {
     this.setData({
-      name: e.detail.value,
-    });
-  },
-  GetHolder(e) {
-    this.setData({
-      holder: e.detail.value,
-    });
-  },
-  GetContent(e) {
-    this.setData({
-      content: e.detail.value,
-    });
-  },
-  GetRequirment(e) {
-    this.setData({
-      requirment: e.detail.value,
-    });
-  },
-  numberselect: function (e) {
-    //console.log('picker发送选择改变，携带值为', e.detail.value)
-    let index = e.detail.value;
-    this.setData({
-      humannumber: index,
-    });
-    // console.log(this.data.humannumber)
-  },
-  dateselect: function (e) {
-    //console.log('picker发送选择改变，携带值为', e.detail.value)
-    let index = e.detail.value;
-    this.setData({
-      enddate: index,
-    });
-    //console.log(this.data.enddate)
+      a_end_date: e.detail.value
+    })
   },
   publicChange(e) {
-    let that = this;
-    //console.log(that.data.isPublic)
-    if (that.data.isPublic == true) {
+    if (e.detail.value[0] === undefined) {
       this.setData({
-        isPublic: false,
-      });
-    } else if (that.data.isPublic == false) {
+        a_is_public: 0
+      })
+    } else {
       this.setData({
-        isPublic: true,
-      });
+        a_is_public: 1
+      })
     }
-    // console.log(that.data.isPublic)
   },
-  Cancle() {
-    this.setData({
-      name: "",
-      holder: "",
-      content: "",
-      requirment: "",
-      humannumber: "",
-      enddate: "",
-      isPublic: "false",
-    });
-    console.log(this.data.enddate);
-    wx.navigateBack();
+  create_activity() {
+    let that = this;
+    wx.request({
+      url: `${base_url}/api/activity/add`,
+      header: util.get_auth_header(),
+      method: 'POST',
+      data: that.data,
+      success(res) {
+        if (util.check_success(res)) {
+          util.route("/pages/page_activity/activity/personal/personal")
+        }
+      },
+      fail(res) {
+        util.fail()
+      }
+    })
+    
   },
-  Save() {
-    /**（未做）将data中元素上传至云端 */
-    wx.navigateBack();
-  },
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {},
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {},
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {},
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {},
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {},
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {},
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {},
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {},
 });

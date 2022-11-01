@@ -1,3 +1,5 @@
 {
-  "usingComponents": {"nav": "/pages/page_common/navigator/navigator"}
+  "usingComponents": {
+    "nav": "/pages/page_common/navigator/navigator"
+    }
 }

@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @PostMapping("/auth")
-    public RestfulResponse auth(HttpServletRequest request, @RequestParam("code") String code, HttpServletResponse resp) {
+    public RestfulResponse auth(@RequestParam("code") String code, HttpServletResponse resp) {
         String openId = WxUtil.getOpenIdByCode(code);
         if (openId != null) {
             User user = userService.getOne(new QueryWrapper<User>().eq("u_id", openId));

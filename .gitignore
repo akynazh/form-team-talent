@@ -42,7 +42,7 @@ replay_pid*
 
 *.iml
 .idea
-out
+target
 
 application.yaml
 application.properties
