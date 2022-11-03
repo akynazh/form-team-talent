@@ -24,5 +24,3 @@
   </block>
 
   <view class="comple_buttom" bindtap="deleteGroup">解散小组</view>
-
-  <nav></nav>

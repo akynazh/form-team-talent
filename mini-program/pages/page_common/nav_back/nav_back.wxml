@@ -1,0 +1,3 @@
+<view class="top_container">
+  <image class="return_button" src="/image/return_image.png" bindtap="navigate_back"></image>
+</view>

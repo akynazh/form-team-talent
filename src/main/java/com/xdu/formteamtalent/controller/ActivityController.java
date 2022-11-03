@@ -11,10 +11,13 @@ import com.xdu.formteamtalent.service.ActivityService;
 import com.xdu.formteamtalent.service.TeamService;
 import com.xdu.formteamtalent.utils.WxUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +26,9 @@ import java.util.stream.Collectors;
 public class ActivityController {
     private ActivityService activityService;
     private TeamService teamService;
+
+    @Value("${server.baseUrl}")
+    private String baseUrl;
 
     @Autowired
     public void setTeamService(TeamService teamService) {
@@ -37,24 +43,29 @@ public class ActivityController {
     @PostMapping("/add")
     public RestfulResponse addActivity(HttpServletRequest request, @RequestBody Activity activity) {
         String a_id = IdUtil.simpleUUID();
-        String a_qrcode_url = "localhost:8080/api/activity/get/" + a_id;
-        String a_qrcode_path = "static/activity/" + a_id + ".jpg";
-        QrCodeUtil.generate(a_qrcode_url, 300, 300, FileUtil.file(a_qrcode_path));
+        String a_qrcode_url = baseUrl + "/api/activity/get/" + a_id;
+        String a_real_qrcode_path = "static/qrcode/" + a_id + ".jpg";
+        String a_qrcode_path = baseUrl + "/qrcode/" + a_id + ".jpg";
+
+        FileUtil.touch(a_real_qrcode_path);
+        QrCodeUtil.generate(a_qrcode_url, 300, 300, FileUtil.file(a_real_qrcode_path));
         activity.setA_holder_id(WxUtil.getOpenId(request));
         activity.setA_id(a_id);
         activity.setA_qrcode_path(a_qrcode_path);
+        activity.setA_end_date(activity.getA_end_date() + new SimpleDateFormat(" HH:mm:ss").format(new Date()));
         activityService.save(activity);
         activity.setA_desc("");
         return RestfulResponse.success(activity);
     }
 
     @PostMapping("/remove")
-
     public RestfulResponse removeActivity(HttpServletRequest request, @RequestParam("a_id") String a_id) {
         QueryWrapper<Activity> wrapper = new QueryWrapper<>();
         wrapper.eq("a_holder_id", WxUtil.getOpenId(request));
         wrapper.eq("a_id", a_id);
-        if (activityService.getOne(wrapper) != null) {
+        Activity activity = activityService.getOne(wrapper);
+        if (activity != null) {
+            FileUtil.del("static/qrcode/" + a_id + ".jpg");
             activityService.removeById(a_id);
             return RestfulResponse.success();
         } else {
@@ -67,6 +78,7 @@ public class ActivityController {
         QueryWrapper<Activity> wrapper = new QueryWrapper<>();
         wrapper.eq("a_holder_id", WxUtil.getOpenId(request));
         wrapper.eq("a_id", activity.getA_id());
+        activity.setA_end_date(activity.getA_end_date() + new SimpleDateFormat(" HH:mm:ss").format(new Date()));
         if (activityService.getOne(wrapper) != null) {
             activityService.updateById(activity);
             return RestfulResponse.success();
@@ -84,7 +96,7 @@ public class ActivityController {
                     String a_end_date = a.getA_end_date();
                     long end_timestamp = Timestamp.valueOf(a_end_date).getTime() / 1000;
                     long current_timestamp = System.currentTimeMillis() / 1000;
-                    return end_timestamp <= current_timestamp;
+                    return end_timestamp >= current_timestamp;
                 }).collect(Collectors.toList());
         return RestfulResponse.success(activities);
     }
@@ -96,7 +108,6 @@ public class ActivityController {
     }
 
     @GetMapping("/get/my")
-
     public RestfulResponse getMyActivity(HttpServletRequest request) {
         List<Activity> list = activityService.list(new QueryWrapper<Activity>().eq("a_holder_id", WxUtil.getOpenId(request)));
         return RestfulResponse.success(list);
@@ -107,7 +118,6 @@ public class ActivityController {
      * @param a_id 活动id
      */
     @GetMapping("/get/team")
-
     public RestfulResponse getActivityTeam(@RequestParam("a_id") Long a_id) {
         QueryWrapper<Team> wrapper = new QueryWrapper<>();
         wrapper.eq("a_id", a_id);

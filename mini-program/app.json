@@ -2,13 +2,16 @@
   "pages": [
     "pages/page_home/page_home",
     "pages/page_me/page_me",
+    "pages/page_activity/activity/activity",
     "pages/page_activity/activity/personal/personal",
     "pages/page_activity/activity/public/public",
     "pages/page_activity/create/create",
     "pages/page_activity/detail/detail",
+    "pages/page_activity/update/update",
     "pages/page_group/group/group",
     "pages/page_group/create/create",
     "pages/page_group/detail/detail"
+    
   ],
   "window": {
     "backgroundTextStyle": "light",

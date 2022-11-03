@@ -9,10 +9,7 @@ page{
   padding-left: 60rpx;
   border-radius: 10rpx;
 }
-.return_button{
-  height: 40rpx;
-  width: 25rpx;
-}
+
 .name_talk_container{
   margin-top: 80rpx;
   margin-left: 50rpx;

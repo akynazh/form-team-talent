@@ -1,0 +1,13 @@
+.return_button{
+  height: 40rpx;
+  width: 25rpx;
+}
+
+.top_container {
+  height: 50rpx;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  margin: 20px 5px 10px 5px;
+  height: 100rpx;
+}

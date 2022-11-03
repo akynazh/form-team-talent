@@ -52,6 +52,7 @@ public class WxUtil {
     public static String getOpenId(HttpServletRequest request) {
         String token = request.getHeader("auth");
         Claims claims = JwtUtil.getClaimsByToken(token);
-        return (String)claims.getSubject();
+        assert claims != null;
+        return claims.getSubject();
     }
 }

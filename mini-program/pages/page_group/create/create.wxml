@@ -37,6 +37,3 @@
   <view class="cancle_button" bindtap="Cancle">取消</view>
   <view class="save_button" bindtap="Save">保存</view>
 </view>
-
-<nav></nav>
-

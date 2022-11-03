@@ -24,7 +24,7 @@ Page({
   },
   memberSelect(e){
     let that=this
-    let idx= e.currentTarget.dataset.id;
+    let idx= e.currentTarget.dataset.id
     console.log(idx)
     that.data.task[idx]=e.detail.value
     console.log(that.data.task[idx])

@@ -1,3 +1,4 @@
+<back page_url="../page_home/page_home"></back>
 <!--顶部头像与昵称-->
 <view class="input_theme">姓名</view>
 <textarea model:value="{{u_name}}" class="input_text_small" bindinput="getName"></textarea>
@@ -11,4 +12,3 @@
 <view class="cancle_save_container">
 	<view class="save_button" bindtap="update_info">更新</view>
 </view>
-<nav></nav>

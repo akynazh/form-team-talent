@@ -1,10 +1,10 @@
 const app = getApp()
-const base_url = app.globalData.base_url;
-import * as util from "../../../utils/util";
+const base_url = app.globalData.base_url
+import * as util from "../../../utils/util"
 
 Page({
   data: {
-    a_name: "sadf",
+    a_name: "",
     a_desc: "",
     a_end_date: "",
     a_is_public: 0,
@@ -26,7 +26,7 @@ Page({
     }
   },
   create_activity() {
-    let that = this;
+    let that = this
     wx.request({
       url: `${base_url}/api/activity/add`,
       header: util.get_auth_header(),
@@ -43,4 +43,4 @@ Page({
     })
     
   },
-});
+})

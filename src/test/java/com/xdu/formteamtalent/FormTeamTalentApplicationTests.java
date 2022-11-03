@@ -21,4 +21,11 @@ class FormTeamTalentApplicationTests {
         System.out.println(timestamp);
     }
 
+    @Test
+    public void test2() {
+        // 获取当前格式化时间
+        String sdf = new SimpleDateFormat("HH:mm:ss").format(new Date());
+
+        System.out.println(sdf);
+    }
 }
