@@ -8,9 +8,10 @@
     "pages/page_activity/create/create",
     "pages/page_activity/detail/detail",
     "pages/page_activity/update/update",
-    "pages/page_group/group/group",
-    "pages/page_group/create/create",
-    "pages/page_group/detail/detail"
+    "pages/page_team/team/team",
+    "pages/page_team/create/create",
+    "pages/page_team/detail/detail",
+    "pages/page_team/update/update"
     
   ],
   "window": {

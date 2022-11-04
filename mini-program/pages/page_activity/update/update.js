@@ -9,12 +9,12 @@ Page({
     a_desc: "",
     a_end_date: "",
     a_is_public: 0,
+    current_date: util.currentTime_1()
   },
   onLoad(params) {
-    console.log(params)
     let that = this
     wx.request({
-      url: `${base_url}/api/activity/get/id/${params.id}`,
+      url: `${base_url}/api/activity/get/id?a_id=${params.a_id}`,
       header: util.get_auth_header(),
       success(res) {
         console.log(res)
@@ -37,7 +37,7 @@ Page({
   },
   bindDateChange(e) {
     this.setData({
-      a_end_date: e.detail.value
+      a_end_date: e.detail.value + ' ' + util.currentTime_2()
     })
   },
   publicChange(e) {

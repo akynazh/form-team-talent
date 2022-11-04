@@ -1,5 +1,7 @@
 export {
   currentTime,
+  currentTime_1,
+  currentTime_2,
   formatNumber,
   alert_fail,
   get_auth_header,
@@ -20,7 +22,14 @@ let currentTime = () => {
   let date = new Date();
   return `${date.getFullYear()}-${ftime(date.getMonth() + 1)}-${ftime(date.getDate())} ${ftime(date.getHours())}:${ftime(date.getMinutes())}:${ftime(date.getSeconds())}`
 }
-
+let currentTime_1 = () => {
+  let date = new Date();
+  return `${date.getFullYear()}-${ftime(date.getMonth() + 1)}-${ftime(date.getDate())}`
+}
+let currentTime_2 = () => {
+  let date = new Date();
+  return `${ftime(date.getHours())}:${ftime(date.getMinutes())}:${ftime(date.getSeconds())}`
+}
 
 let formatNumber = n => {
   n = n.toString()

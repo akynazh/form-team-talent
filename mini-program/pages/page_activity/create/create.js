@@ -8,10 +8,11 @@ Page({
     a_desc: "",
     a_end_date: "",
     a_is_public: 0,
+    current_date: util.currentTime_1()
   },
   bindDateChange(e) {
     this.setData({
-      a_end_date: e.detail.value
+      a_end_date: e.detail.value + ' ' + util.currentTime_2()
     })
   },
   publicChange(e) {

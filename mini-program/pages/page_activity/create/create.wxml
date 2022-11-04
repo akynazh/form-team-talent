@@ -11,7 +11,7 @@
 <textarea placeholder="请输入活动内容" class="input_text_big" model:value="{{a_desc}}"></textarea>
 
 <view class="input_theme">活动截止日期</view>
-<picker mode="date" value="{{a_end_date}}" start="2022-01-25" end="2200-09-01" bindchange="bindDateChange">
+<picker mode="date" value="{{a_end_date}}" start="{{current_date}}" end="2200-09-01" bindchange="bindDateChange">
     <view class="picker">
       当前选择: {{a_end_date}}
     </view>

@@ -15,3 +15,9 @@
 <button bindtap="remove_activity">删除活动</button>
 
 <button bindtap="update_activity">编辑活动</button>
+
+<button bindtap="join_activity">加入活动</button>
+
+<button bindtap="leave_activity">离开活动</button>
+
+<button bindtap="show_group">查看小组</button>

@@ -5,10 +5,11 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xdu.formteamtalent.entity.Activity;
+import com.xdu.formteamtalent.entity.UAT;
 import com.xdu.formteamtalent.global.RestfulResponse;
-import com.xdu.formteamtalent.entity.Team;
 import com.xdu.formteamtalent.service.ActivityService;
 import com.xdu.formteamtalent.service.TeamService;
+import com.xdu.formteamtalent.service.UATService;
 import com.xdu.formteamtalent.utils.WxUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,22 +19,24 @@ import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/activity")
 public class ActivityController {
     private ActivityService activityService;
-    private TeamService teamService;
+    private UATService uatService;
+
+    @Autowired
+    public void setUatService(UATService uatService) {
+        this.uatService = uatService;
+    }
 
     @Value("${server.baseUrl}")
     private String baseUrl;
-
-    @Autowired
-    public void setTeamService(TeamService teamService) {
-        this.teamService = teamService;
-    }
 
     @Autowired
     public void setActivityService(ActivityService activityService) {
@@ -78,7 +81,6 @@ public class ActivityController {
         QueryWrapper<Activity> wrapper = new QueryWrapper<>();
         wrapper.eq("a_holder_id", WxUtil.getOpenId(request));
         wrapper.eq("a_id", activity.getA_id());
-        activity.setA_end_date(activity.getA_end_date() + new SimpleDateFormat(" HH:mm:ss").format(new Date()));
         if (activityService.getOne(wrapper) != null) {
             activityService.updateById(activity);
             return RestfulResponse.success();
@@ -101,27 +103,22 @@ public class ActivityController {
         return RestfulResponse.success(activities);
     }
 
-    @GetMapping("/get/id/{a_id}")
-    public RestfulResponse getActivityById(@PathVariable String a_id) {
+    @GetMapping("/get/id")
+    public RestfulResponse getActivityById(@RequestParam("a_id") String a_id) {
         Activity activity = activityService.getOne(new QueryWrapper<Activity>().eq("a_id", a_id));
         return RestfulResponse.success(activity);
     }
 
     @GetMapping("/get/my")
     public RestfulResponse getMyActivity(HttpServletRequest request) {
-        List<Activity> list = activityService.list(new QueryWrapper<Activity>().eq("a_holder_id", WxUtil.getOpenId(request)));
-        return RestfulResponse.success(list);
-    }
-
-    /**
-     * 根据活动id获取该活动对应的team
-     * @param a_id 活动id
-     */
-    @GetMapping("/get/team")
-    public RestfulResponse getActivityTeam(@RequestParam("a_id") Long a_id) {
-        QueryWrapper<Team> wrapper = new QueryWrapper<>();
-        wrapper.eq("a_id", a_id);
-        List<Team> list = teamService.list(wrapper);
-        return RestfulResponse.success(list);
+        String u_id = WxUtil.getOpenId(request);
+        List<Activity> list = activityService.list(new QueryWrapper<Activity>().eq("a_holder_id", u_id));
+        Set<Activity> set = new HashSet<>(list);
+        List<UAT> list1 = uatService.list(new QueryWrapper<UAT>().eq("u_id", u_id));
+        for (UAT uat : list1) {
+            Activity activity = activityService.getOne(new QueryWrapper<Activity>().eq("a_id", uat.getA_id()));
+            set.add(activity);
+        }
+        return RestfulResponse.success(set);
     }
 }

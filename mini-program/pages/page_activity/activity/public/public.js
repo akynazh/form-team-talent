@@ -25,6 +25,6 @@ Page({
     })
   },
   to_activity_detail(e) {
-    util.route(`../../detail/detail?id=${e.currentTarget.id}`, 0)
+    util.route(`../../detail/detail?a_id=${e.currentTarget.id}`, 0)
   }
 })

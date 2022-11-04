@@ -45,8 +45,8 @@ public class TeamController {
         return RestfulResponse.success();
     }
 
-    @PostMapping("/get/team")
-    public RestfulResponse getTeam(@RequestParam String a_id) {
+    @GetMapping("/get/by_a_id")
+    public RestfulResponse getTeamByA_id(@RequestParam("a_id") String a_id) {
         List<Team> list = teamService.list(new QueryWrapper<Team>().eq("a_id", a_id));
         return RestfulResponse.success(list);
     }

@@ -1,0 +1,10 @@
+
+<view class="group_creat_text">小组创建</view>
+
+<view class="input_theme">小组名</view>
+<textarea placeholder="请输入小组名名" class="input_text_small" model:value="{{t_name}}"></textarea>
+<textarea placeholder="请输入小组描述" class="input_text_small" model:value="{{t_desc}}"></textarea>
+
+<view class="cancle_save_container">
+  <view class="save_button" bindtap="create_team">提交</view>
+</view>
