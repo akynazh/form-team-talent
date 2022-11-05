@@ -1,8 +1,8 @@
 <back page_url="/pages/page_activity/activity/activity"></back>
 <block wx:for="{{teams}}" wx:key="t_id">
-  <view style="margin: 10px; border: 5px solid">
+  <view style="margin: 10px; border: 5px solid" bindtap="show_detail" id="{{item.t_id}}">
     <view>小组名称：{{item.t_name}}</view>
-    <view>小组介绍：{{item.t_desc}}</view>
+    <view>小组现有人数：{{item.t_count}}</view>
   </view>
 </block>
 

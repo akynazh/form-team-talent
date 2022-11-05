@@ -4,90 +4,93 @@ import * as util from "../../../utils/util"
 
 Page({
   data: {
-    group_talk:null,
-    group_leader:'xyz',
-    group_id:'s777',
-    group_name:'weixinxiaoch',
-    group_content:'微信小程序 微信小程序微信小程序微信小程序微信小程序微信小程序微信小程序微信小程序微信小程序微信小程序',
-    task_number:4,
-    task:[
-      {"name":"制作ppt",
-        "member": "null"},
-      {"name":"演讲",
-        "member": "null"},
-      {"name":"答辩",
-        "member": "null"},
-      {"name":"学习",
-        "member": "null"},
-    ]
+    team: {},
+    team_leader_name: "",
+    a_id: "",
+    t_id: "",
+    members: {}
   },
-  return_button(){
-    wx.navigateBack()
+  onLoad(params) {
+    this.data.a_id = params.a_id
+    this.data.t_id = params.t_id
+    let that = this
+    wx.request({
+      url: `${base_url}/api/team/get/id?t_id=${that.data.t_id}`,
+      header: util.get_auth_header(),
+      success(res) {
+        console.log(res)
+        if (util.check_success(res)) {
+          let obj = res.data.obj
+          that.setData({
+            team: obj.team,
+            team_leader_name: obj.team_leader_name,
+            a_id: that.data.a_id,
+            t_id: that.data.t_id,
+            members: obj.members
+          })
+        }
+      },
+      fail() {
+        util.fail()
+      }
+    })
   },
-  memberSelect(e){
-    let that=this
-    let idx= e.currentTarget.dataset.id
-    console.log(idx)
-    that.data.task[idx]=e.detail.value
-    console.log(that.data.task[idx])
-    /**（未做）将此改动上传云端 */
+  remove_team() {
+    let a_id = this.data.a_id
+    let t_id = this.data.t_id
+    wx.showModal({
+      title: "删除小组",
+      content: "确定删除？",
+      success(res) {
+        if (res.confirm) {
+          wx.request({
+            url: `${base_url}/api/team/remove?t_id=${t_id}`,
+            method: 'POST',
+            header: util.get_auth_header(),
+            success(res) {
+              if (util.check_success(res)) {
+                wx.showToast({
+                  title: '操作成功',
+                })
+                util.route(`/pages/page_team/team/team?a_id=${a_id}`)
+              }
+            },
+            fail() {util.fail()}
+          })
+        }
+      }
+    })
   },
-  deleteGroup(){
-    /**（未做）从云端删除小组 */
+  update_team() {
+    let team_json = JSON.stringify(this.data.team)
+    let a_id = this.data.a_id
+    let t_id = this.data.t_id
+    util.route(`/pages/page_team/update/update?a_id=${a_id}&t_id=${t_id}&team=${team_json}`)
   },
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
+  join_team() {
+    let t_id = this.data.t_id
+    let a_id = this.data.a_id
+    wx.showModal({
+      title: "加入小组",
+      content: "确认加入？",
+      success(res) {
+        if (res.confirm) {
+          wx.request({
+            url: `${base_url}/api/user/join/team?a_id=${a_id}&t_id=${t_id}`,
+            header: util.get_auth_header(),
+            method: 'POST',
+            fail() {util.fail()},
+            success(res) {
+              if (util.check_success(res)) {
+                wx.showToast({
+                  title: '操作成功',
+                })
+                util.route(`/pages/page_activity/activity/personal/personal`)
+              }
+            }
+          })
+        }
+      }
+    })
   }
 })

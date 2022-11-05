@@ -1,4 +1,4 @@
-CREATE DATABASE form_team_talent;
+# CREATE DATABASE form_team_talent;
 
 USE form_team_talent;
 
@@ -31,6 +31,8 @@ CREATE TABLE t_team (
     t_name VARCHAR(255) NOT NULL,
     t_leader_id VARCHAR(255) NOT NULL,
     t_desc VARCHAR(1024),
+    t_total INT,
+    t_count INT,
     PRIMARY KEY(t_id),
     FOREIGN KEY (t_leader_id) REFERENCES t_user(u_id),
     FOREIGN KEY (a_id) REFERENCES t_activity(a_id)

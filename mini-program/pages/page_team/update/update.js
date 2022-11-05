@@ -3,67 +3,43 @@ const base_url = app.globalData.base_url
 import * as util from "../../../utils/util"
 
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-
+    a_id: "",
+    t_id: "",
+    t_desc: "",
+    t_name: "",
+    t_total: ""
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad(options) {
-
+  onLoad(params) {
+    console.log(params)
+    let team = JSON.parse(params.team)
+    this.setData({
+      a_id: params.a_id,
+      t_id: params.t_id,
+      t_desc: team.t_desc,
+      t_name: team.t_name,
+      t_total: team.t_total
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
+  update_team() {
+    let a_id = this.data.a_id
+    let t_id = this.data.t_id
+    let that = this
+    console.log(this.data)
+    wx.request({
+      url: `${base_url}/api/team/update`,
+      header: util.get_auth_header(),
+      method: 'POST',
+      data: that.data,
+      success(res) {
+        if (util.check_success(res)) {
+          wx.showToast({
+            title: '操作成功',
+          })
+          util.route(`/pages/page_team/detail/detail?a_id=${a_id}&t_id=${t_id}`)
+        }
+      },
+      fail() {util.fail()}
+    })
   }
 })

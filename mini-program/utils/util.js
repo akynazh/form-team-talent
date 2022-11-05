@@ -2,11 +2,11 @@ export {
   currentTime,
   currentTime_1,
   currentTime_2,
-  formatNumber,
   alert_fail,
   get_auth_header,
   check_success,
-  route
+  route,
+  fail
 }
 
 const app = getApp()
@@ -31,11 +31,6 @@ let currentTime_2 = () => {
   return `${ftime(date.getHours())}:${ftime(date.getMinutes())}:${ftime(date.getSeconds())}`
 }
 
-let formatNumber = n => {
-  n = n.toString()
-  return n[1] ? n : `0${n}`
-}
-
 let check_success = res => {
   if (res.data.code != 200) {
     alert_fail("请求失败", res.data.msg)
@@ -43,7 +38,7 @@ let check_success = res => {
   }
   return true
 }
-let fail = () => { alert_fail("请求失败，请重试") }
+let fail = () => { alert_fail("失败", "操作失败，请重试") }
 
 let alert_fail = (title, content = "") => {
   wx.showModal({
@@ -56,19 +51,49 @@ let alert_fail = (title, content = "") => {
 }
 
 let get_auth_header = () => {
-  let token = wx.getStorageSync('auth') || ""
+  let token = wx.getStorageSync('auth') || ''
   let my_header = token != "" ? { "auth": token } : {}
   return my_header
+}
+let get_token = () => {
+  return wx.getStorageSync('auth') || ''
+}
+
+let route = (page_url, need_auth = 1) => {
+  if (need_auth == 0) {
+    wx.redirectTo({
+      url: page_url,
+    })
+  } else {
+    if (!app.globalData.islogin) {
+      if (get_token() != '') {
+        auth(page_url)
+      } else {
+        wx.getUserProfile({
+          desc: '请问是否进行登录？',
+          success(res) {
+            app.globalData.userInfo = res.userInfo
+            wx.showLoading({
+              title: "登录中..."
+            })
+            auth(page_url)
+          },
+        })
+      }
+    } else {
+      wx.redirectTo({
+        url: page_url,
+      })
+    }
+  }
 }
 
 let auth = page_url => {
   wx.login({
     success(res1) {
-      let token = wx.getStorageSync('auth') || ""
-      let my_header = token != "" ? { "auth": token } : {}
       wx.request({
         url: `${base_url}/api/user/auth?code=${res1.code}`,
-        header: my_header,
+        header: get_auth_header(),
         method: 'POST',
         success(res2) {
           console.log(res2)
@@ -110,31 +135,4 @@ let auth = page_url => {
       })
     }
   })
-}
-
-let route = (page_url, need_auth = 1) => {
-  console.log(need_auth)
-  if (need_auth == 0) {
-    wx.redirectTo({
-      url: page_url,
-    })
-  } else {
-    if (!app.globalData.islogin) {
-      wx.getUserProfile({
-        desc: '请问是否进行登录？',
-        success(res) {
-          app.globalData.userInfo = res.userInfo
-          wx.showLoading({
-            title: "登录中..."
-          })
-          auth(page_url)
-        },
-        fail(err) { }
-      })
-    } else {
-      wx.redirectTo({
-        url: page_url,
-      })
-    }
-  }
 }

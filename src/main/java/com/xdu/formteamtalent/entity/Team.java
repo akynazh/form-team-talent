@@ -22,4 +22,6 @@ public class Team implements Serializable {
     private String t_name;
     private String t_leader_id;
     private String t_desc;
+    private Integer t_total;
+    private Integer t_count;
 }

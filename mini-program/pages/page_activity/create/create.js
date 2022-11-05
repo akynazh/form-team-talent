@@ -8,7 +8,7 @@ Page({
     a_desc: "",
     a_end_date: "",
     a_is_public: 0,
-    current_date: util.currentTime_1()
+    current_date: ""
   },
   bindDateChange(e) {
     this.setData({
@@ -34,6 +34,9 @@ Page({
       method: 'POST',
       data: that.data,
       success(res) {
+        wx.showToast({
+          title: '创建成功',
+        })
         if (util.check_success(res)) {
           util.route("/pages/page_activity/activity/personal/personal")
         }
@@ -42,6 +45,5 @@ Page({
         util.fail()
       }
     })
-    
   },
 })

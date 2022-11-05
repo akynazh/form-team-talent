@@ -1,26 +1,25 @@
-
-<view class="top_container">
-  <image class="return_button" src="/image_resources/return_image.png" bindtap="return_button"></image>
-</view>
-
+<back page_url="/pages/page_team/team/team?a_id={{a_id}}"></back>
 <view class="name_talk_container">
-  <view class="group_name">{{group_id}}</view>
-  <image class="talk_image" src="{{group_talk}}"></image>
+  <view class="group_name">{{team.t_name}}</view>
+</view>
+<view class="name_talk_container">
+  <view>小组描述{{team.t_desc}}</view>
 </view>
 <view class="group_holder">
-    <view class="group_holder_text">组长: </view>
-    <view class="group_holder_text">{{group_leader}}</view>
+  <view class="group_holder_text">组长: </view>
+  <view class="group_holder_text">{{team_leader_name}}</view>
+</view>
+<view>
+  <view>人数限制：{{team.t_total}}</view>
+  <view>现有人数：{{team.t_count}}</view>
+  <view>小组成员：</view>
+  <block wx:for="{{members}}" wx:key="">
+  <view>
+  <view>姓名：{{item.u_name}}，学号：{{item.u_stu_num}}</view>
   </view>
-
-  <view class="group_text">活动内容：</view>
-  <view class="group_content">{{group_content}}</view>
-
-  <view class="task_text">任务分配情况：</view>
-  <block wx:for="{{task}}" wx:if="{{task_number!=0}}" wx:for-index="idx">
-    <view class="task_contener">
-      <view class="task_name">{{item.name}}</view>
-      <textarea data-id="{{idx}}" bindinput="memberSelect" class="match__state" placeholder="{{item.member}}"></textarea>
-    </view>
   </block>
+</view>
 
-  <view class="comple_buttom" bindtap="deleteGroup">解散小组</view>
+<button bindtap="remove_team">解散小组</button>
+<button bindtap="update_team">编辑小组</button>
+<button bindtap="join_team">加入小组</button>

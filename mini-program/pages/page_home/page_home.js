@@ -10,7 +10,14 @@ Page({
     util.route("/pages/page_activity/public/public")
   },
   scan_qrcode() {
-    console.log("scan qrcode")
+    wx.scanCode({
+      success (res) {
+        console.log(res)
+        let url = res.result
+        console.log(url)
+        util.route(url)
+      }
+    })
   }
   
 })

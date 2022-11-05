@@ -17,7 +17,8 @@ Page({
         console.log(res)
         if (util.check_success(res)) {
           that.setData({
-            teams: res.data.obj
+            teams: res.data.obj,
+            a_id: that.data.a_id
           })
         }
       },
@@ -28,5 +29,8 @@ Page({
   },
   create_team() {
     util.route(`/pages/page_team/create/create?a_id=${this.data.a_id}`)
+  },
+  show_detail(e) {
+    util.route(`/pages/page_team/detail/detail?t_id=${e.currentTarget.id}&a_id=${this.data.a_id}`, 0)
   }
 })

@@ -60,7 +60,10 @@ Page({
       data: that.data,
       success(res) {
         if (util.check_success(res)) {
-          util.route("/pages/page_activity/activity/activity")
+          wx.showToast({
+            title: '操作成功',
+          })
+          util.route("/pages/page_activity/activity/personal/personal")
         }
       },
       fail(res) {

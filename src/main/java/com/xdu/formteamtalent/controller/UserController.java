@@ -74,10 +74,17 @@ public class UserController {
      * @param t_id 小组id
      */
     @PostMapping("/join/team")
-
     public RestfulResponse joinTeam(HttpServletRequest request, @RequestParam("t_id") String t_id, @RequestParam("a_id") String a_id) {
+        String u_id = WxUtil.getOpenId(request);
+        QueryWrapper<UAT> wrapper = new QueryWrapper<>();
+        wrapper.eq("u_id", u_id);
+        wrapper.eq("t_id", t_id);
+        wrapper.eq("a_id", a_id);
+        if (uatService.getOne(wrapper) != null) {
+            return RestfulResponse.fail(403, "不可重复加入");
+        }
         UAT uat = new UAT();
-        uat.setU_id(WxUtil.getOpenId(request));
+        uat.setU_id(u_id);
         uat.setA_id(a_id);
         uat.setT_id(t_id);
         uatService.save(uat);
@@ -85,52 +92,15 @@ public class UserController {
     }
 
     /**
-     * 加入某个活动
-     * @param a_id 活动id
-     */
-    @PostMapping("/join/activity")
-    public RestfulResponse joinActivity(HttpServletRequest request, @RequestParam("a_id") String a_id) {
-        UAT uat = new UAT();
-        uat.setU_id(WxUtil.getOpenId(request));
-        uat.setA_id(a_id);
-        uatService.save(uat);
-        return RestfulResponse.success();
-    }
-
-    /**
-     * 退出某个小组
+     * 退出某个小组（活动）
      * @param t_id 小组id
      */
     @PostMapping("/leave/team")
-
     public RestfulResponse leaveTeam(HttpServletRequest request, @RequestParam("t_id") String t_id) {
         String u_id = WxUtil.getOpenId(request);
         QueryWrapper<UAT> wrapper = new QueryWrapper<>();
         wrapper.eq("t_id", t_id);
         wrapper.eq("u_id", u_id);
-        Team team = teamService.getOne(new QueryWrapper<Team>().eq("t_leader_id", u_id));
-        if (team != null) {
-            return RestfulResponse.fail(403, "作为小组创建者，需要先解散该队伍");
-        }
-        uatService.remove(wrapper);
-        return RestfulResponse.success();
-    }
-
-    /**
-     * 退出某个活动
-     * @param a_id 活动id
-     */
-    @PostMapping("/leave/activity")
-
-    public RestfulResponse leaveActivity(HttpServletRequest request, @RequestParam("a_id") String a_id) {
-        String u_id = WxUtil.getOpenId(request);
-        QueryWrapper<UAT> wrapper = new QueryWrapper<>();
-        wrapper.eq("a_id", a_id);
-        wrapper.eq("u_id", u_id);
-        Activity activity = activityService.getOne(new QueryWrapper<Activity>().eq("a_holder_id", u_id));
-        if (activity != null) {
-            return RestfulResponse.fail(403, "作为活动创建者，需先删除该活动");
-        }
         uatService.remove(wrapper);
         return RestfulResponse.success();
     }

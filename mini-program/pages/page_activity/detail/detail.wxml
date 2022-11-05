@@ -5,7 +5,7 @@
     <view class="activity_theme">{{activity.a_name}}</view>
   </view>
   <view class="activity_text">活动内容：</view>
-  <view class="activity_content">{{activity.a_desc}}]</view>
+  <view class="activity_content">{{activity.a_desc}}</view>
 
   <view>截止日期：{{activity.a_end_date}}</view>
 
@@ -16,8 +16,4 @@
 
 <button bindtap="update_activity">编辑活动</button>
 
-<button bindtap="join_activity">加入活动</button>
-
-<button bindtap="leave_activity">离开活动</button>
-
-<button bindtap="show_group">查看小组</button>
+<button bindtap="show_team">查看小组</button>

@@ -4,6 +4,7 @@
 <view class="input_theme">小组名</view>
 <textarea placeholder="请输入小组名名" class="input_text_small" model:value="{{t_name}}"></textarea>
 <textarea placeholder="请输入小组描述" class="input_text_small" model:value="{{t_desc}}"></textarea>
+<textarea placeholder="请输入小组人数限制" class="input_text_small" model:value="{{t_total}}"></textarea>
 
 <view class="cancle_save_container">
   <view class="save_button" bindtap="create_team">提交</view>

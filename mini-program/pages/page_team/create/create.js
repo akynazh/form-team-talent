@@ -8,6 +8,7 @@ Page({
     t_id: "",
     t_name: "",
     t_desc: "",
+    t_total: ""
   },
   onLoad(params) {
     this.data.a_id = params.a_id

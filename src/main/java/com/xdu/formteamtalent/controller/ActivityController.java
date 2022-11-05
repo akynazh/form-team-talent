@@ -5,6 +5,7 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xdu.formteamtalent.entity.Activity;
+import com.xdu.formteamtalent.entity.Team;
 import com.xdu.formteamtalent.entity.UAT;
 import com.xdu.formteamtalent.global.RestfulResponse;
 import com.xdu.formteamtalent.service.ActivityService;
@@ -13,12 +14,11 @@ import com.xdu.formteamtalent.service.UATService;
 import com.xdu.formteamtalent.utils.WxUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,6 +29,12 @@ import java.util.stream.Collectors;
 public class ActivityController {
     private ActivityService activityService;
     private UATService uatService;
+    private TeamService teamService;
+
+    @Autowired
+    public void setTeamService(TeamService teamService) {
+        this.teamService = teamService;
+    }
 
     @Autowired
     public void setUatService(UATService uatService) {
@@ -44,24 +50,27 @@ public class ActivityController {
     }
 
     @PostMapping("/add")
+    @Transactional
     public RestfulResponse addActivity(HttpServletRequest request, @RequestBody Activity activity) {
         String a_id = IdUtil.simpleUUID();
-        String a_qrcode_url = baseUrl + "/api/activity/get/" + a_id;
+        String a_qrcode_url = "/pages/page_activity/detail/detail?a_id=" + a_id;
         String a_real_qrcode_path = "static/qrcode/" + a_id + ".jpg";
         String a_qrcode_path = baseUrl + "/qrcode/" + a_id + ".jpg";
+        String u_id = WxUtil.getOpenId(request);
 
         FileUtil.touch(a_real_qrcode_path);
         QrCodeUtil.generate(a_qrcode_url, 300, 300, FileUtil.file(a_real_qrcode_path));
-        activity.setA_holder_id(WxUtil.getOpenId(request));
+        activity.setA_holder_id(u_id);
         activity.setA_id(a_id);
         activity.setA_qrcode_path(a_qrcode_path);
-        activity.setA_end_date(activity.getA_end_date() + new SimpleDateFormat(" HH:mm:ss").format(new Date()));
         activityService.save(activity);
-        activity.setA_desc("");
+        activity.setA_holder_id("");
+
         return RestfulResponse.success(activity);
     }
 
     @PostMapping("/remove")
+    @Transactional
     public RestfulResponse removeActivity(HttpServletRequest request, @RequestParam("a_id") String a_id) {
         QueryWrapper<Activity> wrapper = new QueryWrapper<>();
         wrapper.eq("a_holder_id", WxUtil.getOpenId(request));
@@ -69,6 +78,8 @@ public class ActivityController {
         Activity activity = activityService.getOne(wrapper);
         if (activity != null) {
             FileUtil.del("static/qrcode/" + a_id + ".jpg");
+            uatService.remove(new QueryWrapper<UAT>().eq("a_id", a_id));
+            teamService.remove(new QueryWrapper<Team>().eq("a_id", a_id));
             activityService.removeById(a_id);
             return RestfulResponse.success();
         } else {
@@ -100,12 +111,16 @@ public class ActivityController {
                     long current_timestamp = System.currentTimeMillis() / 1000;
                     return end_timestamp >= current_timestamp;
                 }).collect(Collectors.toList());
+        for (Activity activity : activities) {
+            activity.setA_holder_id("");
+        }
         return RestfulResponse.success(activities);
     }
 
     @GetMapping("/get/id")
     public RestfulResponse getActivityById(@RequestParam("a_id") String a_id) {
         Activity activity = activityService.getOne(new QueryWrapper<Activity>().eq("a_id", a_id));
+        activity.setA_holder_id("");
         return RestfulResponse.success(activity);
     }
 
@@ -118,6 +133,9 @@ public class ActivityController {
         for (UAT uat : list1) {
             Activity activity = activityService.getOne(new QueryWrapper<Activity>().eq("a_id", uat.getA_id()));
             set.add(activity);
+        }
+        for (Activity activity: set) {
+            activity.setA_holder_id("");
         }
         return RestfulResponse.success(set);
     }
