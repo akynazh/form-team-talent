@@ -1,6 +1,11 @@
 Component({
   properties: {
-    page_url: ""
+    page_url: {
+      type: String
+    },
+    title: {
+      type: String
+    }
   },
   methods: {
     navigate_back() {

@@ -11,8 +11,8 @@
     "pages/page_team/team/team",
     "pages/page_team/create/create",
     "pages/page_team/detail/detail",
-    "pages/page_team/update/update"
-    
+    "pages/page_team/update/update",
+    "pages/page_team/team/personal/personal"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -1,13 +1,18 @@
-<view class="top_container">
-</view>
+<top title="组队达人"></top>
 
-<view bindtap="to_create_activity">
-  <view>创建活动</view>
-  <image class="new_image" src="/image/creat_image.png" />
-</view>
+<van-grid gutter="{{ 10 }}" column-num="2">
+  <van-grid-item icon="photo-o" use-slot wx:for="{{ 1 }}">
+    <van-icon name="add-o" size="60px" /> 创建活动
+  </van-grid-item>
+  <van-grid-item icon="photo-o" use-slot wx:for="{{ 1 }}">
+    <van-icon name="scan" size="60px" /> 加入活动
+  </van-grid-item>
+  <van-grid-item icon="photo-o" use-slot wx:for="{{ 1 }}">
+    <van-icon name="browsing-history-o" size="60px" /> 查看我的小组
+  </van-grid-item>
+  <van-grid-item icon="photo-o" use-slot wx:for="{{ 1 }}">
+    <van-icon name="user-o" size="60px" /> 登录
+  </van-grid-item>
+</van-grid>
 
-<view bindtap="scan_qrcode">
-  <view>扫一扫</view>
-  <image class="new_image" src="/image/scan_image.png" />
-</view>
-<nav></nav>
+<nav active="home"></nav>

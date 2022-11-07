@@ -1,0 +1,4 @@
+<van-nav-bar
+  title="{{title}}"
+  title-class="nav-title"
+/>
