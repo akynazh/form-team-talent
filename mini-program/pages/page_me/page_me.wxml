@@ -1,16 +1,10 @@
-<back page_url="../page_home/page_home"></back>
-<!--顶部头像与昵称-->
-<view class="input_theme">姓名</view>
-<textarea model:value="{{u_name}}" class="input_text_small" bindinput="getName"></textarea>
+<top title="组队达人"></top>
 
-<view class="input_theme">学号</view>
-<textarea model:value="{{u_stu_num}}" class="input_text_small" bindinput="getStuNumber"></textarea>
-
-<view class="input_theme">学校</view>
-<textarea model:value="{{u_school}}" class="input_text_small" bindinput="getSchool"></textarea>
-
-<view class="cancle_save_container">
-	<view class="save_button" bindtap="update_info">更新</view>
-</view>
+<van-cell-group inset>
+  <van-cell title="姓名" value="{{u_name}}" />
+  <van-cell title="学号" value="{{u_stu_num}}" />
+  <van-cell title="学校" value="{{u_school}}" />
+  <van-cell bindtap="update_info" title="编辑信息" is-link />
+</van-cell-group>
 
 <nav active="me"></nav>

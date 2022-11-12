@@ -1,17 +1,23 @@
 <top title="组队达人"></top>
 
 <van-grid gutter="{{ 10 }}" column-num="2">
-  <van-grid-item icon="photo-o" use-slot wx:for="{{ 1 }}">
+  <van-grid-item icon="photo-o" use-slot wx:for="{{ 1 }}" bindtap='to_create_activity'>
     <van-icon name="add-o" size="60px" /> 创建活动
   </van-grid-item>
-  <van-grid-item icon="photo-o" use-slot wx:for="{{ 1 }}">
+  <van-grid-item icon="photo-o" use-slot wx:for="{{ 1 }}" bindtap="scan_qrcode">
     <van-icon name="scan" size="60px" /> 加入活动
   </van-grid-item>
-  <van-grid-item icon="photo-o" use-slot wx:for="{{ 1 }}">
-    <van-icon name="browsing-history-o" size="60px" /> 查看我的小组
+  <van-grid-item icon="photo-o" use-slot wx:for="{{ 1 }}" bindtap="view_public_activity">
+    <van-icon name="fire-o" size="60px" /> 公开活动
   </van-grid-item>
-  <van-grid-item icon="photo-o" use-slot wx:for="{{ 1 }}">
+  <van-grid-item icon="photo-o" use-slot wx:for="{{ 1 }}" bindtap="view_personal_activity">
+    <van-icon name="star-o" size="60px" /> 我的活动
+  </van-grid-item>
+  <van-grid-item icon="photo-o" use-slot wx:for="{{ 1 }}" bindtap="login">
     <van-icon name="user-o" size="60px" /> 登录
+  </van-grid-item>
+  <van-grid-item icon="photo-o" use-slot wx:for="{{ 1 }}" bindtap="view_my_team">
+    <van-icon name="friends-o" size="60px" /> 我的小组
   </van-grid-item>
 </van-grid>
 

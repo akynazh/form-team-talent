@@ -1,7 +1,0 @@
-<back page_url="../activity"></back>
-<block wx:for="{{activities}}" wx:key="a_id">
-  <view class="a_container" bindtap="to_activity_detail" id="{{item.a_id}}">
-    <view class="a_name">{{item.a_name}}</view>
-    <view class="a_end_date">截止时间：{{item.a_end_date}}</view>
-  </view>
-</block>

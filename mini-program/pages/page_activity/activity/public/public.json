@@ -1,6 +1,0 @@
-{
-  "usingComponents": {
-    "nav": "/pages/page_common/navigator/navigator",
-    "back": "/pages/page_common/nav_back/nav_back"
-  }
-}

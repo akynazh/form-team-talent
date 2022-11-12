@@ -1,5 +1,10 @@
-<top title="组队达人"></top>
+<back page_url="/pages/page_home/page_home"></back>
 
-<button style="margin: 100px 10px 100px 10px;" bindtap="to_personal_activity">查看加入或创建的活动</button>
-<button style="margin: 100px 10px 100px 10px;" bindtap="to_public_activity">查看公开活动</button>
-<nav active="home"></nav>
+<block wx:if="{{activities.length > 0}}">
+  <block wx:for="{{activities}}" wx:key="a_id">
+    <van-cell bindtap="to_activity_detail" title="{{item.a_name}}" is-link />
+  </block>
+</block>
+<block wx:else>
+  <van-empty description="屋子空荡荡的" />
+</block>
