@@ -3,8 +3,8 @@
 <van-cell-group inset>
   <van-cell title="姓名" value="{{u_name}}" />
   <van-cell title="学号" value="{{u_stu_num}}" />
-  <van-cell title="学校" value="{{u_school}}" />
-  <van-cell bindtap="update_info" title="编辑信息" is-link />
+  <van-cell title="学校" value="{{u_school}}" icon="location-o" />
+  <van-cell bindtap="updateInfo" title="编辑信息" is-link />
 </van-cell-group>
 
 <nav active="me"></nav>

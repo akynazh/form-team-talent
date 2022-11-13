@@ -1,9 +1,10 @@
-<back page_url="/pages/page_activity/activity/activity"></back>
+<back pageUrl="/pages/page_activity/detail/detail?a_id={{a_id}}&a_type={{a_type}}"></back>
+
 <block wx:for="{{teams}}" wx:key="t_id">
-  <view style="margin: 10px; border: 5px solid" bindtap="show_detail" id="{{item.t_id}}">
+  <view style="margin: 10px; border: 5px solid" bindtap="showDetail" id="{{item.t_id}}">
     <view>小组名称：{{item.t_name}}</view>
     <view>小组现有人数：{{item.t_count}}</view>
   </view>
 </block>
 
-<button bindtap="create_team">创建小组</button>
+<button bindtap="createTeam">创建小组</button>

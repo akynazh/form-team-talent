@@ -1,5 +1,5 @@
 const app = getApp()
-const base_url = app.globalData.base_url
+const baseUrl = app.globalData.baseUrl
 import * as util from "../../../utils/util"
 
 Component({
@@ -11,18 +11,18 @@ Component({
     }
   },
   methods: {
-    nav_to_page(e) {
-      let page_name = e.detail
+    navToPage(e) {
+      let pageName = e.detail
       this.setData({
         active: e.detail
       })
-      if (page_name == "home") {
+      if (pageName == "home") {
         util.route("/pages/page_home/page_home", 0)
       }
-      else if (page_name == "team") {
+      else if (pageName == "team") {
         util.route("/pages/page_team/team/personal/personal", 0)
       }
-      else if (page_name == "me") {
+      else if (pageName == "me") {
         util.route("/pages/page_me/page_me")
       }
     }

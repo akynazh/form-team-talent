@@ -1,28 +1,32 @@
 const app = getApp()
-const base_url = app.globalData.base_url
+const baseUrl = app.globalData.baseUrl
 import * as util from "../../../utils/util"
 
 Page({
   data: {
     a_id: "",
+    a_type: "",
+
     a_name: "",
     a_desc: "",
     a_end_date: "",
     a_is_public: 0,
-    current_date: util.currentTime_1()
   },
   onLoad(params) {
     let that = this
+    let a_id = params.a_id
+    let a_type = params.a_type
     wx.request({
-      url: `${base_url}/api/activity/get/id?a_id=${params.a_id}`,
-      header: util.get_auth_header(),
+      url: `${baseUrl}/api/activity/get/id?a_id=${a_id}`,
+      header: util.getAuthHeader(),
       success(res) {
         console.log(res)
-        if (util.check_success(res)) {
+        if (util.checkSuccess(res)) {
           let obj = res.data.obj
           console.log(obj)
           that.setData({
-            a_id: obj.a_id,
+            a_id: a_id,
+            a_type: a_type,
             a_name: obj.a_name,
             a_desc: obj.a_desc,
             a_end_date: obj.a_end_date,
@@ -33,11 +37,6 @@ Page({
       fail() {
         util.fail()
       }
-    })
-  },
-  bindDateChange(e) {
-    this.setData({
-      a_end_date: e.detail.value + ' ' + util.currentTime_2()
     })
   },
   publicChange(e) {
@@ -51,15 +50,15 @@ Page({
       })
     }
   },
-  update_activity() {
+  updateActivity() {
     let that = this
     wx.request({
-      url: `${base_url}/api/activity/update`,
-      header: util.get_auth_header(),
+      url: `${baseUrl}/api/activity/update`,
+      header: util.getAuthHeader(),
       method: 'POST',
       data: that.data,
       success(res) {
-        if (util.check_success(res)) {
+        if (util.checkSuccess(res)) {
           wx.showToast({
             title: '操作成功',
           })

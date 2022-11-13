@@ -1,6 +1,6 @@
 Component({
   properties: {
-    page_url: {
+    pageUrl: {
       type: String
     },
     title: {
@@ -8,10 +8,10 @@ Component({
     }
   },
   methods: {
-    navigate_back() {
+    navigateBack() {
       let that = this
       wx.redirectTo({
-        url: that.properties.page_url
+        url: that.properties.pageUrl
       })
     }
   },

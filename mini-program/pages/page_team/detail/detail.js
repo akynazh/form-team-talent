@@ -1,5 +1,5 @@
 const app = getApp()
-const base_url = app.globalData.base_url
+const baseUrl = app.globalData.baseUrl
 import * as util from "../../../utils/util"
 
 Page({
@@ -15,11 +15,11 @@ Page({
     this.data.t_id = params.t_id
     let that = this
     wx.request({
-      url: `${base_url}/api/team/get/id?t_id=${that.data.t_id}`,
-      header: util.get_auth_header(),
+      url: `${baseUrl}/api/team/get/id?t_id=${that.data.t_id}`,
+      header: util.getAuthHeader(),
       success(res) {
         console.log(res)
-        if (util.check_success(res)) {
+        if (util.checkSuccess(res)) {
           let obj = res.data.obj
           that.setData({
             team: obj.team,
@@ -35,7 +35,7 @@ Page({
       }
     })
   },
-  remove_team() {
+  removeTeam() {
     let a_id = this.data.a_id
     let t_id = this.data.t_id
     wx.showModal({
@@ -44,11 +44,11 @@ Page({
       success(res) {
         if (res.confirm) {
           wx.request({
-            url: `${base_url}/api/team/remove?t_id=${t_id}`,
+            url: `${baseUrl}/api/team/remove?t_id=${t_id}`,
             method: 'POST',
-            header: util.get_auth_header(),
+            header: util.getAuthHeader(),
             success(res) {
-              if (util.check_success(res)) {
+              if (util.checkSuccess(res)) {
                 wx.showToast({
                   title: '操作成功',
                 })
@@ -61,13 +61,13 @@ Page({
       }
     })
   },
-  update_team() {
+  updateTeam() {
     let team_json = JSON.stringify(this.data.team)
     let a_id = this.data.a_id
     let t_id = this.data.t_id
     util.route(`/pages/page_team/update/update?a_id=${a_id}&t_id=${t_id}&team=${team_json}`)
   },
-  join_team() {
+  joinTeam() {
     let t_id = this.data.t_id
     let a_id = this.data.a_id
     wx.showModal({
@@ -76,12 +76,12 @@ Page({
       success(res) {
         if (res.confirm) {
           wx.request({
-            url: `${base_url}/api/user/join/team?a_id=${a_id}&t_id=${t_id}`,
-            header: util.get_auth_header(),
+            url: `${baseUrl}/api/user/join/team?a_id=${a_id}&t_id=${t_id}`,
+            header: util.getAuthHeader(),
             method: 'POST',
             fail() {util.fail()},
             success(res) {
-              if (util.check_success(res)) {
+              if (util.checkSuccess(res)) {
                 wx.showToast({
                   title: '操作成功',
                 })

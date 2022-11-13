@@ -1,19 +1,29 @@
-<back page_url="/pages/page_activity/activity/activity"></back>
+<back pageUrl="/pages/page_activity/activity/activity?a_type={{a_type}}"></back>
 
-<view class="information_container">
-  <view class="name_QR_container">
-    <view class="activity_theme">{{activity.a_name}}</view>
+<van-cell-group>
+  <van-cell title="活动名称" value="{{activity.a_name}}" />
+  <van-cell title="截止日期" value="{{activity.a_end_date}}" />
+  <van-collapse value="{{ activeNames }}" bind:change="onActiveDescChange">
+    <van-collapse-item title="活动描述" name="1">
+      <view class="my-paragraph">{{activity.a_desc}}
+      </view>
+    </van-collapse-item>
+  </van-collapse>
+  <view style="text-align: center;">
+    <image src="{{activity.a_qrcode_path}}" style="width: 200px; height: 200px;"></image>
   </view>
-  <view class="activity_text">活动内容：</view>
-  <view class="activity_content">{{activity.a_desc}}</view>
+</van-cell-group>
 
-  <view>截止日期：{{activity.a_end_date}}</view>
+<van-row gutter="20">
+  <van-col span="8">
+    <van-button plain type="primary" bindtap="updateActivity">编辑活动</van-button>
+  </van-col>
+  <van-col span="8">
+    <van-button plain type="info" bindtap="showTeam">查看小组</van-button>
+  </van-col>
+  <van-col span="8">
+    <van-button plain type="danger" bindtap="removeActivity">删除活动</van-button>
+  </van-col>
+</van-row>
 
-  <image class="QR_code" src="{{activity.a_qrcode_path}}"></image>
-</view>
 
-<button bindtap="remove_activity">删除活动</button>
-
-<button bindtap="update_activity">编辑活动</button>
-
-<button bindtap="show_team">查看小组</button>

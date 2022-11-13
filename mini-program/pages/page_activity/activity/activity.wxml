@@ -1,8 +1,8 @@
-<back page_url="/pages/page_home/page_home"></back>
+<back pageUrl="/pages/page_home/page_home"></back>
 
 <block wx:if="{{activities.length > 0}}">
   <block wx:for="{{activities}}" wx:key="a_id">
-    <van-cell bindtap="to_activity_detail" title="{{item.a_name}}" is-link />
+    <van-cell id="{{item.a_id}}" bindtap="toActivityDetail" title="{{item.a_name}}" is-link />
   </block>
 </block>
 <block wx:else>

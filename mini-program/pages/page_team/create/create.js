@@ -1,5 +1,5 @@
 const app = getApp()
-const base_url = app.globalData.base_url
+const baseUrl = app.globalData.baseUrl
 import * as util from "../../../utils/util"
 
 Page({
@@ -13,16 +13,16 @@ Page({
   onLoad(params) {
     this.data.a_id = params.a_id
   },
-  create_team() {
+  createTeam() {
     let that = this
     console.log(that.data)
     wx.request({
-      url: `${base_url}/api/team/add`,
-      header: util.get_auth_header(),
+      url: `${baseUrl}/api/team/add`,
+      header: util.getAuthHeader(),
       method: 'POST',
       data: that.data,
       success(res) {
-        if (util.check_success(res)) {
+        if (util.checkSuccess(res)) {
           wx.showToast({
             title: '创建成功',
           })

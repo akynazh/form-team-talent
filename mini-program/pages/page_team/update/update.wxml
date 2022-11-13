@@ -1,11 +1,5 @@
-<back page_url="/pages/page_team/detail/detail?a_id={{a_id}}&t_id={{t_id}}"></back>
-<view class="name_talk_container">
-  小组名称：<input model:value="{{t_name}}"></input>
-</view>
-<view class="name_talk_container">
-  小组描述：<input model:value="{{t_desc}}"></input>
-</view>
-<view>
-  人数限制：<input model:value="{{t_total}}"></input>
-</view>
-<button bindtap="update_team">提交</button>
+<back pageUrl="/pages/page_team/detail/detail?a_id={{a_id}}&t_id={{t_id}}"></back>
+小组名称：<input model:value="{{t_name}}"></input>
+小组描述：<input model:value="{{t_desc}}"></input>
+人数限制：<input model:value="{{t_total}}"></input>
+<button bindtap="updateTeam">提交</button>

@@ -1,24 +1,24 @@
 const app = getApp()
-const base_url = app.globalData.base_url
+const baseUrl = app.globalData.baseUrl
 import * as util from "../../utils/util"
 
 Page({
-  to_create_activity() {
+  toCreateActivity() {
     util.route("/pages/page_activity/create/create")
   },
-  view_public_activity() {
-    util.route("/pages/page_activity/activity/activity?type=0", 0)
+  viewPublicActivity() {
+    util.route("/pages/page_activity/activity/activity?a_type=0", 0)
   },
-  view_personal_activity() {
-    util.route("/pages/page_activity/activity/activity?type=1")
+  viewPersonalActivity() {
+    util.route("/pages/page_activity/activity/activity?a_type=1")
   },
   login() {
     util.route('/pages/page_home/page_home')
   },
-  view_my_team() {
+  viewMyTeam() {
     util.route("/pages/page_team/team/personal/personal")
   },
-  scan_qrcode() {
+  scanQrcode() {
     wx.scanCode({
       success (res) {
         console.log(res)

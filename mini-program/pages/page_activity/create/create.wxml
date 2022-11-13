@@ -1,29 +1,28 @@
+<back pageUrl="/pages/page_home/page_home"></back>
 
-<back page_url="/pages/page_home/page_home"></back>
+<van-cell-group>
+  <van-field model:value="{{a_name}}" label="活动题目" placeholder="例如：思政小组展示" border="{{ false }}" />
+  <van-field model:value="{{a_desc}}" label="活动内容" placeholder="请输入活动内容" border="{{ false }}" />
+  <van-cell title="截止日期" is-link bind:click="showDatePickerPopup" label="{{a_end_date}}" value="选择"/>
+  <van-popup show="{{ show }}" bind:close="onDatePickerClose" position="bottom">
+    <van-datetime-picker
+      type="date"
+      value="{{ currentDate }}"
+      bind:input="onDatePickerInput"
+      bind:cancel="onDatePickerClose"
+      bind:confirm="onDatePickerConfirm"
+      min-date="{{ minDate }}"
+      formatter="{{ formatter }}"
+    />
+  </van-popup>
+  <van-radio-group value="{{a_is_public}}">
+    <van-cell title="公开" clickable data-name="1" bind:click="onIsPublicClick">
+      <van-radio slot="right-icon" name="1" />
+    </van-cell>
+    <van-cell title="私有" clickable data-name="0" bind:click="onIsPublicClick">
+      <van-radio slot="right-icon" name="0" />
+    </van-cell>
+  </van-radio-group>
+</van-cell-group>
 
-<view class="activity_creat_text">活动创建</view>
-
-
-<view class="input_theme">活动题目</view>
-<textarea placeholder="例如：思政小组展示 " class="input_text_small" model:value="{{a_name}}"></textarea>
-
-<view class="input_theme">活动内容</view>
-<textarea placeholder="请输入活动内容" class="input_text_big" model:value="{{a_desc}}"></textarea>
-
-<view class="input_theme">活动截止日期</view>
-<picker mode="date" value="{{a_end_date}}" start="{{current_date}}" end="2200-09-01" bindchange="bindDateChange">
-    <view class="picker">
-      当前选择: {{a_end_date}}
-    </view>
-</picker>
-
-<view class="contaier">
-  <view class="input_theme">活动是否公开</view>
-  <checkbox-group bindchange="publicChange">
-    <checkbox value="{{a_is_public}}"  class="checkbox"></checkbox>
-    </checkbox-group>
-</view>
-
-<view class="cancle_save_container">
-  <view class="save_button" bindtap="create_activity">提交</view>
-</view>
+<van-button plain type="primary" bindtap="createActivity" size="large">提交</van-button>

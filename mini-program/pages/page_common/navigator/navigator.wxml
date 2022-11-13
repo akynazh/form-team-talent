@@ -1,4 +1,4 @@
-<van-tabbar bind:change="nav_to_page" active="{{active}}">
+<van-tabbar bind:change="navToPage" active="{{active}}">
   <van-tabbar-item icon="home-o" name="home">主页</van-tabbar-item>
   <van-tabbar-item icon="friends-o" name="team">小组</van-tabbar-item>
   <van-tabbar-item icon="user-o" name="me">个人</van-tabbar-item>

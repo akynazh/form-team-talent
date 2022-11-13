@@ -1,16 +1,15 @@
 export {
-  currentTime,
-  currentTime_1,
-  currentTime_2,
-  alert_fail,
-  get_auth_header,
-  check_success,
+  getCurrentTime,
+  getTimeByDate,
+  alertFail,
+  fail,
+  getAuthHeader,
+  checkSuccess,
   route,
-  fail
 }
 
 const app = getApp()
-const base_url = app.globalData.base_url
+const baseUrl = app.globalData.baseUrl
 
 let ftime = (t) => {
   if (t < 10) {
@@ -18,29 +17,33 @@ let ftime = (t) => {
   }
   return t
 }
-let currentTime = () => {
+
+// 获取当前格式化时间
+let getCurrentTime = () => {
   let date = new Date();
   return `${date.getFullYear()}-${ftime(date.getMonth() + 1)}-${ftime(date.getDate())} ${ftime(date.getHours())}:${ftime(date.getMinutes())}:${ftime(date.getSeconds())}`
 }
-let currentTime_1 = () => {
-  let date = new Date();
-  return `${date.getFullYear()}-${ftime(date.getMonth() + 1)}-${ftime(date.getDate())}`
-}
-let currentTime_2 = () => {
-  let date = new Date();
-  return `${ftime(date.getHours())}:${ftime(date.getMinutes())}:${ftime(date.getSeconds())}`
+// 根据Date获取格式化时间（时分秒固定为当前时分秒）
+let getTimeByDate = (date) => {
+  let currentDate = new Date()
+return `${date.getFullYear()}-${ftime(date.getMonth() + 1)}-${ftime(date.getDate())} ${ftime(currentDate.getHours())}:${ftime(currentDate.getMinutes())}:${ftime(currentDate.getSeconds())}`
 }
 
-let check_success = res => {
+let checkSuccess = res => {
   if (res.data.code != 200) {
-    alert_fail("请求失败", res.data.msg)
+    alertFail("请求失败", res.data.msg)
     return false
   }
   return true
 }
-let fail = () => { alert_fail("失败", "操作失败，请重试") }
 
-let alert_fail = (title, content = "") => {
+let fail = () => {
+  let title = "失败"
+  let content = "操作失败，请重试"
+  alertFail(title, content) 
+}
+
+let alertFail = (title, content) => {
   wx.showModal({
     title: title,
     content: content,
@@ -50,24 +53,25 @@ let alert_fail = (title, content = "") => {
   })
 }
 
-let get_auth_header = () => {
+let getAuthHeader = () => {
   let token = wx.getStorageSync('auth') || ''
-  let my_header = token != "" ? { "auth": token } : {}
-  return my_header
+  let myHeader = token != "" ? { "auth": token } : {}
+  return myHeader
 }
-let get_token = () => {
+
+let getToken = () => {
   return wx.getStorageSync('auth') || ''
 }
 
-let route = (page_url, need_auth = 1) => {
-  if (need_auth == 0) {
+let route = (pageUrl, needAuth = 1) => {
+  if (needAuth == 0) {
     wx.redirectTo({
-      url: page_url,
+      url: pageUrl,
     })
   } else {
-    if (!app.globalData.islogin) {
-      if (get_token() != '') {
-        auth(page_url)
+    if (!app.globalData.isLogin) {
+      if (getToken() != '') {
+        auth(pageUrl)
       } else {
         wx.getUserProfile({
           desc: '请问是否进行登录？',
@@ -76,24 +80,24 @@ let route = (page_url, need_auth = 1) => {
             wx.showLoading({
               title: "登录中..."
             })
-            auth(page_url)
+            auth(pageUrl)
           },
         })
       }
     } else {
       wx.redirectTo({
-        url: page_url,
+        url: pageUrl,
       })
     }
   }
 }
 
-let auth = page_url => {
+let auth = pageUrl => {
   wx.login({
     success(res1) {
       wx.request({
-        url: `${base_url}/api/user/auth?code=${res1.code}`,
-        header: get_auth_header(),
+        url: `${baseUrl}/api/user/auth?code=${res1.code}`,
+        header: getAuthHeader(),
         method: 'POST',
         success(res2) {
           console.log(res2)
@@ -106,7 +110,7 @@ let auth = page_url => {
               }
             })
             wx.redirectTo({
-              url: page_url,
+              url: pageUrl,
             })
             wx.setStorageSync('auth', res2.header.auth)
             app.globalData.islogin = true
@@ -114,24 +118,24 @@ let auth = page_url => {
           } else if (res2.data.code == 4011 || res2.data.code == 4012) {
             console.log("token过期，重新登录")
             wx.removeStorageSync('auth')
-            auth(page_url)
+            auth(pageUrl)
           }
           else {
             wx.hideLoading({
-              success: () => { alert_fail("登录失败", `${res2.data.msg}`) },
+              success: () => { alertFail("登录失败", `${res2.data.msg}`) },
             })
           }
         },
         fail() {
           wx.hideLoading({
-            success: () => { alert_fail("登录失败", "请检查网络") },
+            success: () => { alertFail("登录失败", "请检查网络") },
           })
         }
       })
     },
     fail() {
       wx.hideLoading({
-        success: () => { alert_fail("登录失败", "请检查网络") },
+        success: () => { alertFail("登录失败", "请检查网络") },
       })
     }
   })

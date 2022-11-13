@@ -1,29 +1,20 @@
+<back pageUrl="/pages/page_activity/detail/detail?a_id={{a_id}}&a_type={{a_type}}"></back>
 
-<back page_url="/pages/page_activity/activity/activity"></back>
+<textarea placeholder="例如：思政小组展示 " model:value="{{a_name}}"></textarea>
 
-<view class="activity_creat_text">活动更新</view>
+<view >活动内容</view>
+<textarea placeholder="请输入活动内容" model:value="{{a_desc}}"></textarea>
 
-
-<view class="input_theme">活动题目</view>
-<textarea placeholder="例如：思政小组展示 " class="input_text_small" model:value="{{a_name}}"></textarea>
-
-<view class="input_theme">活动内容</view>
-<textarea placeholder="请输入活动内容" class="input_text_big" model:value="{{a_desc}}"></textarea>
-
-<view class="input_theme">活动截止日期</view>
+<view >活动截止日期</view>
 <picker mode="date" value="{{a_end_date}}" start="{{current_date}}" end="2200-09-01" bindchange="bindDateChange">
     <view class="picker">
       当前选择: {{a_end_date}}
     </view>
 </picker>
 
-<view class="contaier">
-  <view class="input_theme">活动是否公开</view>
+  <view>活动是否公开</view>
   <checkbox-group bindchange="publicChange">
     <checkbox value="{{a_is_public}}"  class="checkbox"></checkbox>
     </checkbox-group>
-</view>
 
-<view class="cancle_save_container">
-  <view class="save_button" bindtap="update_activity">更新</view>
-</view>
+  <view  bindtap="updateActivity">更新</view>
