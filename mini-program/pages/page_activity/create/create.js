@@ -66,14 +66,14 @@ Page({
               method: 'POST',
               data: that.data,
               success(res) {
-                wx.showToast({
-                  title: '创建成功',
-                })
                 if (util.checkSuccess(res)) {
                   let obj = res.data.obj
                   let a_id = obj.a_id
                   let a_type = that.data.a_type
                   util.route(`/pages/page_activity/activity/activity?a_id=${a_id}&a_type=${a_type}`)
+                  wx.showToast({
+                    title: '创建成功',
+                  })
                 }
               },
               fail() {

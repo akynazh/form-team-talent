@@ -3,6 +3,7 @@
 <van-cell-group>
   <van-cell title="活动名称" value="{{activity.a_name}}" />
   <van-cell title="截止日期" value="{{activity.a_end_date}}" />
+  <van-cell title="活动性质" value="{{activity.a_is_public == 0 ? '私有' : '公开'}}" />
   <van-collapse value="{{ activeNames }}" bind:change="onActiveDescChange">
     <van-collapse-item title="活动描述" name="1">
       <view class="my-paragraph">{{activity.a_desc}}

@@ -1,10 +1,10 @@
 <top title="组队达人"></top>
 
 <van-cell-group inset>
-  <van-cell title="姓名" value="{{u_name}}" />
-  <van-cell title="学号" value="{{u_stu_num}}" />
+  <van-cell title="姓名" value="{{u_name}}" icon="user-o" />
+  <van-cell title="学号" value="{{u_stu_num}}" icon="eye-o" />
   <van-cell title="学校" value="{{u_school}}" icon="location-o" />
-  <van-cell bindtap="updateInfo" title="编辑信息" is-link />
+  <van-cell bindtap="toUpdatePage" title="编辑信息" is-link />
 </van-cell-group>
 
 <nav active="me"></nav>

@@ -6,69 +6,95 @@ Page({
   data: {
     a_id: "",
     a_type: "",
-
     a_name: "",
     a_desc: "",
     a_end_date: "",
-    a_is_public: 0,
+    a_is_public: "0",
+    currentDate: new Date().getTime(),
+    minDate: new Date().getTime(),
+    formatter(type, value) {
+      if (type === 'year') {
+        return `${value}年`;
+      }
+      if (type === 'month') {
+        return `${value}月`;
+      }
+      return value;
+    },
+    show: false,
+  },
+  onIsPublicClick(event) {
+    const { name } = event.currentTarget.dataset;
+    this.setData({
+      a_is_public: name
+    });
+    console.log(this.data.a_is_public)
+  },
+  showDatePickerPopup() {
+    this.setData({ show: true });
+  },
+  onDatePickerClose() {
+    this.setData({ show: false });
+  },
+  onDatePickerInput(event) {
+    this.setData({
+      currentDate: event.detail,
+    });
+  },
+  onDatePickerConfirm() {
+    let myDate = new Date(this.data.currentDate)
+    this.setData({ 
+      show: false,
+      a_end_date: util.getTimeByDate(myDate)
+    });
+  },
+  checkForm() {
+    if (this.data.a_name.trim() == '' || this.data.a_end_date.trim() == '') {
+      return false
+    }
+    return true
   },
   onLoad(params) {
-    let that = this
     let a_id = params.a_id
     let a_type = params.a_type
-    wx.request({
-      url: `${baseUrl}/api/activity/get/id?a_id=${a_id}`,
-      header: util.getAuthHeader(),
-      success(res) {
-        console.log(res)
-        if (util.checkSuccess(res)) {
-          let obj = res.data.obj
-          console.log(obj)
-          that.setData({
-            a_id: a_id,
-            a_type: a_type,
-            a_name: obj.a_name,
-            a_desc: obj.a_desc,
-            a_end_date: obj.a_end_date,
-            a_is_public: obj.a_is_public
-          })
-        }
-      },
-      fail() {
-        util.fail()
-      }
+    let activity = JSON.parse(params.activity)
+    this.setData({
+      a_id: a_id,
+      a_type: a_type,
+      a_name: activity.a_name,
+      a_desc: activity.a_desc,
+      a_end_date: activity.a_end_date,
+      a_is_public: `${activity.a_is_public}`,
     })
-  },
-  publicChange(e) {
-    if (e.detail.value[0] === undefined) {
-      this.setData({
-        a_is_public: 0
-      })
-    } else {
-      this.setData({
-        a_is_public: 1
-      })
-    }
   },
   updateActivity() {
     let that = this
-    wx.request({
-      url: `${baseUrl}/api/activity/update`,
-      header: util.getAuthHeader(),
-      method: 'POST',
-      data: that.data,
+    let a_id = this.data.a_id
+    let a_type = this.data.a_type
+    wx.showModal({
+      title: '更新活动',
+      content: '确认更新？',
       success(res) {
-        if (util.checkSuccess(res)) {
-          wx.showToast({
-            title: '操作成功',
+        if (res.confirm) {
+          wx.request({
+            url: `${baseUrl}/api/activity/update`,
+            header: util.getAuthHeader(),
+            method: 'POST',
+            data: that.data,
+            success(res) {
+              if (util.checkSuccess(res)) {
+                util.route(`/pages/page_activity/detail/detail?a_id=${a_id}&a_type=${a_type}`)
+                wx.showToast({
+                  title: '操作成功',
+                })
+              }
+            },
+            fail() {
+              util.fail()
+            }
           })
-          util.route("/pages/page_activity/activity/personal/personal")
         }
-      },
-      fail(res) {
-        util.fail()
       }
     })
-
   },
 })

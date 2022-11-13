@@ -1,0 +1,9 @@
+<back pageUrl="/pages/page_me/page_me"></back>
+
+<van-cell-group>
+  <van-field model:value="{{u_name}}" label="姓名" placeholder="你的名字" border="{{ false }}" />
+  <van-field model:value="{{u_stu_num}}" label="学号" placeholder="你的学号" border="{{ false }}" />
+  <van-field model:value="{{u_school}}" label="学校" placeholder="你的学校" border="{{ false }}" />
+</van-cell-group>
+
+<van-button plain type="primary" bindtap="updateInfo" size="large">更新</van-button>

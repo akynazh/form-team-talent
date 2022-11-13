@@ -4,9 +4,9 @@ import * as util from "../../utils/util"
 
 Page({
 	data: {
-		u_name: "dsaf",
+		u_name: "",
 		u_stu_num: "",
-		u_school: "sdf"
+		u_school: ""
 	},
 	onLoad() {
     let that = this
@@ -23,32 +23,13 @@ Page({
           })
         }
       },
-      fail(res) {
-        util.alertFail(title="请求失败，请重试")
-      }
-    })
-	},
-	updateInfo() {
-    let that = this
-    wx.request({
-      url: `${baseUrl}/api/user/update`,
-      header: util.getAuthHeader(),
-      method: "POST",
-      data: {
-        u_name: that.data.u_name,
-        u_stu_num: that.data.u_stu_num,
-        u_school: that.data.u_school
-      },
-      success(res) {
-        if (util.checkSuccess(res)) {
-          wx.showToast({
-            title: '更新成功',
-          })
-        }
-      },
-      fail(res) {
+      fail() {
         util.fail()
       }
     })
-	}
+  },
+  toUpdatePage() {
+    let info = JSON.stringify(this.data)
+    util.route(`/pages/page_me/update/update?info=${info}`)
+  }
 })

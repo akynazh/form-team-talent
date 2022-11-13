@@ -63,7 +63,8 @@ Page({
   updateActivity() {
     let a_type = this.data.a_type
     let a_id = this.data.a_id
-    util.route(`/pages/page_activity/update/update?a_id=${a_id}&a_type=${a_type}`, 0)
+    let activity = JSON.stringify(this.data.activity)
+    util.route(`/pages/page_activity/update/update?a_id=${a_id}&a_type=${a_type}&activity=${activity}`, 0)
   },
   showTeam() {
     let a_type = this.data.a_type

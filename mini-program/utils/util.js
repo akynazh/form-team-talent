@@ -113,7 +113,7 @@ let auth = pageUrl => {
               url: pageUrl,
             })
             wx.setStorageSync('auth', res2.header.auth)
-            app.globalData.islogin = true
+            app.globalData.isLogin = true
             return true
           } else if (res2.data.code == 4011 || res2.data.code == 4012) {
             console.log("token过期，重新登录")

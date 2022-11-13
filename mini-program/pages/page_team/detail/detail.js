@@ -49,10 +49,10 @@ Page({
             header: util.getAuthHeader(),
             success(res) {
               if (util.checkSuccess(res)) {
+                util.route(`/pages/page_team/team/team?a_id=${a_id}`)
                 wx.showToast({
                   title: '操作成功',
                 })
-                util.route(`/pages/page_team/team/team?a_id=${a_id}`)
               }
             },
             fail() {util.fail()}
@@ -82,10 +82,10 @@ Page({
             fail() {util.fail()},
             success(res) {
               if (util.checkSuccess(res)) {
+                util.route(`/pages/page_activity/activity/personal/personal`)
                 wx.showToast({
                   title: '操作成功',
                 })
-                util.route(`/pages/page_activity/activity/personal/personal`)
               }
             }
           })

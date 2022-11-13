@@ -23,10 +23,10 @@ Page({
       data: that.data,
       success(res) {
         if (util.checkSuccess(res)) {
+          util.route(`/pages/page_team/team/team?a_id=${that.data.a_id}`)
           wx.showToast({
             title: '创建成功',
           })
-          util.route(`/pages/page_team/team/team?a_id=${that.data.a_id}`)
         }
       },
       fail() {util.fail()}

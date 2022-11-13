@@ -33,10 +33,10 @@ Page({
       data: that.data,
       success(res) {
         if (util.checkSuccess(res)) {
+          util.route(`/pages/page_team/detail/detail?a_id=${a_id}&t_id=${t_id}`)
           wx.showToast({
             title: '操作成功',
           })
-          util.route(`/pages/page_team/detail/detail?a_id=${a_id}&t_id=${t_id}`)
         }
       },
       fail() {util.fail()}
