@@ -16,7 +16,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @TableName("t_team")
 public class Team implements Serializable {
-    @TableId(type = IdType.AUTO)
+    @TableId
     private String t_id;
     private String a_id;
     private String t_name;

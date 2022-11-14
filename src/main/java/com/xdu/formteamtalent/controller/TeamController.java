@@ -10,7 +10,7 @@ import com.xdu.formteamtalent.entity.Team;
 import com.xdu.formteamtalent.service.TeamService;
 import com.xdu.formteamtalent.service.UATService;
 import com.xdu.formteamtalent.service.UserService;
-import com.xdu.formteamtalent.utils.WxUtil;
+import com.xdu.formteamtalent.utils.AuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -46,7 +46,7 @@ public class TeamController {
     @PostMapping("/add")
     @Transactional
     public RestfulResponse addTeam(HttpServletRequest request, @RequestBody Team team) {
-        String u_id = WxUtil.getOpenId(request);
+        String u_id = AuthUtil.getUserId(request);
         String t_id = IdUtil.simpleUUID();
         team.setT_leader_id(u_id);
         team.setT_id(t_id);
@@ -66,7 +66,7 @@ public class TeamController {
     @PostMapping("/remove")
     public RestfulResponse removeTeam(HttpServletRequest request, @RequestParam("t_id") String t_id) {
         Team team = teamService.getOne(new QueryWrapper<Team>().eq("t_id", t_id));
-        if (team.getT_leader_id().equals(WxUtil.getOpenId(request))) {
+        if (team.getT_leader_id().equals(AuthUtil.getUserId(request))) {
             uatService.remove(new QueryWrapper<UAT>().eq("t_id", t_id));
             teamService.removeById(t_id);
         } else {
@@ -79,7 +79,7 @@ public class TeamController {
 
     public RestfulResponse updateTeam(HttpServletRequest request, @RequestBody Team team) {
         Team team1 = teamService.getOne(new QueryWrapper<Team>().eq("t_id", team.getT_id()));
-        if (team1.getT_leader_id().equals(WxUtil.getOpenId(request))) {
+        if (team1.getT_leader_id().equals(AuthUtil.getUserId(request))) {
             teamService.updateById(team);
         } else {
             return RestfulResponse.fail(403, "无权更新");
@@ -129,7 +129,7 @@ public class TeamController {
     @GetMapping("/get/my")
     public RestfulResponse getMyTeam(HttpServletRequest request) {
         QueryWrapper<Team> wrapper = new QueryWrapper<>();
-        wrapper.eq("t_leader_id", WxUtil.getOpenId(request));
+        wrapper.eq("t_leader_id", AuthUtil.getUserId(request));
         List<Team> list = teamService.list(wrapper);
         for (Team team : list) {
             team.setT_leader_id("");

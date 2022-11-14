@@ -50,8 +50,27 @@ CREATE TABLE t_uat (
    FOREIGN KEY (t_id) REFERENCES t_team(t_id)
 );
 
+DROP TABLE IF EXISTS t_req;
+CREATE TABLE t_req (
+    id BIGINT AUTO_INCREMENT,
+    from_id VARCHAR(255) NOT NULL,
+    to_id VARCHAR(255) NOT NULL,
+    a_id VARCHAR(255) NOT NULL,
+    t_id VARCHAR(255) NOT NULL,
+    content VARCHAR(255),
+    send_date VARCHAR(128),
+    agree INT,
+    status INT,
+    PRIMARY KEY (id),
+    FOREIGN KEY (from_id) REFERENCES t_user(u_id),
+    FOREIGN KEY (to_id) REFERENCES t_user(u_id),
+    FOREIGN KEY (a_id) REFERENCES t_activity(a_id),
+    FOREIGN KEY (t_id) REFERENCES t_team(t_id)
+);
+
 ALTER DATABASE form_team_talent DEFAULT CHAR SET utf8;
 ALTER TABLE t_user CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE t_team CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE t_activity CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE t_uat CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
+ALTER TABLE t_req CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;

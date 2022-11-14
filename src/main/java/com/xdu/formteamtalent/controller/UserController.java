@@ -9,7 +9,7 @@ import com.xdu.formteamtalent.service.TeamService;
 import com.xdu.formteamtalent.service.UserService;
 import com.xdu.formteamtalent.service.UATService;
 import com.xdu.formteamtalent.utils.JwtUtil;
-import com.xdu.formteamtalent.utils.WxUtil;
+import com.xdu.formteamtalent.utils.AuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,7 +46,7 @@ public class UserController {
 
     @PostMapping("/auth")
     public RestfulResponse auth(@RequestParam("code") String code, HttpServletResponse resp) {
-        String openId = WxUtil.getOpenIdByCode(code);
+        String openId = AuthUtil.getOpenIdByCode(code);
         if (openId != null) {
             User user = userService.getOne(new QueryWrapper<User>().eq("u_id", openId));
             if (user == null) {
@@ -64,30 +64,8 @@ public class UserController {
     @PostMapping("/update")
     public RestfulResponse update(HttpServletRequest request, @RequestBody  User user) {
         UpdateWrapper<User> wrapper = new UpdateWrapper<>();
-        wrapper.eq("u_id", WxUtil.getOpenId(request));
+        wrapper.eq("u_id", AuthUtil.getUserId(request));
         userService.update(user, wrapper);
-        return RestfulResponse.success();
-    }
-
-    /**
-     * 加入某个小组
-     * @param t_id 小组id
-     */
-    @PostMapping("/join/team")
-    public RestfulResponse joinTeam(HttpServletRequest request, @RequestParam("t_id") String t_id, @RequestParam("a_id") String a_id) {
-        String u_id = WxUtil.getOpenId(request);
-        QueryWrapper<UAT> wrapper = new QueryWrapper<>();
-        wrapper.eq("u_id", u_id);
-        wrapper.eq("t_id", t_id);
-        wrapper.eq("a_id", a_id);
-        if (uatService.getOne(wrapper) != null) {
-            return RestfulResponse.fail(403, "不可重复加入");
-        }
-        UAT uat = new UAT();
-        uat.setU_id(u_id);
-        uat.setA_id(a_id);
-        uat.setT_id(t_id);
-        uatService.save(uat);
         return RestfulResponse.success();
     }
 
@@ -97,7 +75,7 @@ public class UserController {
      */
     @PostMapping("/leave/team")
     public RestfulResponse leaveTeam(HttpServletRequest request, @RequestParam("t_id") String t_id) {
-        String u_id = WxUtil.getOpenId(request);
+        String u_id = AuthUtil.getUserId(request);
         QueryWrapper<UAT> wrapper = new QueryWrapper<>();
         wrapper.eq("t_id", t_id);
         wrapper.eq("u_id", u_id);
@@ -107,7 +85,7 @@ public class UserController {
 
     @GetMapping("/get/info")
     public RestfulResponse getUserInfo(HttpServletRequest request) {
-        User user = userService.getOne(new QueryWrapper<User>().eq("u_id", WxUtil.getOpenId(request)));
+        User user = userService.getOne(new QueryWrapper<User>().eq("u_id", AuthUtil.getUserId(request)));
         user.setU_id("");
         return RestfulResponse.success(user);
     }

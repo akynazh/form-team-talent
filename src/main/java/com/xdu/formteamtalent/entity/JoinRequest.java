@@ -8,20 +8,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.io.Serializable;
-
 @Data
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("t_activity")
-public class Activity implements Serializable {
-    @TableId
+@TableName("t_req")
+public class JoinRequest {
+    @TableId(type = IdType.AUTO)
+    private Long id;
+    private String from_id;
+    private String to_id;
     private String a_id;
-    private String a_name;
-    private String a_holder_id;
-    private String a_desc;
-    private String a_end_date;
-    private Integer a_is_public;
-    private String a_qrcode_path;
+    private String t_id;
+    private String content;
+    private String send_date;
+    private Integer agree;
+    private Integer status;
 }

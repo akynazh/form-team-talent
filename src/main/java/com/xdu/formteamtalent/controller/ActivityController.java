@@ -11,7 +11,7 @@ import com.xdu.formteamtalent.global.RestfulResponse;
 import com.xdu.formteamtalent.service.ActivityService;
 import com.xdu.formteamtalent.service.TeamService;
 import com.xdu.formteamtalent.service.UATService;
-import com.xdu.formteamtalent.utils.WxUtil;
+import com.xdu.formteamtalent.utils.AuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,7 +56,7 @@ public class ActivityController {
         String a_qrcode_url = "/pages/page_activity/detail/detail?a_id=" + a_id;
         String a_real_qrcode_path = "static/qrcode/" + a_id + ".jpg";
         String a_qrcode_path = baseUrl + "/qrcode/" + a_id + ".jpg";
-        String u_id = WxUtil.getOpenId(request);
+        String u_id = AuthUtil.getUserId(request);
 
         FileUtil.touch(a_real_qrcode_path);
         QrCodeUtil.generate(a_qrcode_url, 300, 300, FileUtil.file(a_real_qrcode_path));
@@ -73,7 +73,7 @@ public class ActivityController {
     @Transactional
     public RestfulResponse removeActivity(HttpServletRequest request, @RequestParam("a_id") String a_id) {
         QueryWrapper<Activity> wrapper = new QueryWrapper<>();
-        wrapper.eq("a_holder_id", WxUtil.getOpenId(request));
+        wrapper.eq("a_holder_id", AuthUtil.getUserId(request));
         wrapper.eq("a_id", a_id);
         Activity activity = activityService.getOne(wrapper);
         if (activity != null) {
@@ -90,7 +90,7 @@ public class ActivityController {
     @PostMapping("/update")
     public RestfulResponse updateActivity(HttpServletRequest request, @RequestBody Activity activity) {
         QueryWrapper<Activity> wrapper = new QueryWrapper<>();
-        wrapper.eq("a_holder_id", WxUtil.getOpenId(request));
+        wrapper.eq("a_holder_id", AuthUtil.getUserId(request));
         wrapper.eq("a_id", activity.getA_id());
         if (activityService.getOne(wrapper) != null) {
             activityService.updateById(activity);
@@ -126,7 +126,7 @@ public class ActivityController {
 
     @GetMapping("/get/my")
     public RestfulResponse getMyActivity(HttpServletRequest request) {
-        String u_id = WxUtil.getOpenId(request);
+        String u_id = AuthUtil.getUserId(request);
         List<Activity> list = activityService.list(new QueryWrapper<Activity>().eq("a_holder_id", u_id));
         Set<Activity> set = new HashSet<>(list);
         List<UAT> list1 = uatService.list(new QueryWrapper<UAT>().eq("u_id", u_id));

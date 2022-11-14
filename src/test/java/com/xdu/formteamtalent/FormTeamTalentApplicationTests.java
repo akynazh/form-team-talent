@@ -1,6 +1,11 @@
 package com.xdu.formteamtalent;
 
+import com.xdu.formteamtalent.entity.User;
+import com.xdu.formteamtalent.service.UserService;
+import com.xdu.formteamtalent.service.impl.UserServiceImpl;
+import com.xdu.formteamtalent.utils.JwtUtil;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.Timestamp;
@@ -9,7 +14,20 @@ import java.util.Date;
 
 @SpringBootTest
 class FormTeamTalentApplicationTests {
+    @Autowired
+    UserService userService;
 
+    @Test
+    public void getTokenForTest() {
+        String token = JwtUtil.createToken("test2");
+        User user = new User();
+        user.setU_id("test2");
+        user.setU_name("test1");
+        user.setU_school("xdu");
+        user.setU_stu_num("2000913sdaaf");
+        userService.save(user);
+        System.out.println(token);
+    }
     @Test
     public void test1() {
         // 获取当前格式化时间
