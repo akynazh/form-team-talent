@@ -5,16 +5,27 @@ import * as util from "../../../utils/util"
 Page({
   data: {
     a_id: "",
-    t_id: "",
+    a_type: "",
     t_name: "",
     t_desc: "",
-    t_total: ""
+    t_total: 2
+  },
+  onTotalChange(event) {
+    this.setData({
+      t_total: event.detail
+    })
+    console.log(this.data.t_total)
   },
   onLoad(params) {
-    this.data.a_id = params.a_id
+    this.setData({
+      a_id: params.a_id,
+      a_type: params.a_type
+    })
   },
   createTeam() {
     let that = this
+    let a_id = this.data.a_id
+    let a_type = this.data.a_type
     console.log(that.data)
     wx.request({
       url: `${baseUrl}/api/team/add`,
@@ -23,7 +34,8 @@ Page({
       data: that.data,
       success(res) {
         if (util.checkSuccess(res)) {
-          util.route(`/pages/page_team/team/team?a_id=${that.data.a_id}`)
+          let t_id = res.data.obj.t_id
+          util.route(`/pages/page_team/detail/detail?a_id=${a_id}&t_id=${t_id}`)
           wx.showToast({
             title: '创建成功',
           })

@@ -4,27 +4,25 @@
   <van-cell title="活动名称" value="{{activity.a_name}}" />
   <van-cell title="截止日期" value="{{activity.a_end_date}}" />
   <van-cell title="活动性质" value="{{activity.a_is_public == 0 ? '私有' : '公开'}}" />
-  <van-collapse value="{{ activeNames }}" bind:change="onActiveDescChange">
+  <van-collapse accordion  value="{{ activeNames }}" bind:change="onActiveDescChange">
     <van-collapse-item title="活动描述" name="1">
       <view class="my-paragraph">{{activity.a_desc}}
       </view>
     </van-collapse-item>
+    <van-collapse-item title="活动二维码" name="2">
+      <view style="text-align: center;">
+        <image src="{{activity.a_qrcode_path}}" style="width: 200px; height: 200px;"></image>
+      </view>
+    </van-collapse-item>
   </van-collapse>
-  <view style="text-align: center;">
-    <image src="{{activity.a_qrcode_path}}" style="width: 200px; height: 200px;"></image>
-  </view>
+
+
+  
 </van-cell-group>
 
-<van-row gutter="20">
-  <van-col span="8">
-    <van-button plain type="primary" bindtap="updateActivity">编辑活动</van-button>
-  </van-col>
-  <van-col span="8">
-    <van-button plain type="info" bindtap="showTeam">查看小组</van-button>
-  </van-col>
-  <van-col span="8">
-    <van-button plain type="danger" bindtap="removeActivity">删除活动</van-button>
-  </van-col>
-</van-row>
+  <van-button plain size="large" type="primary" bindtap="updateActivity">编辑活动</van-button>
+  <van-button plain size="large" type="info" bindtap="showTeam">查看小组</van-button>
+  <van-button plain size="large" type="default" bindtap="createTeam">创建小组</van-button>
+  <van-button plain size="large" type="danger" bindtap="removeActivity">删除活动</van-button>
 
 

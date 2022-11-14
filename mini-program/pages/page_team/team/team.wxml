@@ -1,10 +1,10 @@
 <back pageUrl="/pages/page_activity/detail/detail?a_id={{a_id}}&a_type={{a_type}}"></back>
 
-<block wx:for="{{teams}}" wx:key="t_id">
-  <view style="margin: 10px; border: 5px solid" bindtap="showDetail" id="{{item.t_id}}">
-    <view>小组名称：{{item.t_name}}</view>
-    <view>小组现有人数：{{item.t_count}}</view>
-  </view>
+<block wx:if="{{teams.length > 0}}">
+  <block wx:for="{{teams}}" wx:key="a_id">
+    <van-cell id="{{item.t_id}}" bindtap="toTeamDetail" title="{{item.t_name}}" is-link />
+  </block>
 </block>
-
-<button bindtap="createTeam">创建小组</button>
+<block wx:else>
+  <van-empty description="屋子空荡荡的" />
+</block>

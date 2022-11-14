@@ -19,7 +19,7 @@ Component({
       if (pageName == "home") {
         util.route("/pages/page_home/page_home", 0)
       }
-      else if (pageName == "team") {
+      else if (pageName == "manage") {
         util.route("/pages/page_team/team/personal/personal", 0)
       }
       else if (pageName == "me") {

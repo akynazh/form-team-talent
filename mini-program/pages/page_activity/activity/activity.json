@@ -2,6 +2,7 @@
   "usingComponents": {
     "nav": "/pages/page_common/navigator/navigator",
     "back": "/pages/page_common/nav_back/nav_back",
+    "top": "/pages/page_common/top_container/top_container",
     "van-cell": "@vant/weapp/cell/index",
     "van-cell-group": "@vant/weapp/cell-group/index",
     "van-empty": "@vant/weapp/empty/index"

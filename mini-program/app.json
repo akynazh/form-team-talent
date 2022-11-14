@@ -11,7 +11,8 @@
     "pages/page_team/detail/detail",
     "pages/page_team/update/update",
     "pages/page_team/team/personal/personal",
-    "pages/page_me/update/update"
+    "pages/page_me/update/update",
+    "pages/page_manage/page_manage"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -64,11 +64,16 @@ Page({
     let a_type = this.data.a_type
     let a_id = this.data.a_id
     let activity = JSON.stringify(this.data.activity)
-    util.route(`/pages/page_activity/update/update?a_id=${a_id}&a_type=${a_type}&activity=${activity}`, 0)
+    util.route(`/pages/page_activity/update/update?a_id=${a_id}&a_type=${a_type}&activity=${activity}`)
   },
   showTeam() {
     let a_type = this.data.a_type
     let a_id = this.data.a_id
     util.route(`/pages/page_team/team/team?a_id=${a_id}&a_type=${a_type}`, 0)
   },
+  createTeam() {
+    let a_type = this.data.a_type
+    let a_id = this.data.a_id
+    util.route(`/pages/page_team/create/create?a_id=${a_id}&a_type=${a_type}`)
+  }
 })

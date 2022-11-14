@@ -1,6 +1,11 @@
+<back pageUrl="/pages/page_activity/detail/detail?a_id={{a_id}}&a_type={{a_type}}"></back>
 
-<textarea placeholder="请输入小组名名"  model:value="{{t_name}}"></textarea>
-<textarea placeholder="请输入小组描述"  model:value="{{t_desc}}"></textarea>
-<textarea placeholder="请输入小组人数限制"  model:value="{{t_total}}"></textarea>
+<van-cell-group>
+  <van-field model:value="{{t_name}}" label="小组名称" placeholder="请输入小组名称~" border="{{ false }}" />
+  <van-field model:value="{{t_desc}}" label="小组描述" placeholder="请输入小组描述~" border="{{ false }}" />
+  <van-cell title="人数限制">
+    <van-stepper value="{{ t_total }}" bind:change="onTotalChange" min="2" integer/>
+  </van-cell>
+</van-cell-group>
 
-<view  bindtap="createTeam">提交</view>
+<van-button plain type="primary" bindtap="createTeam" size="large">提交</van-button>

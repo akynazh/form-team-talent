@@ -7,17 +7,17 @@
   <van-grid-item icon="photo-o" use-slot wx:for="{{ 1 }}" bindtap="scanQrcode">
     <van-icon name="scan" size="60px" /> 加入活动
   </van-grid-item>
-  <van-grid-item icon="photo-o" use-slot wx:for="{{ 1 }}" bindtap="viewPublicActivity">
-    <van-icon name="fire-o" size="60px" /> 公开活动
-  </van-grid-item>
   <van-grid-item icon="photo-o" use-slot wx:for="{{ 1 }}" bindtap="viewPersonalActivity">
     <van-icon name="star-o" size="60px" /> 我的活动
   </van-grid-item>
-  <van-grid-item icon="photo-o" use-slot wx:for="{{ 1 }}" bindtap="login">
-    <van-icon name="user-o" size="60px" /> 登录
-  </van-grid-item>
   <van-grid-item icon="photo-o" use-slot wx:for="{{ 1 }}" bindtap="viewMyTeam">
     <van-icon name="friends-o" size="60px" /> 我的小组
+  </van-grid-item>
+  <van-grid-item icon="photo-o" use-slot wx:for="{{ 1 }}" bindtap="viewPublicActivity">
+    <van-icon name="fire-o" size="60px" /> 公开活动
+  </van-grid-item>
+  <van-grid-item icon="photo-o" use-slot wx:for="{{ 1 }}" bindtap="login">
+    <van-icon name="user-o" size="60px" /> 登录
   </van-grid-item>
 </van-grid>
 

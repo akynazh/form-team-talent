@@ -1,5 +1,11 @@
-<back pageUrl="/pages/page_team/detail/detail?a_id={{a_id}}&t_id={{t_id}}"></back>
-小组名称：<input model:value="{{t_name}}"></input>
-小组描述：<input model:value="{{t_desc}}"></input>
-人数限制：<input model:value="{{t_total}}"></input>
-<button bindtap="updateTeam">提交</button>
+<back pageUrl="/pages/page_team/detail/detail?a_id={{a_id}}&a_type={{a_type}}&t_id={{t_id}}"></back>
+
+<van-cell-group>
+  <van-field model:value="{{t_name}}" label="小组名称" border="{{ false }}" />
+  <van-field model:value="{{t_desc}}" label="小组描述" border="{{ false }}" />
+  <van-cell title="人数限制">
+    <van-stepper value="{{ t_total }}" bind:change="onTotalChange" min="2" integer/>
+  </van-cell>
+</van-cell-group>
+
+<van-button plain type="primary" bindtap="updateTeam" size="large">更新</van-button>
