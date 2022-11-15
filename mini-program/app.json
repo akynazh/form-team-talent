@@ -12,7 +12,8 @@
     "pages/page_team/update/update",
     "pages/page_team/team/personal/personal",
     "pages/page_me/update/update",
-    "pages/page_manage/page_manage"
+    "pages/page_manage/page_manage",
+    "pages/page_request/page_request"
   ],
   "window": {
     "backgroundTextStyle": "light",

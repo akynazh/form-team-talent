@@ -1,4 +1,4 @@
-<back pageUrl="/pages/page_home/page_home"></back>
+<back pageUrl="/pages/page_manage/page_manage" title="活动"></back>
 
 <block wx:if="{{activities.length > 0}}">
   <block wx:for="{{activities}}" wx:key="a_id">
@@ -8,3 +8,5 @@
 <block wx:else>
   <van-empty description="屋子空荡荡的" />
 </block>
+
+<nav></nav>

@@ -1,0 +1,31 @@
+<block wx:if="{{type == 0}}">
+  <back pageUrl="/pages/page_manage/page_manage" title="我的请求"></back>
+</block>
+<block wx:elif="{{type == 1}}">
+  <back pageUrl="/pages/page_manage/page_manage" title="他人请求"></back>
+</block>
+<block wx:elif="{{type == 2}}">
+  <back pageUrl="/pages/page_manage/page_manage" title="所有请求"></back>
+</block>
+
+<block wx:if="{{requests.length > 0}}">
+  <van-collapse accordion value="{{ activeNames }}" bind:change="onActiveDescChange">
+    <block wx:for="{{requests}}" wx:key="index">
+      <van-collapse-item title="{{item.content}}" name="{{index+1}}">
+        <view>发送日期：{{item.send_date}}</view>
+        <block wx:if="{{item.status == 0}}">
+          <view>处理情况：处理中</view>
+          <van-button data-id="{{item.id}}" plain type="primary" size="mini" bindtap="removeRequest">撤销</van-button>
+        </block>
+        <block wx:if="{{item.status == 1}}">
+          <view>处理结果：{{item.agree == 1 ? "同意":"拒绝"}}</view>
+        </block>
+      </van-collapse-item>
+    </block>
+  </van-collapse>
+</block>
+<block wx:else>
+  <van-empty description="屋子空荡荡的" />
+</block>
+
+<nav></nav>

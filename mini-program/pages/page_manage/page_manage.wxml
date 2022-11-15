@@ -1,3 +1,8 @@
 <top title="组队达人"></top>
 
-<nav active="team"></nav>
+<van-cell icon="smile-o" bindtap="viewMyActivity" title="查看我的活动" is-link />
+<van-cell icon="friends-o" bindtap="viewMyTeam" title="查看我的小组" is-link />
+<van-cell icon="chat-o" bindtap="viewFromMeReq" title="查看我发出的请求" is-link />
+<van-cell icon="send-gift-o" bindtap="viewToMeReq" title="处理发给我的请求" is-link />
+
+<nav active="manage"></nav>

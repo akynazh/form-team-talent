@@ -1,4 +1,4 @@
-<back pageUrl="/pages/page_activity/activity/activity?a_type={{a_type}}"></back>
+<back pageUrl="/pages/page_activity/activity/activity?a_type={{a_type}}" title="活动详情"></back>
 
 <van-cell-group>
   <van-cell title="活动名称" value="{{activity.a_name}}" />

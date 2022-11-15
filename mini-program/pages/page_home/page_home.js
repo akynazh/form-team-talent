@@ -9,14 +9,8 @@ Page({
   viewPublicActivity() {
     util.route("/pages/page_activity/activity/activity?a_type=0", 0)
   },
-  viewPersonalActivity() {
-    util.route("/pages/page_activity/activity/activity?a_type=1")
-  },
   login() {
     util.route('/pages/page_home/page_home')
-  },
-  viewMyTeam() {
-    util.route("/pages/page_team/team/personal/personal")
   },
   scanQrcode() {
     wx.scanCode({

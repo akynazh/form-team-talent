@@ -13,7 +13,7 @@ Page({
     let a_type = params.a_type
     this.setData({
       a_id: a_id,
-      a_type: a_type
+      a_type: a_type,
     })
     let that = this
     wx.request({
