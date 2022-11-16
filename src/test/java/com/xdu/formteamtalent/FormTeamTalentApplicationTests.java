@@ -19,10 +19,10 @@ class FormTeamTalentApplicationTests {
 
     @Test
     public void getTokenForTest() {
-        String token = JwtUtil.createToken("test2");
+        String token = JwtUtil.createToken("test1");
         User user = new User();
-        user.setU_id("test2");
-        user.setU_name("test1");
+        user.setU_id("test1");
+        user.setU_name("mary");
         user.setU_school("xdu");
         user.setU_stu_num("2000913sdaaf");
         userService.save(user);
@@ -37,13 +37,13 @@ class FormTeamTalentApplicationTests {
 
         System.out.println(sdf);
         System.out.println(timestamp);
+
+        String sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(timestamp * 1000));
+        System.out.println(sdf1);
     }
 
     @Test
     public void test2() {
-        // 获取当前格式化时间
-        String sdf = new SimpleDateFormat("HH:mm:ss").format(new Date());
-
-        System.out.println(sdf);
+        System.out.println(System.currentTimeMillis());
     }
 }

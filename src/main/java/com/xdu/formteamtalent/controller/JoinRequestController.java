@@ -2,12 +2,12 @@ package com.xdu.formteamtalent.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xdu.formteamtalent.entity.JoinRequest;
+import com.xdu.formteamtalent.entity.Team;
 import com.xdu.formteamtalent.entity.UAT;
+import com.xdu.formteamtalent.entity.User;
 import com.xdu.formteamtalent.global.RestfulResponse;
 import com.xdu.formteamtalent.mapper.JoinRequestMapper;
-import com.xdu.formteamtalent.service.JoinRequestService;
-import com.xdu.formteamtalent.service.TeamService;
-import com.xdu.formteamtalent.service.UATService;
+import com.xdu.formteamtalent.service.*;
 import com.xdu.formteamtalent.utils.AuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,48 +21,60 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/req")
 @RestController
 public class JoinRequestController {
-    private JoinRequestService joinRequestService;
-    private TeamService teamService;
-    private UATService uatService;
-
-    private JoinRequestMapper joinRequestMapper;
-
-    @Autowired
-    public void setJoinRequestMapper(JoinRequestMapper joinRequestMapper) {
-        this.joinRequestMapper = joinRequestMapper;
-    }
+    private final JoinRequestService joinRequestService;
+    private final TeamService teamService;
+    private final ActivityService activityService;
+    private final UATService uatService;
+    private final UserService userService;
+    private final JoinRequestMapper joinRequestMapper;
 
     @Autowired
-    public void setUatService(UATService uatService) {
-        this.uatService = uatService;
-    }
-
-    @Autowired
-    public void setTeamService(TeamService teamService) {
-        this.teamService = teamService;
-    }
-
-    @Autowired
-    public void setJoinRequestService(JoinRequestService joinRequestService) {
+    public JoinRequestController(JoinRequestService joinRequestService,
+                              TeamService teamService,
+                              ActivityService activityService,
+                              UATService uatService,
+                              UserService userService,
+                              JoinRequestMapper joinRequestMapper) {
         this.joinRequestService = joinRequestService;
+        this.teamService = teamService;
+        this.activityService = activityService;
+        this.uatService = uatService;
+        this.userService = userService;
+        this.joinRequestMapper = joinRequestMapper;
     }
 
     @PostMapping("/send")
     public RestfulResponse sendRequest(@RequestBody JoinRequest joinRequest, HttpServletRequest request) {
+        String userId = AuthUtil.getUserId(request);
+        // 查看是否已经加入了
         QueryWrapper<UAT> wrapper = new QueryWrapper<>();
         wrapper.eq("a_id", joinRequest.getA_id());
         wrapper.eq("t_id", joinRequest.getT_id());
-        UAT uat = uatService.getOne(wrapper);
-
-        if (uat == null) {
-            return RestfulResponse.fail(404, "数据库错误，请联系后台");
+        wrapper.eq("u_id", userId);
+        if (uatService.getOne(wrapper) != null) {
+            return RestfulResponse.fail(403, "不可重复加入哦");
+        }
+        // 获取用户和小组详细信息
+        User user = userService.getOne(new QueryWrapper<User>().eq("u_id", userId));
+        Team team = teamService.getOne(new QueryWrapper<Team>().eq("t_id", joinRequest.getT_id()));
+        // 查看人数是否已满
+        if (team.getT_count().equals(team.getT_total())) {
+            return RestfulResponse.fail(403, "人数已满=_=");
         }
 
         joinRequest.setAgree(0);
         joinRequest.setStatus(1);
-        joinRequest.setFrom_id(AuthUtil.getUserId(request));
-        joinRequest.setTo_id(uat.getU_id());
+        joinRequest.setSend_date(String.valueOf(System.currentTimeMillis()));
+        joinRequest.setU_name(user.getU_name());
+        joinRequest.setT_name(team.getT_name());
+        joinRequest.setFrom_id(userId);
+        joinRequest.setTo_id(team.getT_leader_id());
 
+        JoinRequest checkRequest = joinRequestMapper.checkRequestExist(joinRequest.getFrom_id(), joinRequest.getTo_id(),
+                joinRequest.getA_id(), joinRequest.getT_id());
+        if (checkRequest != null && checkRequest.getStatus() == 1) {
+            return RestfulResponse.fail(403, "已经发过请求啦");
+        }
         joinRequestService.save(joinRequest);
         return RestfulResponse.success();
     }
@@ -88,6 +100,10 @@ public class JoinRequestController {
                 uat.setA_id(one.getA_id());
                 uat.setT_id(one.getT_id());
                 uatService.save(uat);
+
+                Team team = teamService.getOne(new QueryWrapper<Team>().eq("t_id", one.getT_id()));
+                team.setT_count(team.getT_count() + 1);
+                teamService.updateById(team);
             }
             return RestfulResponse.success();
         } else {
@@ -101,21 +117,6 @@ public class JoinRequestController {
         if (one != null) {
             if (one.getFrom_id().equals(AuthUtil.getUserId(request))) {
                 joinRequestService.removeById(id);
-                return RestfulResponse.success();
-            } else {
-                return RestfulResponse.fail(403, "没有权限");
-            }
-        } else {
-            return RestfulResponse.fail(404, "不存在该记录");
-        }
-    }
-
-    @PostMapping("/update")
-    public RestfulResponse updateRequest(@RequestBody JoinRequest joinRequest, HttpServletRequest request) {
-        JoinRequest one = joinRequestService.getOne(new QueryWrapper<JoinRequest>().eq("id", joinRequest.getId()));
-        if (one != null) {
-            if (one.getFrom_id().equals(AuthUtil.getUserId(request))) {
-                joinRequestService.updateById(joinRequest);
                 return RestfulResponse.success();
             } else {
                 return RestfulResponse.fail(403, "没有权限");

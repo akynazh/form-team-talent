@@ -19,9 +19,10 @@ Page({
         if (util.checkSuccess(res)) {
           let obj = res.data.obj
           for (let a of obj) {
-            if (a.a_end_date < util.getCurrentTime()) {
+            if (a.a_end_date < new Date().getTime()) {
               a.a_name = a.a_name + "(已经结束)"
             }
+            // a.a_end_date = util.getTimeByDate(new Date(a.a_end_date));
           }
           that.setData({
             a_type: a_type,

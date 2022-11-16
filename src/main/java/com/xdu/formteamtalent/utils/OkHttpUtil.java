@@ -4,11 +4,12 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Map;
 
-@Slf4j
+@Component
 public class OkHttpUtil {
     private static final OkHttpClient okHttpClient = new OkHttpClient();
 

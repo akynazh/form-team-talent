@@ -8,9 +8,8 @@ import com.xdu.formteamtalent.entity.Activity;
 import com.xdu.formteamtalent.entity.Team;
 import com.xdu.formteamtalent.entity.UAT;
 import com.xdu.formteamtalent.global.RestfulResponse;
-import com.xdu.formteamtalent.service.ActivityService;
-import com.xdu.formteamtalent.service.TeamService;
-import com.xdu.formteamtalent.service.UATService;
+import com.xdu.formteamtalent.mapper.JoinRequestMapper;
+import com.xdu.formteamtalent.service.*;
 import com.xdu.formteamtalent.utils.AuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,26 +26,27 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/activity")
 public class ActivityController {
-    private ActivityService activityService;
-    private UATService uatService;
-    private TeamService teamService;
-
-    @Autowired
-    public void setTeamService(TeamService teamService) {
-        this.teamService = teamService;
-    }
-
-    @Autowired
-    public void setUatService(UATService uatService) {
-        this.uatService = uatService;
-    }
+    private final JoinRequestService joinRequestService;
+    private final TeamService teamService;
+    private final ActivityService activityService;
+    private final UATService uatService;
+    private final UserService userService;
 
     @Value("${server.baseUrl}")
     private String baseUrl;
 
+
     @Autowired
-    public void setActivityService(ActivityService activityService) {
+    public ActivityController(JoinRequestService joinRequestService,
+                                 TeamService teamService,
+                                 ActivityService activityService,
+                                 UATService uatService,
+                                 UserService userService) {
+        this.joinRequestService = joinRequestService;
+        this.teamService = teamService;
         this.activityService = activityService;
+        this.uatService = uatService;
+        this.userService = userService;
     }
 
     @PostMapping("/add")
@@ -63,6 +63,7 @@ public class ActivityController {
         activity.setA_holder_id(u_id);
         activity.setA_id(a_id);
         activity.setA_qrcode_path(a_qrcode_path);
+        activity.setStatus(1);
         activityService.save(activity);
         activity.setA_holder_id("");
 
@@ -102,15 +103,10 @@ public class ActivityController {
 
     @GetMapping("/get/pub")
     public RestfulResponse getPublicActivity() {
-        List<Activity> list = activityService.list(new QueryWrapper<Activity>().eq("a_is_public", 1));
-        // 获取还未结束的活动
-        List<Activity> activities = list.stream()
-                .filter(a -> {
-                    String a_end_date = a.getA_end_date();
-                    long end_timestamp = Timestamp.valueOf(a_end_date).getTime() / 1000;
-                    long current_timestamp = System.currentTimeMillis() / 1000;
-                    return end_timestamp >= current_timestamp;
-                }).collect(Collectors.toList());
+        QueryWrapper<Activity> wrapper = new QueryWrapper<>();
+        wrapper.eq("a_is_public", 1);
+        wrapper.eq("status", 1);
+        List<Activity> activities = activityService.list(wrapper);
         for (Activity activity : activities) {
             activity.setA_holder_id("");
         }
@@ -124,11 +120,16 @@ public class ActivityController {
         return RestfulResponse.success(activity);
     }
 
+    /**
+     * 获取我加入或创建的活动
+     */
     @GetMapping("/get/my")
     public RestfulResponse getMyActivity(HttpServletRequest request) {
+        // 获取我创建的活动
         String u_id = AuthUtil.getUserId(request);
         List<Activity> list = activityService.list(new QueryWrapper<Activity>().eq("a_holder_id", u_id));
         Set<Activity> set = new HashSet<>(list);
+        // 获取我加入的活动
         List<UAT> list1 = uatService.list(new QueryWrapper<UAT>().eq("u_id", u_id));
         for (UAT uat : list1) {
             Activity activity = activityService.getOne(new QueryWrapper<Activity>().eq("a_id", uat.getA_id()));

@@ -7,7 +7,9 @@ Page({
     a_name: "",
     a_desc: "",
     a_end_date: "",
+    a_end_date_show: "",
     a_is_public: "0",
+    a_type: "",
     currentDate: new Date().getTime(),
     minDate: new Date().getTime(),
     formatter(type, value) {
@@ -40,14 +42,14 @@ Page({
     });
   },
   onDatePickerConfirm() {
-    let myDate = new Date(this.data.currentDate)
     this.setData({ 
       show: false,
-      a_end_date: util.getTimeByDate(myDate)
+      a_end_date: this.data.currentDate,
+      a_end_date_show: util.getFormatTimeByMillis(this.data.currentDate)
     });
   },
   checkForm() {
-    if (this.data.a_name.trim() == '' || this.data.a_end_date.trim() == '') {
+    if (this.data.a_name.trim() == '' || this.data.a_end_date == '') {
       return false
     }
     return true
@@ -60,6 +62,9 @@ Page({
         content: '确认创建？',
         success(res) {
           if (res.confirm) {
+            that.setData({
+              a_type: that.data.a_is_public == 1 ? 0 : 1
+            })
             wx.request({
               url: `${baseUrl}/api/activity/add`,
               header: util.getAuthHeader(),

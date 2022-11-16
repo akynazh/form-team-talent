@@ -6,6 +6,7 @@ Page({
   data: {
     a_id: "",
     a_type: "",
+    a_end_date_show: "",
     activity: {},
     activeNames: [],
   },
@@ -20,10 +21,12 @@ Page({
       url: `${baseUrl}/api/activity/get/id?a_id=${params.a_id}`,
       success(res) {
         if (util.checkSuccess(res)) {
+          let activity = res.data.obj
           that.setData({
             a_id: params.a_id,
             a_type: params.a_type,
-            activity: res.data.obj
+            a_end_date_show: util.getFormatTimeByMillis(activity.a_end_date),
+            activity: activity
           })
         }
       },

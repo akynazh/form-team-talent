@@ -1,5 +1,9 @@
-<back pageUrl="/pages/page_manage/page_manage" title="活动"></back>
-
+<block wx:if="{{type == 1}}">
+  <back pageUrl="/pages/page_manage/page_manage" title="活动"></back>
+</block>
+<block wx:else>
+  <back pageUrl="/pages/page_home/page_home" title="活动"></back>
+</block>
 <block wx:if="{{activities.length > 0}}">
   <block wx:for="{{activities}}" wx:key="a_id">
     <van-cell id="{{item.a_id}}" bindtap="toActivityDetail" title="{{item.a_name}}" is-link />

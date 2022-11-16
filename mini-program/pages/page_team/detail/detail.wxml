@@ -1,4 +1,4 @@
-<back pageUrl="/pages/page_team/team/team?a_id={{a_id}}&a_type={{a_type}}"  title="小组详情"></back>
+<back pageUrl="/pages/page_team/team/team?a_id={{a_id}}&a_type={{a_type}}" title="小组详情"></back>
 
 <van-cell-group>
   <van-cell title="小组名称" value="{{team.t_name}}" />
@@ -15,4 +15,7 @@
 
 <van-button plain size="large" type="primary" bindtap="updateTeam">编辑小组</van-button>
 <van-button plain size="large" type="default" bindtap="joinTeam">申请加入</van-button>
+<modal hidden="{{req_hidden}}" title="申请加入小组" confirm-text="发送" cancel-text="取消" bindconfirm="sendReqJoinTeam" bindcancel="cancelSend">
+  <van-field model:value="{{content}}" placeholder="介绍一下自己..."/>
+</modal>
 <van-button plain size="large" type="danger" bindtap="removeTeam">解散小组</van-button>

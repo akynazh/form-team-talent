@@ -20,6 +20,8 @@ public class JoinRequest {
     private String to_id;
     private String a_id;
     private String t_id;
+    private String t_name;
+    private String u_name;
     private String content;
     private String send_date;
     private Integer agree;

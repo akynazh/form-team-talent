@@ -7,9 +7,8 @@ import com.xdu.formteamtalent.entity.UAT;
 import com.xdu.formteamtalent.entity.User;
 import com.xdu.formteamtalent.global.RestfulResponse;
 import com.xdu.formteamtalent.entity.Team;
-import com.xdu.formteamtalent.service.TeamService;
-import com.xdu.formteamtalent.service.UATService;
-import com.xdu.formteamtalent.service.UserService;
+import com.xdu.formteamtalent.mapper.JoinRequestMapper;
+import com.xdu.formteamtalent.service.*;
 import com.xdu.formteamtalent.utils.AuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,23 +23,23 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/team")
 public class TeamController {
-    private TeamService teamService;
-    private UserService userService;
-    private UATService uatService;
+    private final JoinRequestService joinRequestService;
+    private final TeamService teamService;
+    private final ActivityService activityService;
+    private final UATService uatService;
+    private final UserService userService;
 
     @Autowired
-    public void setUatService(UATService uatService) {
-        this.uatService = uatService;
-    }
-
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    @Autowired
-    public void setTeamService(TeamService teamService) {
+    public TeamController(JoinRequestService joinRequestService,
+                              TeamService teamService,
+                              ActivityService activityService,
+                              UATService uatService,
+                              UserService userService) {
+        this.joinRequestService = joinRequestService;
         this.teamService = teamService;
+        this.activityService = activityService;
+        this.uatService = uatService;
+        this.userService = userService;
     }
 
     @PostMapping("/add")
@@ -80,7 +79,11 @@ public class TeamController {
     public RestfulResponse updateTeam(HttpServletRequest request, @RequestBody Team team) {
         Team team1 = teamService.getOne(new QueryWrapper<Team>().eq("t_id", team.getT_id()));
         if (team1.getT_leader_id().equals(AuthUtil.getUserId(request))) {
-            teamService.updateById(team);
+            if (team1.getA_id().equals(team.getA_id())) {
+                teamService.updateById(team);
+            } else {
+                return RestfulResponse.fail(404, "不能修改所属活动");
+            }
         } else {
             return RestfulResponse.fail(403, "无权更新");
         }
@@ -128,12 +131,13 @@ public class TeamController {
 
     @GetMapping("/get/my")
     public RestfulResponse getMyTeam(HttpServletRequest request) {
-        QueryWrapper<Team> wrapper = new QueryWrapper<>();
-        wrapper.eq("t_leader_id", AuthUtil.getUserId(request));
-        List<Team> list = teamService.list(wrapper);
-        for (Team team : list) {
-            team.setT_leader_id("");
+        QueryWrapper<UAT> wrapper = new QueryWrapper<>();
+        wrapper.eq("u_id", AuthUtil.getUserId(request));
+        List<UAT> list = uatService.list(wrapper);
+        List<Team> teams = new ArrayList<>();
+        for (UAT uat : list) {
+            teams.add(teamService.getOne(new QueryWrapper<Team>().eq("t_id", uat.getT_id())));
         }
-        return RestfulResponse.success(list);
+        return RestfulResponse.success(teams);
     }
 }

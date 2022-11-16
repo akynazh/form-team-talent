@@ -10,9 +10,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-@Data
-@Component
 @Slf4j
+@Component
 public class JwtUtil {
     private static String secret;
     private static int expire;

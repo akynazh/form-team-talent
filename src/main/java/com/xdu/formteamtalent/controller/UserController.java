@@ -4,10 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.xdu.formteamtalent.entity.*;
 import com.xdu.formteamtalent.global.RestfulResponse;
-import com.xdu.formteamtalent.service.ActivityService;
-import com.xdu.formteamtalent.service.TeamService;
-import com.xdu.formteamtalent.service.UserService;
-import com.xdu.formteamtalent.service.UATService;
+import com.xdu.formteamtalent.mapper.JoinRequestMapper;
+import com.xdu.formteamtalent.service.*;
 import com.xdu.formteamtalent.utils.JwtUtil;
 import com.xdu.formteamtalent.utils.AuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,38 +17,41 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
-    private UserService userService;
-    private UATService uatService;
-    private ActivityService activityService;
-    private TeamService teamService;
+    private final JoinRequestService joinRequestService;
+    private final TeamService teamService;
+    private final ActivityService activityService;
+    private final UATService uatService;
+    private final UserService userService;
 
     @Autowired
-    public void setTeamService(TeamService teamService) {
+    public UserController(JoinRequestService joinRequestService,
+                              TeamService teamService,
+                              ActivityService activityService,
+                              UATService uatService,
+                              UserService userService) {
+        this.joinRequestService = joinRequestService;
         this.teamService = teamService;
-    }
-
-    @Autowired
-    public void setActivityService(ActivityService activityService) {
         this.activityService = activityService;
-    }
-
-    @Autowired
-    public void setUatService(UATService uatService) {
         this.uatService = uatService;
-    }
-
-    @Autowired
-    public void setUserService(UserService userService) {
         this.userService = userService;
     }
 
+    /**
+     *
+     * @param code 微信授权码
+     * @param resp 返回体
+     * @param nickName 微信昵称
+     */
     @PostMapping("/auth")
-    public RestfulResponse auth(@RequestParam("code") String code, HttpServletResponse resp) {
+    public RestfulResponse auth(@RequestParam("code") String code, HttpServletResponse resp, @RequestParam(value = "nickName", defaultValue = "wechat-user") String nickName) {
         String openId = AuthUtil.getOpenIdByCode(code);
         if (openId != null) {
             User user = userService.getOne(new QueryWrapper<User>().eq("u_id", openId));
             if (user == null) {
-                userService.save(new User(openId));
+                user = new User();
+                user.setU_name(nickName);
+                user.setU_id(openId);
+                userService.save(user);
             }
             String token = JwtUtil.createToken(openId);
             resp.setHeader("auth", token);

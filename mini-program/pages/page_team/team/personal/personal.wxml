@@ -1,4 +1,4 @@
-<back title="我的小组"></back>
+<back title="我的小组" pageUrl="/pages/page_manage/page_manage"></back>
 
 <block wx:if="{{teams.length > 0}}">
   <block wx:for="{{teams}}" wx:key="t_id">

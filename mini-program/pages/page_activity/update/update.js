@@ -9,6 +9,7 @@ Page({
     a_name: "",
     a_desc: "",
     a_end_date: "",
+    a_end_date_show: "",
     a_is_public: "0",
     currentDate: new Date().getTime(),
     minDate: new Date().getTime(),
@@ -42,10 +43,10 @@ Page({
     });
   },
   onDatePickerConfirm() {
-    let myDate = new Date(this.data.currentDate)
     this.setData({ 
       show: false,
-      a_end_date: util.getTimeByDate(myDate)
+      a_end_date: this.data.currentDate,
+      a_end_date_show: util.getFormatTimeByMillis(this.data.currentDate)
     });
   },
   checkForm() {
@@ -64,6 +65,7 @@ Page({
       a_name: activity.a_name,
       a_desc: activity.a_desc,
       a_end_date: activity.a_end_date,
+      a_end_date_show: util.getFormatTimeByMillis(activity.a_end_date),
       a_is_public: `${activity.a_is_public}`,
     })
   },

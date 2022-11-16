@@ -20,6 +20,7 @@ CREATE TABLE t_activity (
     a_end_date VARCHAR(128),
     a_is_public INT,
     a_qrcode_path VARCHAR(1024),
+    status INT,
     PRIMARY KEY(a_id),
     FOREIGN KEY (a_holder_id) REFERENCES t_user(u_id)
 );
@@ -57,6 +58,8 @@ CREATE TABLE t_req (
     to_id VARCHAR(255) NOT NULL,
     a_id VARCHAR(255) NOT NULL,
     t_id VARCHAR(255) NOT NULL,
+    t_name VARCHAR(255) NOT NULL,
+    u_name VARCHAR(255) NOT NULL,
     content VARCHAR(255),
     send_date VARCHAR(128),
     agree INT,
@@ -74,3 +77,9 @@ ALTER TABLE t_team CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE t_activity CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE t_uat CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE t_req CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+DROP TABLE IF EXISTS t_req;
+DROP TABLE IF EXISTS t_uat;
+DROP TABLE IF EXISTS t_team;
+DROP TABLE IF EXISTS t_activity;
+DROP TABLE IF EXISTS t_user;

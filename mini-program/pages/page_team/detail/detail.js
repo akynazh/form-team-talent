@@ -8,6 +8,8 @@ Page({
     a_type: "",
     t_id: "",
     team_leader_name: "",
+    content: "",
+    req_hidden: true,
     team: {},
     members: {}
   },
@@ -65,7 +67,7 @@ Page({
                 })
               }
             },
-            fail() {util.fail()}
+            fail() { util.fail() }
           })
         }
       }
@@ -79,26 +81,32 @@ Page({
     util.route(`/pages/page_team/update/update?a_id=${a_id}&a_type=${a_type}&t_id=${t_id}&team=${team_json}`)
   },
   joinTeam() {
-    let t_id = this.data.t_id
-    let a_id = this.data.a_id
-    wx.showModal({
-      title: "加入小组",
-      content: "确认加入？",
+    this.setData({
+      req_hidden: false
+    })
+  },
+  cancelSend() {
+    this.setData({
+      req_hidden: true
+    })
+  },
+  sendReqJoinTeam() {
+    let that = this
+    wx.request({
+      url: `${baseUrl}/api/req/send`,
+      header: util.getAuthHeader(),
+      method: 'POST',
+      data: {
+        a_id: that.data.a_id,
+        t_id: that.data.t_id,
+        content: that.data.content,
+      },
+      fail() { util.fail() },
       success(res) {
-        if (res.confirm) {
-          wx.request({
-            url: `${baseUrl}/api/user/join/team?a_id=${a_id}&t_id=${t_id}`,
-            header: util.getAuthHeader(),
-            method: 'POST',
-            fail() {util.fail()},
-            success(res) {
-              if (util.checkSuccess(res)) {
-                util.route(`/pages/page_activity/activity/personal/personal`)
-                wx.showToast({
-                  title: '操作成功',
-                })
-              }
-            }
+        if (util.checkSuccess(res)) {
+          util.route(`/pages/page_request/page_request?type=0`)
+          wx.showToast({
+            title: '操作成功',
           })
         }
       }

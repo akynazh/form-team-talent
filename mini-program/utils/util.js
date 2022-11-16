@@ -1,6 +1,6 @@
 export {
-  getCurrentTime,
-  getTimeByDate,
+  getFormatTimeByMillis,
+  getCurrentFormatTime,
   alertFail,
   fail,
   getAuthHeader,
@@ -17,16 +17,20 @@ let ftime = (t) => {
   }
   return t
 }
-
 // 获取当前格式化时间
-let getCurrentTime = () => {
-  let date = new Date();
-  return `${date.getFullYear()}-${ftime(date.getMonth() + 1)}-${ftime(date.getDate())} ${ftime(date.getHours())}:${ftime(date.getMinutes())}:${ftime(date.getSeconds())}`
+let getCurrentFormatTime = () => {
+  return getFormatTimeByDate(new Date())
 }
-// 根据Date获取格式化时间（时分秒固定为当前时分秒）
-let getTimeByDate = (date) => {
-  let currentDate = new Date()
-return `${date.getFullYear()}-${ftime(date.getMonth() + 1)}-${ftime(date.getDate())} ${ftime(currentDate.getHours())}:${ftime(currentDate.getMinutes())}:${ftime(currentDate.getSeconds())}`
+// 根据Date获取格式化时间
+let getFormatTimeByMillis = (millis) => {
+  if (typeof(millis) != "number") {
+    millis = parseInt(millis)
+  }
+  return getFormatTimeByDate(new Date(millis))
+}
+let getFormatTimeByDate = (date) => {
+  return `${date.getFullYear()}年${ftime(date.getMonth() + 1)}月${ftime(date.getDate())}日`
+  // return `${date.getFullYear()}-${ftime(date.getMonth() + 1)}-${ftime(date.getDate())} ${ftime(date.getHours())}:${ftime(date.getMinutes())}:${ftime(date.getSeconds())}`
 }
 
 let checkSuccess = res => {
@@ -95,8 +99,12 @@ let route = (pageUrl, needAuth = 1) => {
 let auth = pageUrl => {
   wx.login({
     success(res1) {
+      let url = `${baseUrl}/api/user/auth?code=${res1.code}`
+      if (app.globalData.userInfo != null) {
+        url += `&nickName=${app.globalData.userInfo.nickName}`
+      }
       wx.request({
-        url: `${baseUrl}/api/user/auth?code=${res1.code}`,
+        url: url,
         header: getAuthHeader(),
         method: 'POST',
         success(res2) {
@@ -114,6 +122,7 @@ let auth = pageUrl => {
             })
             wx.setStorageSync('auth', res2.header.auth)
             app.globalData.isLogin = true
+            
             return true
           } else if (res2.data.code == 4011 || res2.data.code == 4012) {
             console.log("token过期，重新登录")
