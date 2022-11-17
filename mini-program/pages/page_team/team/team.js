@@ -30,7 +30,6 @@ Page({
         util.fail()
       }
     })
-    console.log(this.data.teams.length)
   },
   createTeam() {
     let a_type = this.data.a_type
@@ -40,6 +39,6 @@ Page({
   toTeamDetail(e) {
     let a_type = this.data.a_type
     let a_id = this.data.a_id
-    util.route(`/pages/page_team/detail/detail?t_id=${e.currentTarget.id}&a_id=${a_id}&a_type=${a_type}`, 0)
+    util.route(`/pages/page_team/detail/detail?t_id=${e.currentTarget.id}&a_id=${a_id}&a_type=${a_type}`)
   }
 })

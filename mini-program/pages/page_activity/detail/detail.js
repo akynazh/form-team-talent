@@ -9,6 +9,7 @@ Page({
     a_end_date_show: "",
     activity: {},
     activeNames: [],
+    owner: false
   },
   onActiveDescChange(event) {
     this.setData({
@@ -19,14 +20,18 @@ Page({
     let that = this
     wx.request({
       url: `${baseUrl}/api/activity/get/id?a_id=${params.a_id}`,
+      header: util.getAuthHeader(),
       success(res) {
         if (util.checkSuccess(res)) {
-          let activity = res.data.obj
+          let activity = res.data.obj.activity
+          let owner = res.data.obj.owner
+          console.log(owner)
           that.setData({
             a_id: params.a_id,
             a_type: params.a_type,
             a_end_date_show: util.getFormatTimeByMillis(activity.a_end_date),
-            activity: activity
+            activity: activity,
+            owner: owner
           })
         }
       },
@@ -72,7 +77,7 @@ Page({
   showTeam() {
     let a_type = this.data.a_type
     let a_id = this.data.a_id
-    util.route(`/pages/page_team/team/team?a_id=${a_id}&a_type=${a_type}`, 0)
+    util.route(`/pages/page_team/team/team?a_id=${a_id}&a_type=${a_type}`)
   },
   createTeam() {
     let a_type = this.data.a_type

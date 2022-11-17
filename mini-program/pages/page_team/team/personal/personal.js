@@ -26,6 +26,6 @@ Page({
   toTeamDetail(e) {
     let a_id = e.currentTarget.dataset.a_id
     let t_id = e.currentTarget.dataset.t_id
-    util.route(`/pages/page_team/detail/detail?t_id=${t_id}&a_id=${a_id}&a_type=1`, 0)
+    util.route(`/pages/page_team/detail/detail?t_id=${t_id}&a_id=${a_id}&a_type=1&manage=1`)
   }
 })

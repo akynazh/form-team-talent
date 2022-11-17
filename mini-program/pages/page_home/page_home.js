@@ -10,7 +10,7 @@ Page({
     util.route("/pages/page_activity/activity/activity?a_type=0", 0)
   },
   login() {
-    util.route('/pages/page_home/page_home')
+    util.route('/pages/page_me/page_me')
   },
   scanQrcode() {
     wx.scanCode({

@@ -8,4 +8,4 @@
   </van-cell>
 </van-cell-group>
 
-<van-button plain type="primary" bindtap="createTeam" size="large">提交</van-button>
+<van-button plain type="primary" bindtap="createTeam" block>提交</van-button>

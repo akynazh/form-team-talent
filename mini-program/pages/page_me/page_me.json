@@ -4,6 +4,9 @@
     "back": "/pages/page_common/nav_back/nav_back",
     "top": "/pages/page_common/top_container/top_container",
     "van-cell": "@vant/weapp/cell/index",
-    "van-cell-group": "@vant/weapp/cell-group/index"
+    "van-cell-group": "@vant/weapp/cell-group/index",
+		"van-image": "@vant/weapp/image/index",
+    "van-card": "@vant/weapp/card/index",
+    "van-button": "@vant/weapp/button/index"
   }
 }

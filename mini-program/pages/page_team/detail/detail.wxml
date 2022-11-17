@@ -1,4 +1,10 @@
-<back pageUrl="/pages/page_team/team/team?a_id={{a_id}}&a_type={{a_type}}" title="小组详情"></back>
+<block wx:if="{{manage == 0}}">
+  <back pageUrl="/pages/page_team/team/team?a_id={{a_id}}&a_type={{a_type}}" title="小组详情"></back>
+</block>
+<block wx:else>
+  <back pageUrl="/pages/page_team/team/personal/personal" title="小组详情"></back>
+</block>
+
 
 <van-cell-group>
   <van-cell title="小组名称" value="{{team.t_name}}" />
@@ -10,12 +16,20 @@
       <view class="my-paragraph">{{team.t_desc}}
       </view>
     </van-collapse-item>
+    <van-collapse-item title="小组成员" name="2">
+      <block wx:for="{{members}}">
+        <view>({{index+1}}) 名称: {{item.u_name}}, 学号: {{item.u_stu_num}}</view>
+      </block>
+    </van-collapse-item>
   </van-collapse>
 </van-cell-group>
 
-<van-button plain size="large" type="primary" bindtap="updateTeam">编辑小组</van-button>
-<van-button plain size="large" type="default" bindtap="joinTeam">申请加入</van-button>
+<van-button plain block type="default" bindtap="joinTeam">申请加入</van-button>
 <modal hidden="{{req_hidden}}" title="申请加入小组" confirm-text="发送" cancel-text="取消" bindconfirm="sendReqJoinTeam" bindcancel="cancelSend">
   <van-field model:value="{{content}}" placeholder="介绍一下自己..."/>
 </modal>
-<van-button plain size="large" type="danger" bindtap="removeTeam">解散小组</van-button>
+
+<block wx:if="{{owner}}">
+  <van-button plain block type="primary" bindtap="updateTeam">编辑小组</van-button>
+  <van-button plain block type="danger" bindtap="removeTeam">解散小组</van-button>
+</block>

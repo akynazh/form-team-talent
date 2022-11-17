@@ -20,9 +20,12 @@
   
 </van-cell-group>
 
-  <van-button plain size="large" type="primary" bindtap="updateActivity">编辑活动</van-button>
-  <van-button plain size="large" type="info" bindtap="showTeam">查看小组</van-button>
-  <van-button plain size="large" type="default" bindtap="createTeam">创建小组</van-button>
-  <van-button plain size="large" type="danger" bindtap="removeActivity">删除活动</van-button>
+<van-button plain block type="info" bindtap="showTeam">查看小组</van-button>
+<van-button plain block type="default" bindtap="createTeam">创建小组</van-button>
+
+<block wx:if="{{owner}}">
+  <van-button plain block type="primary" bindtap="updateActivity">编辑活动</van-button>
+  <van-button plain block type="danger" bindtap="removeActivity">删除活动</van-button>
+</block>
 
 

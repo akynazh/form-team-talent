@@ -34,6 +34,7 @@ let getFormatTimeByDate = (date) => {
 }
 
 let checkSuccess = res => {
+  console.log(res)
   if (res.data.code != 200) {
     alertFail("请求失败", res.data.msg)
     return false
@@ -80,7 +81,6 @@ let route = (pageUrl, needAuth = 1) => {
         wx.getUserProfile({
           desc: '请问是否进行登录？',
           success(res) {
-            app.globalData.userInfo = res.userInfo
             wx.showLoading({
               title: "登录中..."
             })
@@ -100,15 +100,15 @@ let auth = pageUrl => {
   wx.login({
     success(res1) {
       let url = `${baseUrl}/api/user/auth?code=${res1.code}`
-      if (app.globalData.userInfo != null) {
-        url += `&nickName=${app.globalData.userInfo.nickName}`
+      let nickName = wx.getStorageSync('nickName') || ''
+      if (nickName != '') {
+        url += `&nickName=${nickName}`
       }
       wx.request({
         url: url,
         header: getAuthHeader(),
         method: 'POST',
         success(res2) {
-          console.log(res2)
           if (res2.data.code == 200) {
             wx.hideLoading({
               success: () => {
@@ -117,12 +117,11 @@ let auth = pageUrl => {
                 })
               }
             })
+            wx.setStorageSync('auth', res2.header.auth)
+            app.globalData.isLogin = true
             wx.redirectTo({
               url: pageUrl,
             })
-            wx.setStorageSync('auth', res2.header.auth)
-            app.globalData.isLogin = true
-            
             return true
           } else if (res2.data.code == 4011 || res2.data.code == 4012) {
             console.log("token过期，重新登录")

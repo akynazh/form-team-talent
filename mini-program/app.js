@@ -1,10 +1,9 @@
 App({
   globalData: {
     isLogin: false,
-    baseUrl: "http://127.0.0.1:8080",
-    userInfo: null
+    baseUrl: "http://192.168.1.101:8080",
   },
   onLaunch() {
     // wx.clearStorage()
   }
-})  
+})

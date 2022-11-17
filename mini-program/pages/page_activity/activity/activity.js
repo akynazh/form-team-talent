@@ -22,7 +22,6 @@ Page({
             if (a.a_end_date < new Date().getTime()) {
               a.a_name = a.a_name + "(已经结束)"
             }
-            // a.a_end_date = util.getTimeByDate(new Date(a.a_end_date));
           }
           that.setData({
             a_type: a_type,
@@ -40,7 +39,7 @@ Page({
     if (a_type == 1) {
       util.route(`/pages/page_activity/detail/detail?a_id=${e.currentTarget.id}&a_type=${a_type}`)
     } else {
-      util.route(`/pages/page_activity/detail/detail?a_id=${e.currentTarget.id}&a_type=${a_type}`, 0)
+      util.route(`/pages/page_activity/detail/detail?a_id=${e.currentTarget.id}&a_type=${a_type}`)
     }
 
   }

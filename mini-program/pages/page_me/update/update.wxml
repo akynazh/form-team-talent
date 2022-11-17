@@ -6,4 +6,4 @@
   <van-field model:value="{{u_school}}" label="学校" placeholder="你的学校" border="{{ false }}" />
 </van-cell-group>
 
-<van-button plain type="primary" bindtap="updateInfo" size="large">更新</van-button>
+<van-button plain type="primary" bindtap="updateInfo" block>更新</van-button>

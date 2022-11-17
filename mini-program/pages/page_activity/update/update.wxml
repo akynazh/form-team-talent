@@ -25,4 +25,4 @@
   </van-radio-group>
 </van-cell-group>
 
-<van-button plain type="primary" bindtap="updateActivity" size="large">更新</van-button>
+<van-button plain type="primary" bindtap="updateActivity" block>更新</van-button>

@@ -6,9 +6,13 @@ Page({
 	data: {
 		u_name: "",
 		u_stu_num: "",
-		u_school: ""
+    u_school: "",
+    avatarUrl: ""
 	},
 	onLoad() {
+    this.setData({
+      avatarUrl: wx.getStorageSync('avatarUrl') || ''
+    })
     let that = this
     wx.request({
       url: `${baseUrl}/api/user/get/info`,

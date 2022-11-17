@@ -7,11 +7,13 @@ Page({
     a_id: "",
     a_type: "",
     t_id: "",
+    manage: "",
     team_leader_name: "",
     content: "",
     req_hidden: true,
     team: {},
-    members: {}
+    members: {},
+    owner: false
   },
   onActiveDescChange(event) {
     this.setData({
@@ -22,10 +24,12 @@ Page({
     let a_id = params.a_id
     let a_type = params.a_type
     let t_id = params.t_id
+    let manage = params.manage || 0
     this.setData({
       a_id: a_id,
       a_type: a_type,
       t_id: t_id,
+      manage: manage
     })
     let that = this
     wx.request({
@@ -37,7 +41,8 @@ Page({
           that.setData({
             team: obj.team,
             members: obj.members,
-            team_leader_name: obj.team_leader_name
+            team_leader_name: obj.team_leader_name,
+            owner: obj.owner
           })
         }
       },
@@ -50,9 +55,10 @@ Page({
     let a_id = this.data.a_id
     let a_type = this.data.a_type
     let t_id = this.data.t_id
+    let manage = this.data.manage
     wx.showModal({
-      title: "删除小组",
-      content: "确定删除？",
+      title: "解散小组",
+      content: "确定解散？",
       success(res) {
         if (res.confirm) {
           wx.request({
@@ -61,7 +67,11 @@ Page({
             header: util.getAuthHeader(),
             success(res) {
               if (util.checkSuccess(res)) {
-                util.route(`/pages/page_team/team/team?a_id=${a_id}&a_type=${a_type}`)
+                if (manage == 0) {
+                  util.route(`/pages/page_team/team/team?a_id=${a_id}&a_type=${a_type}`)
+                } else if (manage == 1) {
+                  util.route('/pages/page_team/team/personal/personal')
+                }
                 wx.showToast({
                   title: '操作成功',
                 })
@@ -78,7 +88,8 @@ Page({
     let a_id = this.data.a_id
     let a_type = this.data.a_type
     let t_id = this.data.t_id
-    util.route(`/pages/page_team/update/update?a_id=${a_id}&a_type=${a_type}&t_id=${t_id}&team=${team_json}`)
+    let manage = this.data.manage
+    util.route(`/pages/page_team/update/update?a_id=${a_id}&a_type=${a_type}&t_id=${t_id}&team=${team_json}&manage=${manage}`)
   },
   joinTeam() {
     this.setData({

@@ -25,4 +25,4 @@
   </van-radio-group>
 </van-cell-group>
 
-<van-button plain type="primary" bindtap="createActivity" size="large">提交</van-button>
+<van-button plain type="primary" bindtap="createActivity" block>提交</van-button>
