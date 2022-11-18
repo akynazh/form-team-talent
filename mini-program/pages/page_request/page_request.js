@@ -51,7 +51,7 @@ Page({
             fail() {util.fail()},
             success(res) {
               if (util.checkSuccess(res)) {
-                util.route("/pages/page_request/page_request?type=0")
+                util.route("/pages/page_request/page_request?type=0", 1, 1)
                 wx.showToast({
                   title: '操作成功',
                 })
@@ -77,7 +77,7 @@ Page({
             fail() {util.fail()},
             success(res) {
               if (util.checkSuccess(res)) {
-                util.route("/pages/page_request/page_request?type=1")
+                util.route("/pages/page_request/page_request?type=1", 1, 1)
                 wx.showToast({
                   title: '操作成功',
                 })

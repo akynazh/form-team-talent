@@ -68,9 +68,9 @@ Page({
             success(res) {
               if (util.checkSuccess(res)) {
                 if (manage == 0) {
-                  util.route(`/pages/page_team/team/team?a_id=${a_id}&a_type=${a_type}`)
+                  util.route(`/pages/page_team/team/team?a_id=${a_id}&a_type=${a_type}`, 1, 1)
                 } else if (manage == 1) {
-                  util.route('/pages/page_team/team/personal/personal')
+                  util.route('/pages/page_team/team/personal/personal', 1, 1)
                 }
                 wx.showToast({
                   title: '操作成功',
@@ -102,6 +102,9 @@ Page({
     })
   },
   sendReqJoinTeam() {
+    this.setData({
+      req_hidden: true
+    })
     let that = this
     wx.request({
       url: `${baseUrl}/api/req/send`,
@@ -112,7 +115,9 @@ Page({
         t_id: that.data.t_id,
         content: that.data.content,
       },
-      fail() { util.fail() },
+      fail() { 
+        util.fail() 
+      },
       success(res) {
         if (util.checkSuccess(res)) {
           util.route(`/pages/page_request/page_request?type=0`)

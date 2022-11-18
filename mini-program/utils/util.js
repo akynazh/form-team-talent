@@ -68,35 +68,42 @@ let getToken = () => {
   return wx.getStorageSync('auth') || ''
 }
 
-let route = (pageUrl, needAuth = 1) => {
-  if (needAuth == 0) {
+let goToPage = (pageUrl, redirect) => {
+  if (redirect == 0) {
+    wx.navigateTo({
+      url: pageUrl,
+    })
+  } else if (redirect == 1) {
     wx.redirectTo({
       url: pageUrl,
     })
+  }
+} 
+let route = (pageUrl, needAuth = 1, redirect = 0) => {
+  if (needAuth == 0) {
+    goToPage(pageUrl, redirect)
   } else {
     if (!app.globalData.isLogin) {
       if (getToken() != '') {
-        auth(pageUrl)
+        auth(pageUrl, 0, redirect)
       } else {
         wx.getUserProfile({
           desc: '请问是否进行登录？',
-          success(res) {
+          success() {
             wx.showLoading({
               title: "登录中..."
             })
-            auth(pageUrl)
+            auth(pageUrl, 1, redirect)
           },
         })
       }
     } else {
-      wx.redirectTo({
-        url: pageUrl,
-      })
+      goToPage(pageUrl, redirect)
     }
   }
 }
 
-let auth = pageUrl => {
+let auth = (pageUrl, first = 0, redirect) => {
   wx.login({
     success(res1) {
       let url = `${baseUrl}/api/user/auth?code=${res1.code}`
@@ -110,23 +117,23 @@ let auth = pageUrl => {
         method: 'POST',
         success(res2) {
           if (res2.data.code == 200) {
-            wx.hideLoading({
-              success: () => {
-                wx.showToast({
-                  title: '登录成功'
-                })
-              }
-            })
+            if (first == 1) {
+              wx.hideLoading({
+                success: () => {
+                  wx.showToast({
+                    title: '登录成功'
+                  })
+                }
+              })
+            }
             wx.setStorageSync('auth', res2.header.auth)
             app.globalData.isLogin = true
-            wx.redirectTo({
-              url: pageUrl,
-            })
+            goToPage(pageUrl, redirect)
             return true
           } else if (res2.data.code == 4011 || res2.data.code == 4012) {
             console.log("token过期，重新登录")
             wx.removeStorageSync('auth')
-            auth(pageUrl)
+            auth(pageUrl, 1, redirect)
           }
           else {
             wx.hideLoading({

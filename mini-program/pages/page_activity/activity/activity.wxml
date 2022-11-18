@@ -1,4 +1,4 @@
-<block wx:if="{{type == 1}}">
+<block wx:if="{{a_type == 1}}">
   <back pageUrl="/pages/page_manage/page_manage" title="活动"></back>
 </block>
 <block wx:else>
@@ -12,5 +12,3 @@
 <block wx:else>
   <van-empty description="屋子空荡荡的" />
 </block>
-
-<nav></nav>

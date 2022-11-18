@@ -75,7 +75,7 @@ Page({
                   let obj = res.data.obj
                   let a_id = obj.a_id
                   let a_type = that.data.a_type
-                  util.route(`/pages/page_activity/activity/activity?a_id=${a_id}&a_type=${a_type}`)
+                  util.route(`/pages/page_activity/activity/activity?a_id=${a_id}&a_type=${a_type}`, 1, 1)
                   wx.showToast({
                     title: '创建成功',
                   })

@@ -85,7 +85,7 @@ Page({
             data: that.data,
             success(res) {
               if (util.checkSuccess(res)) {
-                util.route(`/pages/page_activity/detail/detail?a_id=${a_id}&a_type=${a_type}`)
+                util.route(`/pages/page_activity/detail/detail?a_id=${a_id}&a_type=${a_type}`, 1, 1)
                 wx.showToast({
                   title: '操作成功',
                 })

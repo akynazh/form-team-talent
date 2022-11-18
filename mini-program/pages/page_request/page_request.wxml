@@ -46,5 +46,3 @@
 <block wx:else>
   <van-empty description="屋子空荡荡的" />
 </block>
-
-<nav></nav>

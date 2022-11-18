@@ -42,7 +42,7 @@ Page({
       data: that.data,
       success(res) {
         if (util.checkSuccess(res)) {
-          util.route(`/pages/page_team/detail/detail?a_id=${a_id}&t_id=${t_id}&a_type=${a_type}&manage=${manage}`)
+          util.route(`/pages/page_team/detail/detail?a_id=${a_id}&t_id=${t_id}&a_type=${a_type}&manage=${manage}`, 1, 1)
           wx.showToast({
             title: '操作成功',
           })

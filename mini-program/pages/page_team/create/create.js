@@ -35,7 +35,7 @@ Page({
       success(res) {
         if (util.checkSuccess(res)) {
           let t_id = res.data.obj.t_id
-          util.route(`/pages/page_team/detail/detail?a_id=${a_id}&t_id=${t_id}`)
+          util.route(`/pages/page_team/detail/detail?a_id=${a_id}&t_id=${t_id}`, 1, 1)
           wx.showToast({
             title: '创建成功',
           })

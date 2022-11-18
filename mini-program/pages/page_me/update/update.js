@@ -23,7 +23,7 @@ Page({
       data: that.data,
       success(res) {
         if (util.checkSuccess(res)) {
-          util.route('/pages/page_me/page_me')
+          util.route('/pages/page_me/page_me', 1, 1)
           wx.showToast({
             title: '更新成功',
           })

@@ -10,7 +10,7 @@ Component({
   methods: {
     navigateBack() {
       let that = this
-      wx.redirectTo({
+      wx.navigateTo({
         url: that.properties.pageUrl
       })
     }
