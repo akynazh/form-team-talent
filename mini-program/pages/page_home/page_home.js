@@ -10,14 +10,12 @@ Page({
     util.route("/pages/page_activity/activity/activity?a_type=0", 0)
   },
   login() {
-    util.route('/pages/page_me/page_me')
+    util.auth("/pages/page_me/page_me")
   },
   scanQrcode() {
     wx.scanCode({
       success (res) {
-        console.log(res)
         let url = res.result
-        console.log(url)
         util.route(url)
       }
     })

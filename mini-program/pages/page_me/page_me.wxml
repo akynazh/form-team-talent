@@ -2,13 +2,19 @@
 
 <van-cell-group inset>
   <view class="userinfo">
-    <view class="userinfo-avatar" bindtap="bindViewTap">
-      <open-data type="userAvatarUrl"></open-data>
-    </view>
+    <van-image
+      round
+      fit="cover"
+      width="4rem"
+      height="4rem"
+      src="{{avatarUrl}}"
+    />
   </view>
-  <van-cell title="姓名" value="{{u_name}}" icon="user-o" />
-  <van-cell title="学号" value="{{u_stu_num}}" icon="eye-o" />
-  <van-cell title="学校" value="{{u_school}}" icon="location-o" />
+  <van-cell title="姓名" value="{{user.u_name}}" icon="user-o" />
+  <van-cell title="性别" value="{{sexShow}}" icon="diamond-o" />
+  <van-cell title="学号" value="{{user.u_stu_num}}" icon="eye-o" />
+  <van-cell title="学校" value="{{user.u_school}}" icon="location-o" />
+  <van-cell title="专业" value="{{user.u_major}}" icon="award-o" />
 </van-cell-group>
 <van-button plain type="primary" bindtap="toUpdatePage" block>编辑信息</van-button>
 <nav active="me"></nav>

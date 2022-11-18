@@ -4,26 +4,25 @@ import * as util from "../../utils/util"
 
 Page({
 	data: {
-		u_name: "",
-		u_stu_num: "",
-    u_school: "",
-    avatarUrl: ""
+    user: {},
+    avatarUrl: "",
+    sexShow: ""
 	},
 	onLoad() {
-    this.setData({
-      avatarUrl: wx.getStorageSync('avatarUrl') || ''
-    })
     let that = this
     wx.request({
       url: `${baseUrl}/api/user/get/info`,
       header: util.getAuthHeader(),
       success(res) {
         if (util.checkSuccess(res)) {
-          let obj = res.data.obj
+          let user = res.data.obj
+          let sexShow = "其它"
+          if (user.u_sex == "female") sexShow = "女"
+          else if (user.u_sex == "male") sexShow = "男"
           that.setData({
-            u_name: obj.u_name,
-            u_stu_num: obj.u_stu_num,
-            u_school: obj.u_school
+            user: user,
+            avatarUrl: `/images/${user.u_sex}.png`,
+            sexShow: sexShow
           })
         }
       },

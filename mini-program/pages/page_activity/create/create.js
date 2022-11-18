@@ -89,7 +89,7 @@ Page({
         }
       })
     } else {
-      util.alertFail('提交失败', '表单未正确填写')
+      util.alertFail('表单未正确填写')
     }
   },
 })
