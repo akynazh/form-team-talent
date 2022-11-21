@@ -1,4 +1,4 @@
-<back pageUrl="/pages/page_activity/detail/detail?a_id={{a_id}}&a_type={{a_type}}"  title="小组"></back>
+<back title="小组"></back>
 
 <block wx:if="{{teams.length > 0}}">
   <block wx:for="{{teams}}" wx:key="t_id">

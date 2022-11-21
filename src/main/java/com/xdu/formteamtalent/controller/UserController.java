@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.xdu.formteamtalent.entity.*;
 import com.xdu.formteamtalent.global.RestfulResponse;
-import com.xdu.formteamtalent.mapper.JoinRequestMapper;
 import com.xdu.formteamtalent.service.*;
 import com.xdu.formteamtalent.utils.JwtUtil;
 import com.xdu.formteamtalent.utils.AuthUtil;
@@ -39,17 +38,24 @@ public class UserController {
     /**
      *
      * @param code 微信授权码
-     * @param resp 返回体
-     * @param nickName 微信昵称
+     * @param check 验证token是否合格
      */
     @PostMapping("/auth")
-    public RestfulResponse auth(@RequestParam("code") String code, HttpServletResponse resp, @RequestParam(value = "nickName", defaultValue = "wechat-user") String nickName) {
+    public RestfulResponse auth(@RequestParam(value = "code", defaultValue = "") String code,
+                                @RequestParam(value = "check", defaultValue = "") String check,
+                                HttpServletRequest req,
+                                HttpServletResponse resp){
+        if (check.equals("1")) {
+            if (AuthUtil.checkToken(req)) return RestfulResponse.success();
+            else return RestfulResponse.fail(401, "token验证错误");
+        }
         String openId = AuthUtil.getOpenIdByCode(code);
         if (openId != null) {
             User user = userService.getOne(new QueryWrapper<User>().eq("u_id", openId));
             if (user == null) {
                 user = new User();
-                user.setU_name(nickName);
+                user.setU_name("wx-user");
+                user.setU_sex("other");
                 user.setU_id(openId);
                 userService.save(user);
             }

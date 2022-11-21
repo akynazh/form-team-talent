@@ -30,11 +30,11 @@ public class JoinRequestController {
 
     @Autowired
     public JoinRequestController(JoinRequestService joinRequestService,
-                              TeamService teamService,
-                              ActivityService activityService,
-                              UATService uatService,
-                              UserService userService,
-                              JoinRequestMapper joinRequestMapper) {
+                                 TeamService teamService,
+                                 ActivityService activityService,
+                                 UATService uatService,
+                                 UserService userService,
+                                 JoinRequestMapper joinRequestMapper) {
         this.joinRequestService = joinRequestService;
         this.teamService = teamService;
         this.activityService = activityService;
@@ -126,22 +126,33 @@ public class JoinRequestController {
         }
     }
 
+    private List<JoinRequest> removeOpenId(List<JoinRequest> list) {
+        for (JoinRequest req : list) {
+            req.setFrom_id("");
+            req.setTo_id("");
+        }
+        return list;
+    }
+
     /**
      * 获得与我相关的请求
-     * @param type 非必要，0：我发出的请求 1：发给我的请求 2：所有请求（默认）
-     * @param status 非必要，0：已处理的请求 1：未处理的请求 2：所有请求（默认）
+     *
+     * @param type    非必要，0：我发出的请求 1：发给我的请求 2：所有请求（默认）
+     * @param status  非必要，0：已处理的请求 1：未处理的请求 2：所有请求（默认）
      * @param request 请求
      * @return json
      */
     @GetMapping("/get")
-    public RestfulResponse getMyRequest(@RequestParam(defaultValue = "2") Integer type, @RequestParam(defaultValue = "2") Integer status, HttpServletRequest request) {
+    public RestfulResponse getMyRequest(@RequestParam(defaultValue = "2") Integer type,
+                                        @RequestParam(defaultValue = "2") Integer status,
+                                        HttpServletRequest request) {
         if ((type != 0 && type != 1 && type != 2) || (status != 0 && status != 1 && status != 2)) {
             return RestfulResponse.fail(404, "参数错误");
         }
         String u_id = AuthUtil.getUserId(request);
         List<JoinRequest> requests = joinRequestMapper.getMyRequest(u_id);
         if (status == 2 && type == 2) {
-            return RestfulResponse.success(requests);
+            return RestfulResponse.success(removeOpenId(requests));
         }
 
         // 过滤出符合type的
@@ -149,8 +160,16 @@ public class JoinRequestController {
         // 过滤出符合status的
         Predicate<JoinRequest> p_status = req -> req.getStatus().equals(status);
 
-        if (status == 2) return RestfulResponse.success(requests.stream().filter(p_type).collect(Collectors.toList()));
-        if (type == 2) return RestfulResponse.success(requests.stream().filter(p_status).collect(Collectors.toList()));
-        return RestfulResponse.success(requests.stream().filter(p_status).filter(p_type).collect(Collectors.toList()));
+        if (status == 2)
+            return RestfulResponse.success(
+                    removeOpenId(requests.stream().filter(p_type).collect(Collectors.toList()))
+            );
+        if (type == 2)
+            return RestfulResponse.success(
+                    removeOpenId(requests.stream().filter(p_status).collect(Collectors.toList()))
+            );
+        return RestfulResponse.success(
+                removeOpenId(requests.stream().filter(p_status).filter(p_type).collect(Collectors.toList()))
+        );
     }
 }

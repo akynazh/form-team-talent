@@ -20,6 +20,8 @@ public class User implements Serializable {
     private String u_name;
     private String u_stu_num;
     private String u_school;
+    private String u_sex;
+    private String u_major;
 
     public User(String u_id) {
         this.u_id = u_id;

@@ -1,11 +1,11 @@
 <block wx:if="{{type == 0}}">
-  <back pageUrl="/pages/page_manage/page_manage" title="我的请求"></back>
+  <back title="我的请求"></back>
 </block>
 <block wx:elif="{{type == 1}}">
-  <back pageUrl="/pages/page_manage/page_manage" title="他人请求"></back>
+  <back title="他人请求"></back>
 </block>
 <block wx:elif="{{type == 2}}">
-  <back pageUrl="/pages/page_manage/page_manage" title="所有请求"></back>
+  <back title="所有请求"></back>
 </block>
 
 <block wx:if="{{requests.length > 0}}">

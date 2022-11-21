@@ -9,7 +9,8 @@ Page({
     a_end_date_show: "",
     activity: {},
     activeNames: [],
-    owner: false
+    owner: false,
+    baseUrl: app.globalData.baseUrl
   },
   onActiveDescChange(event) {
     this.setData({
@@ -54,7 +55,7 @@ Page({
             method: 'POST',
             success(res) {
               if (util.checkSuccess(res)) {
-                util.route(`/pages/page_activity/activity/activity?a_id=${a_id}&a_type=${a_type}`, 1, 1)
+                util.route(`/pages/page_activity/activity/activity?a_type=${a_type}`, 1, 1)
                 wx.showToast({
                   title: '操作成功',
                 })

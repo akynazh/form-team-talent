@@ -23,7 +23,7 @@ Component({
         util.route("/pages/page_manage/page_manage", 0, 1)
       }
       else if (pageName == "me") {
-        util.route("/pages/page_me/page_me", 1, 1)
+        util.route("/pages/page_me/page_me", 0, 1)
       }
     }
   },

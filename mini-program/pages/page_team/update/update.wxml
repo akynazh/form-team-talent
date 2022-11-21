@@ -1,4 +1,4 @@
-<back pageUrl="/pages/page_team/detail/detail?a_id={{a_id}}&a_type={{a_type}}&t_id={{t_id}}&manage={{manage}}"  title="更新小组"></back>
+<back title="更新小组"></back>
 
 <van-cell-group>
   <van-field model:value="{{t_name}}" label="小组名称" border="{{ false }}" />

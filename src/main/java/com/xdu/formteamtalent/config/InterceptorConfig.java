@@ -19,17 +19,10 @@ public class InterceptorConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(enterInterceptor)
                 .addPathPatterns("/**")
-                // /api/user
                 .excludePathPatterns("/api/user/auth")
-
-                // /api/activity
-                .excludePathPatterns("/api/activity/get/**")
-                .addPathPatterns("/api/activity/get/my")
-
-                // api/group
-
-                // other
+                .excludePathPatterns("/api/activity/get/pub")
                 .excludePathPatterns("/api/error/**")
-                .excludePathPatterns("/qrcode/**");
+                .excludePathPatterns("/qrcode/**")
+                .excludePathPatterns("/error");
     }
 }

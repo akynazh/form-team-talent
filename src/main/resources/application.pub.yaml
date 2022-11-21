@@ -1,8 +1,8 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    username: xxxxxx
+    password: xxxxxx
     url: jdbc:mysql://localhost:3306/form_team_talent?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
   application:
     name: form-team-talent
@@ -19,11 +19,14 @@ server:
   port: 8080
 
 wx:
-  appId: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-  appSecret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  appId: xxxxxx
+  appSecret: xxxxxx
   getOpenIdUrl: https://api.weixin.qq.com/sns/jscode2session
 
 auth:
   jwt:
-    secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-    expire: xxxxxxxxxxxxxxxxxxxxx
+    secret: xxxxxx
+    expire: xxxxxx
+
+# 用于方便地获取外部静态地址，在外部application.yaml指定，此处不用修改，只是为了程序的正常运行
+staticPath: ""

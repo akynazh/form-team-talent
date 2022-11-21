@@ -1,6 +1,13 @@
-# CREATE DATABASE form_team_talent;
+CREATE DATABASE form_team_talent;
+ALTER DATABASE form_team_talent DEFAULT CHAR SET utf8;
 
 USE form_team_talent;
+
+DROP TABLE IF EXISTS t_req;
+DROP TABLE IF EXISTS t_uat;
+DROP TABLE IF EXISTS t_team;
+DROP TABLE IF EXISTS t_activity;
+DROP TABLE IF EXISTS t_user;
 
 DROP TABLE IF EXISTS t_user;
 CREATE TABLE t_user (
@@ -8,8 +15,11 @@ CREATE TABLE t_user (
     u_name VARCHAR(255),
     u_stu_num VARCHAR(64),
     u_school VARCHAR(255),
+    u_major VARCHAR(255),
+    u_sex VARCHAR(32),
     PRIMARY KEY(u_id)
 );
+ALTER TABLE t_user CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS t_activity;
 CREATE TABLE t_activity (
@@ -24,6 +34,7 @@ CREATE TABLE t_activity (
     PRIMARY KEY(a_id),
     FOREIGN KEY (a_holder_id) REFERENCES t_user(u_id)
 );
+ALTER TABLE t_activity CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS t_team;
 CREATE TABLE t_team (
@@ -38,6 +49,7 @@ CREATE TABLE t_team (
     FOREIGN KEY (t_leader_id) REFERENCES t_user(u_id),
     FOREIGN KEY (a_id) REFERENCES t_activity(a_id)
 );
+ALTER TABLE t_team CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS t_uat;
 CREATE TABLE t_uat (
@@ -50,6 +62,7 @@ CREATE TABLE t_uat (
    FOREIGN KEY (a_id) REFERENCES t_activity(a_id),
    FOREIGN KEY (t_id) REFERENCES t_team(t_id)
 );
+ALTER TABLE t_uat CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 DROP TABLE IF EXISTS t_req;
 CREATE TABLE t_req (
@@ -70,16 +83,4 @@ CREATE TABLE t_req (
     FOREIGN KEY (a_id) REFERENCES t_activity(a_id),
     FOREIGN KEY (t_id) REFERENCES t_team(t_id)
 );
-
-ALTER DATABASE form_team_talent DEFAULT CHAR SET utf8;
-ALTER TABLE t_user CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
-ALTER TABLE t_team CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
-ALTER TABLE t_activity CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
-ALTER TABLE t_uat CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
 ALTER TABLE t_req CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
-
-DROP TABLE IF EXISTS t_req;
-DROP TABLE IF EXISTS t_uat;
-DROP TABLE IF EXISTS t_team;
-DROP TABLE IF EXISTS t_activity;
-DROP TABLE IF EXISTS t_user;

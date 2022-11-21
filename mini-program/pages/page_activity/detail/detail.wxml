@@ -1,4 +1,4 @@
-<back pageUrl="/pages/page_activity/activity/activity?a_type={{a_type}}" title="活动详情"></back>
+<back title="活动详情"></back>
 
 <van-cell-group>
   <van-cell title="活动名称" value="{{activity.a_name}}" />
@@ -11,7 +11,7 @@
     </van-collapse-item>
     <van-collapse-item title="活动二维码" name="2">
       <view style="text-align: center;">
-        <image src="{{activity.a_qrcode_path}}" style="width: 200px; height: 200px;"></image>
+        <image src="{{baseUrl}}{{activity.a_qrcode_path}}" style="width: 200px; height: 200px;"></image>
       </view>
     </van-collapse-item>
   </van-collapse>

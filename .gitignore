@@ -45,4 +45,4 @@ replay_pid*
 target
 
 application.yaml
-application.properties
+docker-compose.yaml

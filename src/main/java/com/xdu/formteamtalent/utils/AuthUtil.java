@@ -1,11 +1,16 @@
 package com.xdu.formteamtalent.utils;
 
 import cn.hutool.json.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.xdu.formteamtalent.entity.User;
+import com.xdu.formteamtalent.service.UserService;
 import io.jsonwebtoken.Claims;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,5 +58,17 @@ public class AuthUtil {
         Claims claims = JwtUtil.getClaimsByToken(token);
         assert claims != null;
         return claims.getSubject();
+    }
+
+    public static Boolean checkToken(HttpServletRequest request) {
+        String token = request.getHeader("auth");
+        if (token == null) { // token不存在
+            return false;
+        }
+        Claims claims = JwtUtil.getClaimsByToken(token);
+        if (claims == null || JwtUtil.isTokenExpired(claims.getExpiration())) { // token错误或过期
+            return false;
+        }
+        return true;
     }
 }

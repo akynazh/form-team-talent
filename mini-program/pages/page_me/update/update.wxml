@@ -1,4 +1,4 @@
-<back pageUrl="/pages/page_me/page_me"  title="更新信息"></back>
+<back title="更新信息"></back>
 
 <van-cell-group>
   <van-field model:value="{{u_name}}" label="姓名" placeholder="你的名字" border="{{ false }}" />

@@ -1,14 +1,15 @@
 package com.xdu.formteamtalent.controller;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.extra.qrcode.QrCodeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xdu.formteamtalent.entity.Activity;
+import com.xdu.formteamtalent.entity.JoinRequest;
 import com.xdu.formteamtalent.entity.Team;
 import com.xdu.formteamtalent.entity.UAT;
 import com.xdu.formteamtalent.global.RestfulResponse;
-import com.xdu.formteamtalent.mapper.JoinRequestMapper;
 import com.xdu.formteamtalent.service.*;
 import com.xdu.formteamtalent.utils.AuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/activity")
@@ -31,10 +31,8 @@ public class ActivityController {
     private final ActivityService activityService;
     private final UATService uatService;
     private final UserService userService;
-
-    @Value("${server.baseUrl}")
-    private String baseUrl;
-
+    @Value("${staticPath}")
+    private String staticPath;
 
     @Autowired
     public ActivityController(JoinRequestService joinRequestService,
@@ -49,20 +47,33 @@ public class ActivityController {
         this.userService = userService;
     }
 
+    private String getQrcodePath(String a_id) {
+        String a_real_qrcode_path = "/qrcode/" + a_id + ".jpg";
+        if (!staticPath.equals("")) {
+            return staticPath + a_real_qrcode_path; // 绝对路径
+        } else {
+            return "static" + a_real_qrcode_path; // 相对路径，默认相对于类路径
+        }
+    }
+
     @PostMapping("/add")
     @Transactional
     public RestfulResponse addActivity(HttpServletRequest request, @RequestBody Activity activity) {
         String a_id = IdUtil.simpleUUID();
-        String a_qrcode_url = "/pages/page_activity/detail/detail?a_id=" + a_id;
-        String a_real_qrcode_path = "static/qrcode/" + a_id + ".jpg";
-        String a_qrcode_path = baseUrl + "/qrcode/" + a_id + ".jpg";
+        // 二维码指向的URL地址
+        String a_qrcode_des_url = "/pages/page_activity/detail/detail?a_id=" + a_id;
+        // 二维码图片在主机上的绝对路径地址
+        String a_real_qrcode_path = getQrcodePath(a_id);
+        // 访问二维码图片的URL地址
+        String a_qrcode_visit_path = "/qrcode/" + a_id + ".jpg";
         String u_id = AuthUtil.getUserId(request);
 
         FileUtil.touch(a_real_qrcode_path);
-        QrCodeUtil.generate(a_qrcode_url, 300, 300, FileUtil.file(a_real_qrcode_path));
+        // FileUtil.file() 当地址为相对地址时默认相对与ClassPath!
+        QrCodeUtil.generate(a_qrcode_des_url, 300, 300, FileUtil.file(a_real_qrcode_path));
         activity.setA_holder_id(u_id);
         activity.setA_id(a_id);
-        activity.setA_qrcode_path(a_qrcode_path);
+        activity.setA_qrcode_path(a_qrcode_visit_path);
         activity.setStatus(1);
         activityService.save(activity);
         activity.setA_holder_id("");
@@ -78,8 +89,10 @@ public class ActivityController {
         wrapper.eq("a_id", a_id);
         Activity activity = activityService.getOne(wrapper);
         if (activity != null) {
-            FileUtil.del("static/qrcode/" + a_id + ".jpg");
+            String qrcodePath = getQrcodePath(a_id);
+            FileUtil.del(qrcodePath);
             uatService.remove(new QueryWrapper<UAT>().eq("a_id", a_id));
+            joinRequestService.remove(new QueryWrapper<JoinRequest>().eq("a_id", a_id));
             teamService.remove(new QueryWrapper<Team>().eq("a_id", a_id));
             activityService.removeById(a_id);
             return RestfulResponse.success();
@@ -114,10 +127,15 @@ public class ActivityController {
     }
 
     @GetMapping("/get/id")
-    public RestfulResponse getActivityById(@RequestParam("a_id") String a_id) {
+    public RestfulResponse getActivityById(@RequestParam("a_id") String a_id, HttpServletRequest request) {
         Activity activity = activityService.getOne(new QueryWrapper<Activity>().eq("a_id", a_id));
+        boolean owner = activity.getA_holder_id().equals(AuthUtil.getUserId(request));
         activity.setA_holder_id("");
-        return RestfulResponse.success(activity);
+        Map<Object, Object> map = MapUtil.builder()
+                .put("activity", activity)
+                .put("owner", owner)
+                .build();
+        return RestfulResponse.success(map);
     }
 
     /**

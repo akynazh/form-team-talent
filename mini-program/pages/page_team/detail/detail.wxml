@@ -1,8 +1,8 @@
 <block wx:if="{{manage == 0}}">
-  <back pageUrl="/pages/page_team/team/team?a_id={{a_id}}&a_type={{a_type}}" title="小组详情"></back>
+  <back title="小组详情"></back>
 </block>
 <block wx:else>
-  <back pageUrl="/pages/page_team/team/personal/personal" title="小组详情"></back>
+  <back title="小组详情"></back>
 </block>
 
 

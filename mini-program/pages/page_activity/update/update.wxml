@@ -1,4 +1,4 @@
-<back pageUrl="/pages/page_activity/detail/detail?a_id={{a_id}}&a_type={{a_type}}" title="更新活动"></back>
+<back title="更新活动"></back>
 
 <van-cell-group>
   <van-field model:value="{{a_name}}" label="活动题目" placeholder="例如：思政小组展示" border="{{ false }}" />

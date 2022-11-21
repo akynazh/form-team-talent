@@ -91,7 +91,7 @@ function route(pageUrl, needAuth = 1, redirect = 0) {
   if (needAuth == 0) {
     goToPage(pageUrl, redirect)
   } else {
-    if (getToken() != '' && checkToken()) {
+    if (getToken() != '') {
       checkToken().then(
         () => goToPage(pageUrl, redirect),
         () => auth()
@@ -121,35 +121,41 @@ function auth(pageUrl = "", redirect = 1) {
   wx.showLoading({
     title: "尝试登录..."
   })
-  wx.login({
-    success(res1) {
-      wx.request({
-        url: `${baseUrl}/api/user/auth?code=${res1.code}`,
-        method: 'POST',
-        success(res2) {
-          if (res2.data.code == 200) {
+  return new Promise((resolve, reject) => {
+    wx.login({
+      success(res1) {
+        wx.request({
+          url: `${baseUrl}/api/user/auth?code=${res1.code}`,
+          method: 'POST',
+          success(res2) {
+            if (res2.data.code == 200) {
+              wx.hideLoading({
+                success: () => { wx.showToast({ title: '登录成功' }) }
+              })
+              wx.setStorageSync('auth', res2.header.auth)
+              if (pageUrl != "") goToPage(pageUrl, redirect)
+              resolve()
+            } else {
+              wx.hideLoading({
+                success: () => { alertFail(`${res2.data.msg}`) },
+              })
+              reject()
+            }
+          },
+          fail() {
             wx.hideLoading({
-              success: () => { wx.showToast({ title: '登录成功' }) }
+              success: () => { alertFail("请检查网络") },
             })
-            wx.setStorageSync('auth', res2.header.auth)
-            if (pageUrl != "") goToPage(pageUrl, redirect)
-          } else {
-            wx.hideLoading({
-              success: () => { alertFail(`${res2.data.msg}`) },
-            })
+            reject()
           }
-        },
-        fail() {
-          wx.hideLoading({
-            success: () => { alertFail("请检查网络") },
-          })
-        }
-      })
-    },
-    fail() {
-      wx.hideLoading({
-        success: () => { alertFail("请检查网络") },
-      })
-    }
+        })
+      },
+      fail() {
+        wx.hideLoading({
+          success: () => { alertFail("请检查网络") },
+        })
+        reject()
+      }
+    })
   })
 }

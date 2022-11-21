@@ -5,15 +5,25 @@ import * as util from "../../../utils/util"
 Page({
   data: {
     activities: [],
-    a_type: ""
+    a_type: "",
+    url: ""
+  },
+  onShow() {
+
   },
   onLoad(params) {
     let a_type = params.a_type
-    let that = this
     let url = `${baseUrl}/api/activity/get/pub`
     if (a_type == 1) url = `${baseUrl}/api/activity/get/my`
+    this.setData({
+      a_type: a_type,
+      url: url
+    })
+  },
+  onShow() {
+    let that = this
     wx.request({
-      url: url,
+      url: that.data.url,
       header: util.getAuthHeader(),
       success(res) {
         if (util.checkSuccess(res)) {
@@ -24,7 +34,6 @@ Page({
             }
           }
           that.setData({
-            a_type: a_type,
             activities: obj
           })
         }
@@ -36,11 +45,6 @@ Page({
   },
   toActivityDetail(e) {
     let a_type = this.data.a_type
-    if (a_type == 1) {
-      util.route(`/pages/page_activity/detail/detail?a_id=${e.currentTarget.id}&a_type=${a_type}`)
-    } else {
-      util.route(`/pages/page_activity/detail/detail?a_id=${e.currentTarget.id}&a_type=${a_type}`)
-    }
-
+    util.route(`/pages/page_activity/detail/detail?a_id=${e.currentTarget.id}&a_type=${a_type}`)
   }
 })
