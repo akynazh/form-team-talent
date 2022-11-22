@@ -4,9 +4,9 @@
 
 一个简洁的小程序，可以快速，方便，高效地进行课外活动，课题研究，大作业等的组队。
 
-### 展示
+[查看小程序展示](#show)
 
-未完成......
+未部署到微信（尚无此打算）
 
 ### 技术说明
 
@@ -214,6 +214,35 @@ a77290b38aa2   form-team-talent_form-team-talent   "java -jar app.jar"      Abou
 ```
 
 部署完毕。
+
+<h3 id="show">展示</h3>
+
+**主页**
+
+![](./image/home.jpg)
+
+**个人页**
+
+![](./image/me.jpg)
+
+**管理页**
+
+![](./image/manage.jpg)
+
+**活动页**
+
+![](./image/activity1.jpg)
+![](./image/activity2.jpg)
+
+**小组页**
+
+![](./image/team.jpg)
+
+**请求**
+
+![](./image/req1.jpg)
+![](./image/req2.jpg)
+![](./image/req3.jpg)
 
 ### 联系与交流
 

@@ -10,7 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class FormTeamTalentApplicationTests {
-    @Autowired
+    /*
+	@Autowired
     UserService userService;
     @Test
     public void getTokenForTest() {
@@ -24,4 +25,5 @@ class FormTeamTalentApplicationTests {
         userService.save(user);
         System.out.println(token);
     }
+	*/
 }

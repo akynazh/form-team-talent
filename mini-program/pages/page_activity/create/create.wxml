@@ -2,7 +2,7 @@
 
 <van-cell-group>
   <van-field model:value="{{a_name}}" label="活动题目" placeholder="例如：思政小组展示" border="{{ false }}" />
-  <van-field model:value="{{a_desc}}" label="活动内容" placeholder="请输入活动内容" border="{{ false }}" />
+  <van-field model:value="{{a_desc}}" label="活动简介" placeholder="请输入活动简介" border="{{ false }}" />
   <van-cell title="截止日期" is-link bind:click="showDatePickerPopup" label="{{a_end_date_show}}" value="选择"/>
   <van-popup show="{{ show }}" bind:close="onDatePickerClose" position="bottom">
     <van-datetime-picker
