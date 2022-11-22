@@ -12,7 +12,7 @@
 
 **后端部分：**
 
-由SpringBoot构建，通过Docker部署。
+主要通过Java实现，通过Docker部署。
 
 - SpringBoot
 - Docker & Docker-compose
@@ -21,8 +21,11 @@
 - Hutool
 - JWT
 - Quartz
+- OkHttp
 
 **前端部分：**
+
+主要由JavaScript实现。
 
 只有微信小程序端，通过微信官方API和Vant Weapp框架搭建UI。
 
@@ -232,6 +235,7 @@ a77290b38aa2   form-team-talent_form-team-talent   "java -jar app.jar"      Abou
 **活动页**
 
 ![](./image/activity1.jpg)
+
 ![](./image/activity2.jpg)
 
 **小组页**
@@ -240,8 +244,14 @@ a77290b38aa2   form-team-talent_form-team-talent   "java -jar app.jar"      Abou
 
 **请求**
 
+发送加入小组的请求：
+
 ![](./image/req1.jpg)
+
+处理请求：
+
 ![](./image/req2.jpg)
+
 ![](./image/req3.jpg)
 
 ### 联系与交流
