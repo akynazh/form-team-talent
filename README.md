@@ -32,13 +32,13 @@
 - WeChat API
 - Vant Weapp
 
-### 开发说明
+### 后端开发步骤
 
 #### 一、编辑配置文件
 
 将 `application.pub.yaml` 重命名为 `application.yaml`，然后开始编辑：
 
-”xxxxxx“为需编辑内容。
+“xxxxxx”为需编辑内容。
 
 ```yaml
 spring:
@@ -170,7 +170,7 @@ services:
 
 方便起见，通过脚本实现快速部署。
 
-第一运行的话， 在项目根目录下，执行 `./publish.sh -u` 即可：
+第一次运行的话， 在项目根目录下，执行 `./publish.sh -u` 即可：
 
 ```shell
 if [ "$1" = "-u" ] # 更新jar包
@@ -218,7 +218,32 @@ a77290b38aa2   form-team-talent_form-team-talent   "java -jar app.jar"      Abou
 
 部署完毕。
 
-<h3 id="show">展示</h3>
+### 前端开发步骤
+
+`mini-program` 为小程序开发目录。
+
+```
+cd mini-program
+npm init
+npm install
+```
+
+然后，使用微信开发者工具进行npm构建即可。
+
+接着，编辑 `app.js`，如下，将“xxxxxx”替换为后端服务地址即可。
+
+```js
+App({
+  globalData: {
+    baseUrl: "xxxxxx",
+  },
+  onLaunch() {
+    // wx.clearStorage()
+  }
+})
+```
+
+<h3 id="show">小程序展示</h3>
 
 **主页**
 
