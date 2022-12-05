@@ -43,6 +43,8 @@ replay_pid*
 *.iml
 .idea
 target
+image
 
 application.yaml
 docker-compose.yaml
+docker-compose.yaml.bak
