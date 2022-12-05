@@ -89,7 +89,7 @@
 
     <build>
         <!-- 指定jar包包名 -->
-        <finalName>form-team-talent-1.0.0</finalName>
+        <finalName>form-team-talent</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

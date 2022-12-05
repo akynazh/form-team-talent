@@ -4,11 +4,23 @@
 
 一个简洁的小程序，可以快速，方便，高效地进行课外活动，课题研究，大作业等的组队。
 
-[查看小程序展示](#show)
+[点击查看小程序展示](#show)
 
-未部署到微信（尚无此打算）
+### 团队分工情况
 
-### 技术说明
+- 江志航：40%，后端代码和部分前端代码
+- 王飞扬：30%，界面设计和部分前端代码
+- 汪运泽：30%，负责文档，PPT的编写和部分前端代码
+
+### 设计思想
+
+每个人都可以通过组队达人创建一个活动，活动可以设置为私有活动或者公共活动。其他人可以通过二维码加入活动。
+
+加入活动之后，可以创建自己的小组，设定小组人数限制，说明小组的目标等等。
+
+活动参与者可以申请加入小组，说明自己的情况，以便组长筛选组员。
+
+### 技术概览
 
 **后端部分：**
 
@@ -31,6 +43,10 @@
 
 - WeChat API
 - Vant Weapp
+
+### 主要技术点
+
+
 
 ### 后端开发步骤
 
@@ -156,7 +172,7 @@ services:
     container_name: form-team-talent
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: $/code/form-team-talent/Dockerfile_dk
     volumes:
       - /docker/app/form-team-talent:/docker/app/form-team-talent
     depends_on:
@@ -189,7 +205,7 @@ docker-compose up --build -d
 ```shell
 [root => ~/code/form-team-talent]$ ./publish.sh
 [+] Building 0.1s (6/6) FINISHED
- => [internal] load build definition from Dockerfile                                           0.0s
+ => [internal] load build definition from Dockerfile_dk                                           0.0s
  => => transferring dockerfile: 32B                                                            0.0s
  => [internal] load .dockerignore                                                              0.0s
  => => transferring context: 2B                                                                0.0s

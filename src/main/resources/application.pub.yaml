@@ -10,6 +10,9 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 20MB
+  web:
+    resources:
+      static-locations: file:/app/form-team-talent/static
 
 mybatis-plus:
   configuration:
@@ -28,5 +31,5 @@ auth:
     secret: xxxxxx
     expire: xxxxxx
 
-# 用于方便地获取外部静态地址，在外部application.yaml指定，此处不用修改，只是为了程序的正常运行
-staticPath: ""
+# 用于方便地获取外部静态地址，值等同于web.resources.static-locations中file:（如果有）后面的部分
+staticPath: "/app/form-team-talent/static"
