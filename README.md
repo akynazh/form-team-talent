@@ -172,7 +172,7 @@ services:
     container_name: form-team-talent
     build:
       context: .
-      dockerfile: $/code/form-team-talent/Dockerfile_dk
+      dockerfile: $/code/form-team-talent/Dockerfile_dkc
     volumes:
       - /docker/app/form-team-talent:/docker/app/form-team-talent
     depends_on:
@@ -203,9 +203,9 @@ docker-compose up --build -d
 如下：
 
 ```shell
-[root => ~/code/form-team-talent]$ ./publish.sh
+[root => ~/code/form-team-talent]$ ./publish_dkc.sh
 [+] Building 0.1s (6/6) FINISHED
- => [internal] load build definition from Dockerfile_dk                                           0.0s
+ => [internal] load build definition from Dockerfile_dkc                                           0.0s
  => => transferring dockerfile: 32B                                                            0.0s
  => [internal] load .dockerignore                                                              0.0s
  => => transferring context: 2B                                                                0.0s

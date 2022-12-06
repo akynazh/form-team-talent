@@ -22,7 +22,7 @@ services:
     container_name: form-team-talent
     build:
       context: .
-      dockerfile: Dockerfile_dk
+      dockerfile: Dockerfile_dkc
     volumes:
       - /docker/app/form-team-talent:/docker/app/form-team-talent
     depends_on:
