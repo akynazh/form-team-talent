@@ -1,0 +1,5 @@
+<van-tabbar bind:change="navToPage" active="{{active}}">
+  <van-tabbar-item icon="home-o" name="home">主页</van-tabbar-item>
+  <van-tabbar-item icon="orders-o" name="manage">管理</van-tabbar-item>
+  <van-tabbar-item icon="user-o" name="me">个人</van-tabbar-item>
+</van-tabbar>

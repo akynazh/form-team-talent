@@ -5,18 +5,18 @@ import * as util from "../../../utils/util"
 Page({
   data: {
     activities: [],
-    a_type: "",
+    aType: "",
     url: ""
   },
   onShow() {
 
   },
   onLoad(params) {
-    let a_type = params.a_type
+    let aType = params.aType
     let url = `${baseUrl}/api/activity/get/pub`
-    if (a_type == 1) url = `${baseUrl}/api/activity/get/my`
+    if (aType == 1) url = `${baseUrl}/api/activity/get/my`
     this.setData({
-      a_type: a_type,
+      aType: aType,
       url: url
     })
   },
@@ -29,8 +29,8 @@ Page({
         if (util.checkSuccess(res)) {
           let obj = res.data.obj
           for (let a of obj) {
-            if (a.a_end_date < new Date().getTime()) {
-              a.a_name = a.a_name + "(已经结束)"
+            if (a.aEndDate < new Date().getTime()) {
+              a.aName = a.aName + "(已经结束)"
             }
           }
           that.setData({
@@ -44,7 +44,7 @@ Page({
     })
   },
   toActivityDetail(e) {
-    let a_type = this.data.a_type
-    util.route(`/pages/page_activity/detail/detail?a_id=${e.currentTarget.id}&a_type=${a_type}`)
+    let aType = this.data.aType
+    util.route(`/pages/page_activity/detail/detail?aId=${e.currentTarget.id}&aType=${aType}`)
   }
 })

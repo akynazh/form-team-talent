@@ -1,0 +1,15 @@
+.my-paragraph {
+  display: block; 
+  text-overflow:ellipsis; 
+  word-wrap:break-word;
+}
+
+.nav-title {
+  font-weight: bolder !important; 
+  font-family: 'Times New Roman', Times, serif !important;
+}
+
+.my-avatar {
+  width: 100px;
+  height: 100px
+}

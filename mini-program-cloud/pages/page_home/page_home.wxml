@@ -1,0 +1,18 @@
+<top title="组队达人"></top>
+
+<van-grid gutter="{{ 10 }}" column-num="2">
+  <van-grid-item icon="photo-o" use-slot wx:for="{{ 1 }}" bindtap='toCreateActivity'>
+    <van-icon name="add-o" size="60px" /> 创建活动
+  </van-grid-item>
+  <van-grid-item icon="photo-o" use-slot wx:for="{{ 1 }}" bindtap="scanQrcode">
+    <van-icon name="scan" size="60px" /> 加入活动
+  </van-grid-item>
+  <van-grid-item icon="photo-o" use-slot wx:for="{{ 1 }}" bindtap="viewPublicActivity">
+    <van-icon name="fire-o" size="60px" /> 公开活动
+  </van-grid-item>
+  <van-grid-item icon="photo-o" use-slot wx:for="{{ 1 }}" bindtap="login">
+    <van-icon name="user-o" size="60px" /> 登录
+  </van-grid-item>
+</van-grid>
+
+<nav active="home"></nav>

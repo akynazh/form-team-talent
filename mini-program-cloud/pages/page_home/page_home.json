@@ -1,0 +1,13 @@
+{
+  "usingComponents": {
+    "nav": "/pages/page_common/navigator/navigator",
+    "back": "/pages/page_common/nav_back/nav_back",
+    "van-grid": "@vant/weapp/grid/index",
+    "van-grid-item": "@vant/weapp/grid-item/index",
+    "van-nav-bar": "@vant/weapp/nav-bar/index",
+    "top": "/pages/page_common/top_container/top_container",
+    "van-row": "@vant/weapp/row/index",
+    "van-col": "@vant/weapp/col/index",
+    "van-icon": "@vant/weapp/icon/index"
+  }
+}

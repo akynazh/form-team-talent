@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: xxxxxx
-    password: xxxxxx
-    url: jdbc:mysql://localhost:3306/form_team_talent?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
+    username: xxxxx
+    password: xxxxx
+    url: jdbc:mysql://127.0.0.1:3306/form_team_talent?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
   application:
     name: form-team-talent
   servlet:
@@ -12,24 +12,44 @@ spring:
       max-request-size: 20MB
   web:
     resources:
-      static-locations: file:/app/form-team-talent/static
+# 本地静态资源存储位置
+      static-locations: xxxxx
+
+# 用于方便地获取外部静态地址，值等同于web.resources.static-locations中file:（如果有）后面的部分
+staticPath: xxxxx
 
 mybatis-plus:
   configuration:
-    map-underscore-to-camel-case: false
+    map-underscore-to-camel-case: true
 
 server:
   port: 8080
 
+# 微信小程序的 appId 和 appSecret
 wx:
-  appId: xxxxxx
-  appSecret: xxxxxx
+  appId: xxxxx
+  appSecret: xxxxx
   getOpenIdUrl: https://api.weixin.qq.com/sns/jscode2session
 
+# token 密钥和过期时间（单位：s）
 auth:
   jwt:
-    secret: xxxxxx
-    expire: xxxxxx
+    secret: xxxxx
+    expire: xxxxx
 
-# 用于方便地获取外部静态地址，值等同于web.resources.static-locations中file:（如果有）后面的部分
-staticPath: "/app/form-team-talent/static"
+# 当值为0时，不使用云
+# 当值为1时，使用阿里云对象存储进行文件存储，对应bucket需要绑定域名
+# 当值为2时，使用腾讯云对象存储进行文件存储
+
+enableCloud: 2
+
+# 阿里云对象存储字段，当 enableCloud 为1时需要编辑
+aliAccessKeyId: "xxxxx"
+aliAccessKeySecret: "xxxxx"
+aliBucketName: "xxxxx"
+
+# 腾讯云对象存储字段，当 enableCloud 为2时需要编辑
+tcSecretId: "xxxxx"
+tcSecretKey: "xxxxx"
+tcRegion: "xxxxx"
+tcBucketName: "xxxxx"

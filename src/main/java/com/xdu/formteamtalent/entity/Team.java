@@ -3,6 +3,7 @@ package com.xdu.formteamtalent.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,11 +18,18 @@ import java.io.Serializable;
 @TableName("t_team")
 public class Team implements Serializable {
     @TableId
-    private String t_id;
-    private String a_id;
-    private String t_name;
-    private String t_leader_id;
-    private String t_desc;
-    private Integer t_total;
-    private Integer t_count;
+    @JsonProperty("tId")
+    private String tId;
+    @JsonProperty("aId")
+    private String aId;
+    @JsonProperty("tName")
+    private String tName;
+    @JsonProperty("tLeaderId")
+    private String tLeaderId;
+    @JsonProperty("tDesc")
+    private String tDesc;
+    @JsonProperty("tTotal")
+    private Integer tTotal;
+    @JsonProperty("tCount")
+    private Integer tCount;
 }

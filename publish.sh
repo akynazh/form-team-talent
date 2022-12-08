@@ -1,5 +1,9 @@
-# docker build -t form-team-talent:latest .
+if [ "$1" = "-u" ] # 更新jar包
+then
+  mvn clean && mvn package
+fi
 
+docker build -t form-team-talent:latest .
 docker network create form-team-talent-network
 
 docker run --name mysqldb \
@@ -8,7 +12,7 @@ docker run --name mysqldb \
 -v /docker/mysql/conf:/etc/mysql/conf.d \
 -v /docker/mysql/logs:/logs \
 -v /docker/mysql/data:/var/lib/mysql \
--e MYSQL_ROOT_PASSWORD=658766@Jzh \
+-e MYSQL_ROOT_PASSWORD=xxxxxx \
 -d mysql:5.7
 
 docker run --name form-team-talent \

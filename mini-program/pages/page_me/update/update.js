@@ -4,27 +4,27 @@ import * as util from "../../../utils/util"
 
 Page({
   data: {
-    u_name: "",
-    u_sex: "",
-    u_school: "",
-    u_stu_num: "",
-    u_major: "",
+    uName: "",
+    uSex: "",
+    uSchool: "",
+    uStuNum: "",
+    uMajor: "",
     sexColumns: ["男", "女", "其它"]
   },
   onSexChange(event) {
     this.setData({
-      u_sex: event.detail
+      uSex: event.detail
     })
   },
   onLoad(params) {
     let info = JSON.parse(params.info)
     let user = info.user
     this.setData({
-      u_name: user.u_name,
-      u_sex: user.u_sex,
-      u_school: user.u_school,
-      u_stu_num: user.u_stu_num,
-      u_major: user.u_major
+      uName: user.uName,
+      uSex: user.uSex,
+      uSchool: user.uSchool,
+      uStuNum: user.uStuNum,
+      uMajor: user.uMajor
     })
   },
   updateInfo() {

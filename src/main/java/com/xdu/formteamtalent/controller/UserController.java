@@ -54,9 +54,9 @@ public class UserController {
             User user = userService.getOne(new QueryWrapper<User>().eq("u_id", openId));
             if (user == null) {
                 user = new User();
-                user.setU_name("wx-user");
-                user.setU_sex("other");
-                user.setU_id(openId);
+                user.setUName("wx-user");
+                user.setUSex("other");
+                user.setUId(openId);
                 userService.save(user);
             }
             String token = JwtUtil.createToken(openId);
@@ -78,14 +78,14 @@ public class UserController {
 
     /**
      * 退出某个小组（活动）
-     * @param t_id 小组id
+     * @param tId 小组id
      */
     @PostMapping("/leave/team")
-    public RestfulResponse leaveTeam(HttpServletRequest request, @RequestParam("t_id") String t_id) {
-        String u_id = AuthUtil.getUserId(request);
+    public RestfulResponse leaveTeam(HttpServletRequest request, @RequestParam("tId") String tId) {
+        String uId = AuthUtil.getUserId(request);
         QueryWrapper<UAT> wrapper = new QueryWrapper<>();
-        wrapper.eq("t_id", t_id);
-        wrapper.eq("u_id", u_id);
+        wrapper.eq("t_id", tId);
+        wrapper.eq("u_id", uId);
         uatService.remove(wrapper);
         return RestfulResponse.success();
     }
@@ -93,7 +93,7 @@ public class UserController {
     @GetMapping("/get/info")
     public RestfulResponse getUserInfo(HttpServletRequest request) {
         User user = userService.getOne(new QueryWrapper<User>().eq("u_id", AuthUtil.getUserId(request)));
-        user.setU_id("");
+        user.setUId("");
         return RestfulResponse.success(user);
     }
 }

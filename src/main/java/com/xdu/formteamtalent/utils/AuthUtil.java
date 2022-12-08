@@ -20,6 +20,7 @@ public class AuthUtil {
     private static String appId;
     private static String appSecret;
 
+
     @Value("${wx.appId}")
     public void setAppId(String appId) {
         AuthUtil.appId = appId;

@@ -4,13 +4,13 @@ import * as util from "../../../utils/util"
 
 Page({
   data: {
-    a_id: "",
-    a_type: "",
-    a_name: "",
-    a_desc: "",
-    a_end_date: "",
-    a_end_date_show: "",
-    a_is_public: "0",
+    aId: "",
+    aType: "",
+    aName: "",
+    aDesc: "",
+    aEndDate: "",
+    aEndDateShow: "",
+    aIsPublic: "0",
     currentDate: new Date().getTime(),
     minDate: new Date().getTime(),
     formatter(type, value) {
@@ -27,9 +27,9 @@ Page({
   onIsPublicClick(event) {
     const { name } = event.currentTarget.dataset;
     this.setData({
-      a_is_public: name
+      aIsPublic: name
     });
-    console.log(this.data.a_is_public)
+    console.log(this.data.aIsPublic)
   },
   showDatePickerPopup() {
     this.setData({ show: true });
@@ -45,34 +45,34 @@ Page({
   onDatePickerConfirm() {
     this.setData({ 
       show: false,
-      a_end_date: this.data.currentDate,
-      a_end_date_show: util.getFormatTimeByMillis(this.data.currentDate)
+      aEndDate: this.data.currentDate,
+      aEndDateShow: util.getFormatTimeByMillis(this.data.currentDate)
     });
   },
   checkForm() {
-    if (this.data.a_name.trim() == '' || this.data.a_end_date.trim() == '') {
+    if (this.data.aName.trim() == '' || this.data.aEndDate.trim() == '') {
       return false
     }
     return true
   },
   onLoad(params) {
-    let a_id = params.a_id
-    let a_type = params.a_type
+    let aId = params.aId
+    let aType = params.aType
     let activity = JSON.parse(params.activity)
     this.setData({
-      a_id: a_id,
-      a_type: a_type,
-      a_name: activity.a_name,
-      a_desc: activity.a_desc,
-      a_end_date: activity.a_end_date,
-      a_end_date_show: util.getFormatTimeByMillis(activity.a_end_date),
-      a_is_public: `${activity.a_is_public}`,
+      aId: aId,
+      aType: aType,
+      aName: activity.aName,
+      aDesc: activity.aDesc,
+      aEndDate: activity.aEndDate,
+      aEndDateShow: util.getFormatTimeByMillis(activity.aEndDate),
+      aIsPublic: `${activity.aIsPublic}`,
     })
   },
   updateActivity() {
     let that = this
-    let a_id = this.data.a_id
-    let a_type = this.data.a_type
+    let aId = this.data.aId
+    let aType = this.data.aType
     wx.showModal({
       title: '更新活动',
       content: '确认更新？',
@@ -85,7 +85,7 @@ Page({
             data: that.data,
             success(res) {
               if (util.checkSuccess(res)) {
-                util.route(`/pages/page_activity/detail/detail?a_id=${a_id}&a_type=${a_type}`, 1, 1)
+                util.route(`/pages/page_activity/detail/detail?aId=${aId}&aType=${aType}`, 1, 1)
                 wx.showToast({
                   title: '操作成功',
                 })

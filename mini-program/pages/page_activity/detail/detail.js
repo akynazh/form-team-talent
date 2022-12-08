@@ -4,9 +4,9 @@ import * as util from "../../../utils/util"
 
 Page({
   data: {
-    a_id: "",
-    a_type: "",
-    a_end_date_show: "",
+    aId: "",
+    aType: "",
+    aEndDateShow: "",
     activity: {},
     activeNames: [],
     owner: false,
@@ -20,17 +20,18 @@ Page({
   onLoad(params) {
     let that = this
     wx.request({
-      url: `${baseUrl}/api/activity/get/id?a_id=${params.a_id}`,
+      url: `${baseUrl}/api/activity/get/id?aId=${params.aId}`,
       header: util.getAuthHeader(),
       success(res) {
         if (util.checkSuccess(res)) {
+          console.log(res)
           let activity = res.data.obj.activity
           let owner = res.data.obj.owner
           console.log(owner)
           that.setData({
-            a_id: params.a_id,
-            a_type: params.a_type,
-            a_end_date_show: util.getFormatTimeByMillis(activity.a_end_date),
+            aId: params.aId,
+            aType: params.aType,
+            aEndDateShow: util.getFormatTimeByMillis(activity.aEndDate),
             activity: activity,
             owner: owner
           })
@@ -42,20 +43,20 @@ Page({
     })
   },
   removeActivity() {
-    let a_id = this.data.a_id
-    let a_type = this.data.a_type
+    let aId = this.data.aId
+    let aType = this.data.aType
     wx.showModal({
       title: '删除活动',
       content: '确认删除？',
       success(res) {
         if (res.confirm) {
           wx.request({
-            url: `${baseUrl}/api/activity/remove?a_id=${a_id}`,
+            url: `${baseUrl}/api/activity/remove?aId=${aId}`,
             header: util.getAuthHeader(),
             method: 'POST',
             success(res) {
               if (util.checkSuccess(res)) {
-                util.route(`/pages/page_activity/activity/activity?a_type=${a_type}`, 1, 1)
+                util.route(`/pages/page_activity/activity/activity?aType=${aType}`, 1, 1)
                 wx.showToast({
                   title: '操作成功',
                 })
@@ -70,19 +71,19 @@ Page({
     })
   },
   updateActivity() {
-    let a_type = this.data.a_type
-    let a_id = this.data.a_id
+    let aType = this.data.aType
+    let aId = this.data.aId
     let activity = JSON.stringify(this.data.activity)
-    util.route(`/pages/page_activity/update/update?a_id=${a_id}&a_type=${a_type}&activity=${activity}`)
+    util.route(`/pages/page_activity/update/update?aId=${aId}&aType=${aType}&activity=${activity}`)
   },
   showTeam() {
-    let a_type = this.data.a_type
-    let a_id = this.data.a_id
-    util.route(`/pages/page_team/team/team?a_id=${a_id}&a_type=${a_type}`)
+    let aType = this.data.aType
+    let aId = this.data.aId
+    util.route(`/pages/page_team/team/team?aId=${aId}&aType=${aType}`)
   },
   createTeam() {
-    let a_type = this.data.a_type
-    let a_id = this.data.a_id
-    util.route(`/pages/page_team/create/create?a_id=${a_id}&a_type=${a_type}`)
+    let aType = this.data.aType
+    let aId = this.data.aId
+    util.route(`/pages/page_team/create/create?aId=${aId}&aType=${aType}`)
   }
 })

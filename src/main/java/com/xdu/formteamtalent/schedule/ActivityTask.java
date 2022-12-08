@@ -25,7 +25,7 @@ public class ActivityTask extends QuartzJobBean {
     protected void executeInternal(JobExecutionContext context) {
         List<Activity> activities = activityService.list();
         for (Activity activity : activities) {
-            if (Long.parseLong(activity.getA_end_date()) <= System.currentTimeMillis()) {
+            if (Long.parseLong(activity.getAEndDate()) <= System.currentTimeMillis()) {
                 activity.setStatus(0);
                 activityService.updateById(activity);
             }

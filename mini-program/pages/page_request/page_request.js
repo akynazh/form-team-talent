@@ -23,7 +23,7 @@ Page({
       success(res) {
         let reqs = res.data.obj
         for (let req of reqs) {
-          req.send_date = util.getFormatTimeByMillis(req.send_date)
+          req.sendDate = util.getFormatTimeByMillis(req.sendDate)
         }
         if (util.checkSuccess(res)) {
           that.setData({

@@ -1,0 +1,14 @@
+{
+  "usingComponents": {
+    "nav": "/pages/page_common/navigator/navigator",
+    "back": "/pages/page_common/nav_back/nav_back",
+    "van-cell": "@vant/weapp/cell/index",
+    "van-cell-group": "@vant/weapp/cell-group/index",
+    "van-button": "@vant/weapp/button/index",
+    "van-row": "@vant/weapp/row/index",
+    "van-col": "@vant/weapp/col/index",
+    "van-collapse": "@vant/weapp/collapse/index",
+    "van-collapse-item": "@vant/weapp/collapse-item/index",
+    "van-field": "@vant/weapp/field/index"
+  }
+}

@@ -1,8 +1,8 @@
 package com.xdu.formteamtalent.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,12 +17,20 @@ import java.io.Serializable;
 @TableName("t_activity")
 public class Activity implements Serializable {
     @TableId
-    private String a_id;
-    private String a_name;
-    private String a_holder_id;
-    private String a_desc;
-    private String a_end_date;
-    private Integer a_is_public;
-    private String a_qrcode_path;
+    @JsonProperty("aId")
+    private String aId;
+    @JsonProperty("aName")
+    private String aName;
+    @JsonProperty("aHolderId")
+    private String aHolderId;
+    @JsonProperty("aDesc")
+    private String aDesc;
+    @JsonProperty("aEndDate")
+    private String aEndDate;
+    @JsonProperty("aIsPublic")
+    private Integer aIsPublic;
+    @JsonProperty("aQrcodePath")
+    private String aQrcodePath;
+    @JsonProperty("status")
     private Integer status;
 }

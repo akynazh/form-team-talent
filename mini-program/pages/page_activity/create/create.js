@@ -4,12 +4,12 @@ import * as util from "../../../utils/util"
 
 Page({
   data: {
-    a_name: "",
-    a_desc: "",
-    a_end_date: "",
-    a_end_date_show: "",
-    a_is_public: "0",
-    a_type: "",
+    aName: "",
+    aDesc: "",
+    aEndDate: "",
+    aEndDateShow: "",
+    aIsPublic: "0",
+    aType: "",
     currentDate: new Date().getTime(),
     minDate: new Date().getTime(),
     formatter(type, value) {
@@ -26,9 +26,9 @@ Page({
   onIsPublicClick(event) {
     const { name } = event.currentTarget.dataset;
     this.setData({
-      a_is_public: name
+      aIsPublic: name
     });
-    console.log(this.data.a_is_public)
+    console.log(this.data.aIsPublic)
   },
   showDatePickerPopup() {
     this.setData({ show: true });
@@ -44,12 +44,12 @@ Page({
   onDatePickerConfirm() {
     this.setData({ 
       show: false,
-      a_end_date: this.data.currentDate,
-      a_end_date_show: util.getFormatTimeByMillis(this.data.currentDate)
+      aEndDate: this.data.currentDate,
+      aEndDateShow: util.getFormatTimeByMillis(this.data.currentDate)
     });
   },
   checkForm() {
-    if (this.data.a_name.trim() == '' || this.data.a_end_date == '') {
+    if (this.data.aName.trim() == '' || this.data.aEndDate == '') {
       return false
     }
     return true
@@ -63,7 +63,7 @@ Page({
         success(res) {
           if (res.confirm) {
             that.setData({
-              a_type: that.data.a_is_public == 1 ? 0 : 1
+              aType: that.data.aIsPublic == 1 ? 0 : 1
             })
             wx.request({
               url: `${baseUrl}/api/activity/add`,
@@ -73,9 +73,9 @@ Page({
               success(res) {
                 if (util.checkSuccess(res)) {
                   let obj = res.data.obj
-                  let a_id = obj.a_id
-                  let a_type = that.data.a_type
-                  util.route(`/pages/page_activity/activity/activity?a_id=${a_id}&a_type=${a_type}`, 1, 1)
+                  let aId = obj.aId
+                  let aType = that.data.aType
+                  util.route(`/pages/page_activity/activity/activity?aId=${aId}&aType=${aType}`, 1, 1)
                   wx.showToast({
                     title: '创建成功',
                   })

@@ -1,0 +1,6 @@
+<van-nav-bar
+  title="{{title}}"
+  title-class="nav-title"
+  left-arrow
+  bind:click-left="navigateBack"
+/>

@@ -1,0 +1,31 @@
+<back title="活动详情"></back>
+
+<van-cell-group>
+  <van-cell title="活动名称" value="{{activity.aName}}" />
+  <van-cell title="截止日期" value="{{aEndDateShow}}" />
+  <van-cell title="活动性质" value="{{activity.aIsPublic == 0 ? '私有' : '公开'}}" />
+  <van-collapse accordion  value="{{ activeNames }}" bind:change="onActiveDescChange">
+    <van-collapse-item title="活动描述" name="1">
+      <view class="my-paragraph">{{activity.aDesc}}
+      </view>
+    </van-collapse-item>
+    <van-collapse-item title="活动二维码" name="2">
+      <view style="text-align: center;">
+        <image src="{{activity.aQrcodePath}}" style="width: 200px; height: 200px;"></image>
+      </view>
+    </van-collapse-item>
+  </van-collapse>
+
+
+  
+</van-cell-group>
+
+<van-button plain block type="info" bindtap="showTeam">查看小组</van-button>
+<van-button plain block type="default" bindtap="createTeam">创建小组</van-button>
+
+<block wx:if="{{owner}}">
+  <van-button plain block type="primary" bindtap="updateActivity">编辑活动</van-button>
+  <van-button plain block type="danger" bindtap="removeActivity">删除活动</van-button>
+</block>
+
+

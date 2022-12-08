@@ -4,13 +4,13 @@ import * as util from "../../../utils/util"
 
 Page({
   data: {
-    a_id: "",
-    a_type: "",
-    t_id: "",
+    aId: "",
+    aType: "",
+    tId: "",
     manage: "",
-    team_leader_name: "",
+    teamLeaderName: "",
     content: "",
-    req_hidden: true,
+    reqHidden: true,
     team: {},
     members: {},
     owner: false
@@ -21,19 +21,20 @@ Page({
     });
   },
   onLoad(params) {
-    let a_id = params.a_id
-    let a_type = params.a_type
-    let t_id = params.t_id
+    console.log(params)
+    let aId = params.aId
+    let aType = params.aType
+    let tId = params.tId
     let manage = params.manage || 0
     this.setData({
-      a_id: a_id,
-      a_type: a_type,
-      t_id: t_id,
+      aId: aId,
+      aType: aType,
+      tId: tId,
       manage: manage
     })
     let that = this
     wx.request({
-      url: `${baseUrl}/api/team/get/id?t_id=${t_id}`,
+      url: `${baseUrl}/api/team/get/id?tId=${tId}`,
       header: util.getAuthHeader(),
       success(res) {
         if (util.checkSuccess(res)) {
@@ -41,7 +42,7 @@ Page({
           that.setData({
             team: obj.team,
             members: obj.members,
-            team_leader_name: obj.team_leader_name,
+            teamLeaderName: obj.teamLeaderName,
             owner: obj.owner
           })
         }
@@ -52,9 +53,9 @@ Page({
     })
   },
   removeTeam() {
-    let a_id = this.data.a_id
-    let a_type = this.data.a_type
-    let t_id = this.data.t_id
+    let aId = this.data.aId
+    let aType = this.data.aType
+    let tId = this.data.tId
     let manage = this.data.manage
     wx.showModal({
       title: "解散小组",
@@ -62,13 +63,13 @@ Page({
       success(res) {
         if (res.confirm) {
           wx.request({
-            url: `${baseUrl}/api/team/remove?t_id=${t_id}`,
+            url: `${baseUrl}/api/team/remove?tId=${tId}`,
             method: 'POST',
             header: util.getAuthHeader(),
             success(res) {
               if (util.checkSuccess(res)) {
                 if (manage == 0) {
-                  util.route(`/pages/page_team/team/team?a_id=${a_id}&a_type=${a_type}`, 1, 1)
+                  util.route(`/pages/page_team/team/team?aId=${aId}&aType=${aType}`, 1, 1)
                 } else if (manage == 1) {
                   util.route('/pages/page_team/team/personal/personal', 1, 1)
                 }
@@ -84,26 +85,26 @@ Page({
     })
   },
   updateTeam() {
-    let team_json = JSON.stringify(this.data.team)
-    let a_id = this.data.a_id
-    let a_type = this.data.a_type
-    let t_id = this.data.t_id
+    let teamJson = JSON.stringify(this.data.team)
+    let aId = this.data.aId
+    let aType = this.data.aType
+    let tId = this.data.tId
     let manage = this.data.manage
-    util.route(`/pages/page_team/update/update?a_id=${a_id}&a_type=${a_type}&t_id=${t_id}&team=${team_json}&manage=${manage}`)
+    util.route(`/pages/page_team/update/update?aId=${aId}&aType=${aType}&tId=${tId}&team=${teamJson}&manage=${manage}`)
   },
   joinTeam() {
     this.setData({
-      req_hidden: false
+      reqHidden: false
     })
   },
   cancelSend() {
     this.setData({
-      req_hidden: true
+      reqHidden: true
     })
   },
   sendReqJoinTeam() {
     this.setData({
-      req_hidden: true
+      reqHidden: true
     })
     let that = this
     wx.request({
@@ -111,8 +112,8 @@ Page({
       header: util.getAuthHeader(),
       method: 'POST',
       data: {
-        a_id: that.data.a_id,
-        t_id: that.data.t_id,
+        aId: that.data.aId,
+        tId: that.data.tId,
         content: that.data.content,
       },
       fail() { 

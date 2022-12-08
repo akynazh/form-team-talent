@@ -21,11 +21,11 @@ Page({
               if (util.checkSuccess(res)) {
                 let user = res.data.obj
                 let sexShow = "其它"
-                if (user.u_sex == "female") sexShow = "女"
-                else if (user.u_sex == "male") sexShow = "男"
+                if (user.uSex == "female") sexShow = "女"
+                else if (user.uSex == "male") sexShow = "男"
                 that.setData({
                   user: user,
-                  avatarUrl: `/images/${user.u_sex}.png`,
+                  avatarUrl: `/images/${user.uSex}.png`,
                   sexShow: sexShow,
                   isLogin: true
                 })

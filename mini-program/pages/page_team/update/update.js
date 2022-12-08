@@ -4,35 +4,35 @@ import * as util from "../../../utils/util"
 
 Page({
   data: {
-    a_id: "",
-    a_type: "",
-    t_id: "",
-    t_name: "",
-    t_desc: "",
-    t_total: "",
+    aId: "",
+    aType: "",
+    tId: "",
+    tName: "",
+    tDesc: "",
+    tTotal: "",
     manage: ""
   },
   onTotalChange(event) {
     this.setData({
-      t_total: event.detail
+      tTotal: event.detail
     })
   },
   onLoad(params) {
     let team = JSON.parse(params.team)
     this.setData({
-      a_id: params.a_id,
-      a_type: params.a_type,
-      t_id: params.t_id,
-      t_name: team.t_name,
-      t_desc: team.t_desc,
-      t_total: team.t_total,
+      aId: params.aId,
+      aType: params.aType,
+      tId: params.tId,
+      tName: team.tName,
+      tDesc: team.tDesc,
+      tTotal: team.tTotal,
       manage: params.manage
     })
   },
   updateTeam() {
-    let a_id = this.data.a_id
-    let a_type = this.data.a_type
-    let t_id = this.data.t_id
+    let aId = this.data.aId
+    let aType = this.data.aType
+    let tId = this.data.tId
     let manage = this.data.manage
     let that = this
     wx.request({
@@ -42,7 +42,7 @@ Page({
       data: that.data,
       success(res) {
         if (util.checkSuccess(res)) {
-          util.route(`/pages/page_team/detail/detail?a_id=${a_id}&t_id=${t_id}&a_type=${a_type}&manage=${manage}`, 1, 1)
+          util.route(`/pages/page_team/detail/detail?aId=${aId}&tId=${tId}&aType=${aType}&manage=${manage}`, 1, 1)
           wx.showToast({
             title: '操作成功',
           })

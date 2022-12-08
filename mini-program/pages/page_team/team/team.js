@@ -5,19 +5,19 @@ import * as util from "../../../utils/util"
 Page({
   data: {
     teams: [],
-    a_id: '',
-    a_type: ''
+    aId: '',
+    aType: ''
   },
   onLoad(params) {
-    let a_id = params.a_id
-    let a_type = params.a_type
+    let aId = params.aId
+    let aType = params.aType
     this.setData({
-      a_id: a_id,
-      a_type: a_type,
+      aId: aId,
+      aType: aType,
     })
     let that = this
     wx.request({
-      url: `${baseUrl}/api/team/get/by_a_id?a_id=${a_id}`,
+      url: `${baseUrl}/api/team/get/byAId?aId=${aId}`,
       header: util.getAuthHeader(),
       success(res) {
         if (util.checkSuccess(res)) {
@@ -32,13 +32,13 @@ Page({
     })
   },
   createTeam() {
-    let a_type = this.data.a_type
-    let a_id = this.data.a_id
-    util.route(`/pages/page_team/create/create?a_id=${a_id}&a_type=${a_type}`)
+    let aType = this.data.aType
+    let aId = this.data.aId
+    util.route(`/pages/page_team/create/create?aId=${aId}&aType=${aType}`)
   },
   toTeamDetail(e) {
-    let a_type = this.data.a_type
-    let a_id = this.data.a_id
-    util.route(`/pages/page_team/detail/detail?t_id=${e.currentTarget.id}&a_id=${a_id}&a_type=${a_type}`)
+    let aType = this.data.aType
+    let aId = this.data.aId
+    util.route(`/pages/page_team/detail/detail?tId=${e.currentTarget.id}&aId=${aId}&aType=${aType}`)
   }
 })

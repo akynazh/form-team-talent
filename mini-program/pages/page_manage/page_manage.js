@@ -7,7 +7,7 @@ Page({
 
   },
   viewMyActivity() {
-    util.route("/pages/page_activity/activity/activity?a_type=1")
+    util.route("/pages/page_activity/activity/activity?aType=1")
   },
   viewMyTeam() {
     util.route("/pages/page_team/team/personal/personal")

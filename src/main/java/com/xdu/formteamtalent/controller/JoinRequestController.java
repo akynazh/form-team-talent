@@ -48,30 +48,30 @@ public class JoinRequestController {
         String userId = AuthUtil.getUserId(request);
         // 查看是否已经加入了
         QueryWrapper<UAT> wrapper = new QueryWrapper<>();
-        wrapper.eq("a_id", joinRequest.getA_id());
-        wrapper.eq("t_id", joinRequest.getT_id());
+        wrapper.eq("a_id", joinRequest.getAId());
+        wrapper.eq("t_id", joinRequest.getTId());
         wrapper.eq("u_id", userId);
         if (uatService.getOne(wrapper) != null) {
             return RestfulResponse.fail(403, "不可重复加入哦");
         }
         // 获取用户和小组详细信息
         User user = userService.getOne(new QueryWrapper<User>().eq("u_id", userId));
-        Team team = teamService.getOne(new QueryWrapper<Team>().eq("t_id", joinRequest.getT_id()));
+        Team team = teamService.getOne(new QueryWrapper<Team>().eq("t_id", joinRequest.getTId()));
         // 查看人数是否已满
-        if (team.getT_count().equals(team.getT_total())) {
+        if (team.getTCount().equals(team.getTTotal())) {
             return RestfulResponse.fail(403, "人数已满=_=");
         }
 
         joinRequest.setAgree(0);
         joinRequest.setStatus(1);
-        joinRequest.setSend_date(String.valueOf(System.currentTimeMillis()));
-        joinRequest.setU_name(user.getU_name());
-        joinRequest.setT_name(team.getT_name());
-        joinRequest.setFrom_id(userId);
-        joinRequest.setTo_id(team.getT_leader_id());
+        joinRequest.setSendDate(String.valueOf(System.currentTimeMillis()));
+        joinRequest.setUName(user.getUName());
+        joinRequest.setTName(team.getTName());
+        joinRequest.setFromId(userId);
+        joinRequest.setToId(team.getTLeaderId());
 
-        JoinRequest checkRequest = joinRequestMapper.checkRequestExist(joinRequest.getFrom_id(), joinRequest.getTo_id(),
-                joinRequest.getA_id(), joinRequest.getT_id());
+        JoinRequest checkRequest = joinRequestMapper.checkRequestExist(joinRequest.getFromId(), joinRequest.getToId(),
+                joinRequest.getAId(), joinRequest.getTId());
         if (checkRequest != null && checkRequest.getStatus() == 1) {
             return RestfulResponse.fail(403, "已经发过请求啦");
         }
@@ -83,26 +83,26 @@ public class JoinRequestController {
     @Transactional
     public RestfulResponse handleRequest(@RequestParam Long id, @RequestParam Integer agree, HttpServletRequest request) {
         JoinRequest one = joinRequestService.getOne(new QueryWrapper<JoinRequest>().eq("id", id));
-        if (one.getTo_id().equals(AuthUtil.getUserId(request))) {
+        if (one.getToId().equals(AuthUtil.getUserId(request))) {
             one.setStatus(0);
             one.setAgree(agree);
             joinRequestService.updateById(one);
             if (agree == 1) {
                 QueryWrapper<UAT> wrapper = new QueryWrapper<>();
-                wrapper.eq("u_id", one.getFrom_id());
-                wrapper.eq("t_id", one.getT_id());
-                wrapper.eq("a_id", one.getA_id());
+                wrapper.eq("u_id", one.getFromId());
+                wrapper.eq("t_id", one.getTId());
+                wrapper.eq("a_id", one.getAId());
                 if (uatService.getOne(wrapper) != null) {
                     return RestfulResponse.fail(404, "不可重复加入");
                 }
                 UAT uat = new UAT();
-                uat.setU_id(one.getFrom_id());
-                uat.setA_id(one.getA_id());
-                uat.setT_id(one.getT_id());
+                uat.setUId(one.getFromId());
+                uat.setAId(one.getAId());
+                uat.setTId(one.getTId());
                 uatService.save(uat);
 
-                Team team = teamService.getOne(new QueryWrapper<Team>().eq("t_id", one.getT_id()));
-                team.setT_count(team.getT_count() + 1);
+                Team team = teamService.getOne(new QueryWrapper<Team>().eq("t_id", one.getTId()));
+                team.setTCount(team.getTCount() + 1);
                 teamService.updateById(team);
             }
             return RestfulResponse.success();
@@ -115,7 +115,7 @@ public class JoinRequestController {
     public RestfulResponse removeRequest(@PathVariable String id, HttpServletRequest request) {
         JoinRequest one = joinRequestService.getOne(new QueryWrapper<JoinRequest>().eq("id", id));
         if (one != null) {
-            if (one.getFrom_id().equals(AuthUtil.getUserId(request))) {
+            if (one.getFromId().equals(AuthUtil.getUserId(request))) {
                 joinRequestService.removeById(id);
                 return RestfulResponse.success();
             } else {
@@ -128,8 +128,8 @@ public class JoinRequestController {
 
     private List<JoinRequest> removeOpenId(List<JoinRequest> list) {
         for (JoinRequest req : list) {
-            req.setFrom_id("");
-            req.setTo_id("");
+            req.setFromId("");
+            req.setToId("");
         }
         return list;
     }
@@ -149,27 +149,27 @@ public class JoinRequestController {
         if ((type != 0 && type != 1 && type != 2) || (status != 0 && status != 1 && status != 2)) {
             return RestfulResponse.fail(404, "参数错误");
         }
-        String u_id = AuthUtil.getUserId(request);
-        List<JoinRequest> requests = joinRequestMapper.getMyRequest(u_id);
+        String uId = AuthUtil.getUserId(request);
+        List<JoinRequest> requests = joinRequestMapper.getMyRequest(uId);
         if (status == 2 && type == 2) {
             return RestfulResponse.success(removeOpenId(requests));
         }
 
         // 过滤出符合type的
-        Predicate<JoinRequest> p_type = req -> type == 0 ? req.getFrom_id().equals(u_id) : req.getTo_id().equals(u_id);
+        Predicate<JoinRequest> pType = req -> type == 0 ? req.getFromId().equals(uId) : req.getToId().equals(uId);
         // 过滤出符合status的
-        Predicate<JoinRequest> p_status = req -> req.getStatus().equals(status);
+        Predicate<JoinRequest> pStatus = req -> req.getStatus().equals(status);
 
         if (status == 2)
             return RestfulResponse.success(
-                    removeOpenId(requests.stream().filter(p_type).collect(Collectors.toList()))
+                    removeOpenId(requests.stream().filter(pType).collect(Collectors.toList()))
             );
         if (type == 2)
             return RestfulResponse.success(
-                    removeOpenId(requests.stream().filter(p_status).collect(Collectors.toList()))
+                    removeOpenId(requests.stream().filter(pStatus).collect(Collectors.toList()))
             );
         return RestfulResponse.success(
-                removeOpenId(requests.stream().filter(p_status).filter(p_type).collect(Collectors.toList()))
+                removeOpenId(requests.stream().filter(pStatus).filter(pType).collect(Collectors.toList()))
         );
     }
 }

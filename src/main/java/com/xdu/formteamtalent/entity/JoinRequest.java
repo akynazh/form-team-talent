@@ -3,6 +3,7 @@ package com.xdu.formteamtalent.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,15 +16,26 @@ import lombok.ToString;
 @TableName("t_req")
 public class JoinRequest {
     @TableId(type = IdType.AUTO)
+    @JsonProperty("id")
     private Long id;
-    private String from_id;
-    private String to_id;
-    private String a_id;
-    private String t_id;
-    private String t_name;
-    private String u_name;
+    @JsonProperty("fromId")
+    private String fromId;
+    @JsonProperty("toId")
+    private String toId;
+    @JsonProperty("aId")
+    private String aId;
+    @JsonProperty("tId")
+    private String tId;
+    @JsonProperty("tName")
+    private String tName;
+    @JsonProperty("uName")
+    private String uName;
+    @JsonProperty("content")
     private String content;
-    private String send_date;
+    @JsonProperty("sendDate")
+    private String sendDate;
+    @JsonProperty("agree")
     private Integer agree;
+    @JsonProperty("status")
     private Integer status;
 }

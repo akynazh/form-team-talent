@@ -46,4 +46,5 @@ replay_pid*
 target
 
 application.yaml
+app.js
 docker-compose.yaml

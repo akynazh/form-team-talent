@@ -8,7 +8,6 @@ import com.xdu.formteamtalent.entity.UAT;
 import com.xdu.formteamtalent.entity.User;
 import com.xdu.formteamtalent.global.RestfulResponse;
 import com.xdu.formteamtalent.entity.Team;
-import com.xdu.formteamtalent.mapper.JoinRequestMapper;
 import com.xdu.formteamtalent.service.*;
 import com.xdu.formteamtalent.utils.AuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,31 +45,31 @@ public class TeamController {
     @PostMapping("/add")
     @Transactional
     public RestfulResponse addTeam(HttpServletRequest request, @RequestBody Team team) {
-        String u_id = AuthUtil.getUserId(request);
-        String t_id = IdUtil.simpleUUID();
-        team.setT_leader_id(u_id);
-        team.setT_id(t_id);
-        team.setT_count(1);
+        String uId = AuthUtil.getUserId(request);
+        String tId = IdUtil.simpleUUID();
+        team.setTLeaderId(uId);
+        team.setTId(tId);
+        team.setTCount(1);
         teamService.save(team);
 
         UAT uat = new UAT();
-        uat.setA_id(team.getA_id());
-        uat.setU_id(u_id);
-        uat.setT_id(t_id);
+        uat.setAId(team.getAId());
+        uat.setUId(uId);
+        uat.setTId(tId);
         uatService.save(uat);
 
-        team.setT_leader_id("");
+        team.setTLeaderId("");
         return RestfulResponse.success(team);
     }
 
     @PostMapping("/remove")
     @Transactional
-    public RestfulResponse removeTeam(HttpServletRequest request, @RequestParam("t_id") String t_id) {
-        Team team = teamService.getOne(new QueryWrapper<Team>().eq("t_id", t_id));
-        if (team.getT_leader_id().equals(AuthUtil.getUserId(request))) {
-            uatService.remove(new QueryWrapper<UAT>().eq("t_id", t_id));
-            joinRequestService.remove(new QueryWrapper<JoinRequest>().eq("t_id", t_id));
-            teamService.removeById(t_id);
+    public RestfulResponse removeTeam(HttpServletRequest request, @RequestParam("tId") String tId) {
+        Team team = teamService.getOne(new QueryWrapper<Team>().eq("t_id", tId));
+        if (team.getTLeaderId().equals(AuthUtil.getUserId(request))) {
+            uatService.remove(new QueryWrapper<UAT>().eq("t_id", tId));
+            joinRequestService.remove(new QueryWrapper<JoinRequest>().eq("t_id", tId));
+            teamService.removeById(tId);
         } else {
             return RestfulResponse.fail(403, "无权删除");
         }
@@ -80,9 +79,9 @@ public class TeamController {
     @PostMapping("/update")
 
     public RestfulResponse updateTeam(HttpServletRequest request, @RequestBody Team team) {
-        Team team1 = teamService.getOne(new QueryWrapper<Team>().eq("t_id", team.getT_id()));
-        if (team1.getT_leader_id().equals(AuthUtil.getUserId(request))) {
-            if (team1.getA_id().equals(team.getA_id())) {
+        Team team1 = teamService.getOne(new QueryWrapper<Team>().eq("t_id", team.getTId()));
+        if (team1.getTLeaderId().equals(AuthUtil.getUserId(request))) {
+            if (team1.getAId().equals(team.getAId())) {
                 teamService.updateById(team);
             } else {
                 return RestfulResponse.fail(404, "不能修改所属活动");
@@ -94,39 +93,37 @@ public class TeamController {
     }
 
     @GetMapping("/get/by_a_id")
-    public RestfulResponse getTeamByA_id(@RequestParam("a_id") String a_id) {
+    public RestfulResponse getTeamByAId(@RequestParam("a_id") String a_id) {
         List<Team> list = teamService.list(new QueryWrapper<Team>().eq("a_id", a_id));
         for (Team team : list) {
-            team.setT_leader_id("");
+            team.setTLeaderId("");
         }
         return RestfulResponse.success(list);
     }
 
     @GetMapping("/get/id")
-    public RestfulResponse getTeamById(@RequestParam("t_id") String t_id, HttpServletRequest request) {
-        // get team by t_id
-        Team team = teamService.getOne(new QueryWrapper<Team>().eq("t_id", t_id));
-        // get leader by t_leader_id
-        User leader = userService.getOne(new QueryWrapper<User>().eq("u_id", team.getT_leader_id()));
-        String leaderName = leader.getU_name();
+    public RestfulResponse getTeamById(@RequestParam("tId") String tId, HttpServletRequest request) {
+        Team team = teamService.getOne(new QueryWrapper<Team>().eq("t_id", tId));
+        User leader = userService.getOne(new QueryWrapper<User>().eq("u_id", team.getTLeaderId()));
+        String leaderName = leader.getUName();
         if (!StringUtils.hasText(leaderName)) {
             leaderName = "无名氏";
         }
         // get members
-        List<UAT> uats = uatService.list(new QueryWrapper<UAT>().eq("t_id", t_id));
+        List<UAT> uats = uatService.list(new QueryWrapper<UAT>().eq("t_id", tId));
         List<User> members = new ArrayList<>();
         for (UAT uat : uats) {
-            String u_id = uat.getU_id();
-            User user1 = userService.getOne(new QueryWrapper<User>().eq("u_id", u_id));
-            user1.setU_id("");
+            String uId = uat.getUId();
+            User user1 = userService.getOne(new QueryWrapper<User>().eq("u_id", uId));
+            user1.setUId("");
             members.add(user1);
         }
 
-        boolean owner = leader.getU_id().equals(AuthUtil.getUserId(request));
-        team.setT_leader_id("");
+        boolean owner = leader.getUId().equals(AuthUtil.getUserId(request));
+        team.setTLeaderId("");
         Map<Object, Object> map = MapUtil.builder()
                 .put("team", team)
-                .put("team_leader_name", leaderName)
+                .put("teamLeaderName", leaderName)
                 .put("members", members)
                 .put("owner", owner)
                 .build();
@@ -140,8 +137,8 @@ public class TeamController {
         List<UAT> list = uatService.list(wrapper);
         List<Team> teams = new ArrayList<>();
         for (UAT uat : list) {
-            Team team = teamService.getOne(new QueryWrapper<Team>().eq("t_id", uat.getT_id()));
-            team.setT_leader_id("");
+            Team team = teamService.getOne(new QueryWrapper<Team>().eq("t_id", uat.getTId()));
+            team.setTLeaderId("");
             teams.add(team);
         }
         return RestfulResponse.success(teams);

@@ -24,8 +24,8 @@ Page({
     })
   },
   toTeamDetail(e) {
-    let a_id = e.currentTarget.dataset.a_id
-    let t_id = e.currentTarget.dataset.t_id
-    util.route(`/pages/page_team/detail/detail?t_id=${t_id}&a_id=${a_id}&a_type=1&manage=1`)
+    let aId = e.currentTarget.dataset.aid
+    let tId = e.currentTarget.dataset.tid
+    util.route(`/pages/page_team/detail/detail?tId=${tId}&aId=${aId}&aType=1&manage=1`)
   }
 })
