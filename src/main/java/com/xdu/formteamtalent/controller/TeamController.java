@@ -92,9 +92,9 @@ public class TeamController {
         return RestfulResponse.success();
     }
 
-    @GetMapping("/get/by_a_id")
-    public RestfulResponse getTeamByAId(@RequestParam("a_id") String a_id) {
-        List<Team> list = teamService.list(new QueryWrapper<Team>().eq("a_id", a_id));
+    @GetMapping("/get/byAId")
+    public RestfulResponse getTeamByAId(@RequestParam("aId") String aId) {
+        List<Team> list = teamService.list(new QueryWrapper<Team>().eq("a_id", aId));
         for (Team team : list) {
             team.setTLeaderId("");
         }
