@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS form_team_talent;
 CREATE DATABASE form_team_talent;
 ALTER DATABASE form_team_talent DEFAULT CHAR SET utf8;
 
@@ -12,6 +13,7 @@ DROP TABLE IF EXISTS t_user;
 DROP TABLE IF EXISTS t_user;
 CREATE TABLE t_user (
     u_id VARCHAR(255),
+    u_pwd VARCHAR(255),
     u_name VARCHAR(255),
     u_stu_num VARCHAR(64),
     u_school VARCHAR(255),
@@ -35,6 +37,8 @@ CREATE TABLE t_activity (
     FOREIGN KEY (a_holder_id) REFERENCES t_user(u_id)
 );
 ALTER TABLE t_activity CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
+-- CREATE INDEX t_activity_idx_get ON t_activity(a_holder_id, a_id);
+CREATE INDEX t_activity_idx_get_pub ON t_activity(a_is_public, status);
 
 DROP TABLE IF EXISTS t_team;
 CREATE TABLE t_team (
@@ -50,6 +54,7 @@ CREATE TABLE t_team (
     FOREIGN KEY (a_id) REFERENCES t_activity(a_id)
 );
 ALTER TABLE t_team CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE INDEX t_team_idx_a_id ON t_team(a_id);
 
 DROP TABLE IF EXISTS t_uat;
 CREATE TABLE t_uat (
@@ -63,10 +68,14 @@ CREATE TABLE t_uat (
    FOREIGN KEY (t_id) REFERENCES t_team(t_id)
 );
 ALTER TABLE t_uat CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE INDEX t_uat_idx_join ON t_uat(a_id, t_id, u_id);
+CREATE INDEX t_uat_idx_a_id ON t_uat(a_id);
+CREATE INDEX  t_uat_idx_t_id ON t_uat(t_id);
+CREATE INDEX t_uat_idx_leave_team ON t_uat(t_id, u_id);
 
 DROP TABLE IF EXISTS t_req;
 CREATE TABLE t_req (
-    id BIGINT AUTO_INCREMENT,
+    id VARCHAR(255),
     from_id VARCHAR(255) NOT NULL,
     to_id VARCHAR(255) NOT NULL,
     a_id VARCHAR(255) NOT NULL,
@@ -84,3 +93,8 @@ CREATE TABLE t_req (
     FOREIGN KEY (t_id) REFERENCES t_team(t_id)
 );
 ALTER TABLE t_req CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
+CREATE INDEX t_req_idx_new_req ON t_req(from_id, to_id, a_id, t_id);
+CREATE INDEX t_req_idx_a_id ON t_req(a_id);
+CREATE INDEX t_req_idx_t_id ON t_req(t_id);
+CREATE INDEX  t_req_idx_from_id ON t_req(from_id);
+CREATE INDEX  t_req_idx_to_id ON t_req(to_id);

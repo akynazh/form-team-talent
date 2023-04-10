@@ -3,13 +3,11 @@ package com.xdu.formteamtalent.controller;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.xdu.formteamtalent.entity.JoinRequest;
-import com.xdu.formteamtalent.entity.UAT;
-import com.xdu.formteamtalent.entity.User;
+import com.xdu.formteamtalent.entity.*;
 import com.xdu.formteamtalent.global.RestfulResponse;
-import com.xdu.formteamtalent.entity.Team;
 import com.xdu.formteamtalent.service.*;
 import com.xdu.formteamtalent.utils.AuthUtil;
+import com.xdu.formteamtalent.utils.RedisHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -29,18 +27,23 @@ public class TeamController {
     private final UATService uatService;
     private final UserService userService;
 
+    private final RedisHelper redisHelper;
+
     @Autowired
     public TeamController(JoinRequestService joinRequestService,
-                              TeamService teamService,
-                              ActivityService activityService,
-                              UATService uatService,
-                              UserService userService) {
+                          TeamService teamService,
+                          ActivityService activityService,
+                          UATService uatService,
+                          UserService userService,
+                          RedisHelper redisHelper) {
         this.joinRequestService = joinRequestService;
         this.teamService = teamService;
         this.activityService = activityService;
         this.uatService = uatService;
         this.userService = userService;
+        this.redisHelper = redisHelper;
     }
+
 
     @PostMapping("/add")
     @Transactional
@@ -58,18 +61,18 @@ public class TeamController {
         uat.setTId(tId);
         uatService.save(uat);
 
-        team.setTLeaderId("");
         return RestfulResponse.success(team);
     }
 
     @PostMapping("/remove")
     @Transactional
     public RestfulResponse removeTeam(HttpServletRequest request, @RequestParam("tId") String tId) {
-        Team team = teamService.getOne(new QueryWrapper<Team>().eq("t_id", tId));
+        Team team = redisHelper.getTeamByTId(tId);
         if (team.getTLeaderId().equals(AuthUtil.getUserId(request))) {
             uatService.remove(new QueryWrapper<UAT>().eq("t_id", tId));
             joinRequestService.remove(new QueryWrapper<JoinRequest>().eq("t_id", tId));
             teamService.removeById(tId);
+            redisHelper.removeTeamCacheByTId(tId);
         } else {
             return RestfulResponse.fail(403, "无权删除");
         }
@@ -77,12 +80,12 @@ public class TeamController {
     }
 
     @PostMapping("/update")
-
     public RestfulResponse updateTeam(HttpServletRequest request, @RequestBody Team team) {
-        Team team1 = teamService.getOne(new QueryWrapper<Team>().eq("t_id", team.getTId()));
+        Team team1 = redisHelper.getTeamByTId(team.getTId());
         if (team1.getTLeaderId().equals(AuthUtil.getUserId(request))) {
             if (team1.getAId().equals(team.getAId())) {
                 teamService.updateById(team);
+                redisHelper.removeTeamCacheByTId(team.getTId());
             } else {
                 return RestfulResponse.fail(404, "不能修改所属活动");
             }
@@ -93,18 +96,15 @@ public class TeamController {
     }
 
     @GetMapping("/get/byAId")
-    public RestfulResponse getTeamByAId(@RequestParam("aId") String aId) {
+    public RestfulResponse getTeamsByAId(@RequestParam("aId") String aId) {
         List<Team> list = teamService.list(new QueryWrapper<Team>().eq("a_id", aId));
-        for (Team team : list) {
-            team.setTLeaderId("");
-        }
         return RestfulResponse.success(list);
     }
 
     @GetMapping("/get/id")
     public RestfulResponse getTeamById(@RequestParam("tId") String tId, HttpServletRequest request) {
-        Team team = teamService.getOne(new QueryWrapper<Team>().eq("t_id", tId));
-        User leader = userService.getOne(new QueryWrapper<User>().eq("u_id", team.getTLeaderId()));
+        Team team = redisHelper.getTeamByTId(tId);
+        User leader = redisHelper.getUserByUId(team.getTLeaderId());
         String leaderName = leader.getUName();
         if (!StringUtils.hasText(leaderName)) {
             leaderName = "无名氏";
@@ -113,14 +113,10 @@ public class TeamController {
         List<UAT> uats = uatService.list(new QueryWrapper<UAT>().eq("t_id", tId));
         List<User> members = new ArrayList<>();
         for (UAT uat : uats) {
-            String uId = uat.getUId();
-            User user1 = userService.getOne(new QueryWrapper<User>().eq("u_id", uId));
-            user1.setUId("");
-            members.add(user1);
+            members.add(redisHelper.getUserByUId(uat.getUId()));
         }
 
         boolean owner = leader.getUId().equals(AuthUtil.getUserId(request));
-        team.setTLeaderId("");
         Map<Object, Object> map = MapUtil.builder()
                 .put("team", team)
                 .put("teamLeaderName", leaderName)
@@ -137,9 +133,7 @@ public class TeamController {
         List<UAT> list = uatService.list(wrapper);
         List<Team> teams = new ArrayList<>();
         for (UAT uat : list) {
-            Team team = teamService.getOne(new QueryWrapper<Team>().eq("t_id", uat.getTId()));
-            team.setTLeaderId("");
-            teams.add(team);
+            teams.add(redisHelper.getTeamByTId(uat.getTId()));
         }
         return RestfulResponse.success(teams);
     }

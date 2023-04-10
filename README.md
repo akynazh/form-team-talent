@@ -26,11 +26,12 @@
 
 #### 一、后端技术概览：
 
-主要通过 Java 实现，支持通过 Docker 快速部署。使用微信云托管部署服务，使用腾讯云COS（或阿里云OSS）存储静态文件。
+主要通过 Java 实现，支持通过 Docker 快速部署。使用微信云托管部署服务，使用腾讯云COS（或阿里云OSS）存储静态文件，通过 Redis 实现缓存。
 
 - SpringBoot
 - Docker & Docker-compose
 - MySQL
+- Redis
 - MybatisPlus
 - Hutool
 - JWT
@@ -131,34 +132,7 @@ async function auth(pageUrl = "", redirect = 1) {
 }
 ```
 
-**4、快速过滤目标对象**
-
-关于加入小组的请求，可以是他人向自己的请求和自己向他人的请求，在这个基础上，又分为已处理的请求和未处理的请求，为了减少 sql 语句的编写和对数据库的压力，可以通过返回对象后再进行过滤来实现。
-
-通过 Java8 的新特性 stream 可以很好地解决这个问题：
-
-```java
-// 过滤出符合type的
-Predicate<JoinRequest> pType = req -> type == 0 ? req.getFromId().equals(uId) : req.getToId().equals(uId);
-// 过滤出符合status的
-Predicate<JoinRequest> pStatus = req -> req.getStatus().equals(status);
-
-if (status == 2)
-    return RestfulResponse.success(
-            removeOpenId(requests.stream().filter(pType).collect(Collectors.toList()))
-    );
-if (type == 2)
-    return RestfulResponse.success(
-            removeOpenId(requests.stream().filter(pStatus).collect(Collectors.toList()))
-    );
-return RestfulResponse.success(
-        removeOpenId(requests.stream().filter(pStatus).filter(pType).collect(Collectors.toList()))
-);
-```
-
-如上，filter 指定好的 Predicate 即可。
-
-**5、关于后端返回的 json 数据**
+**4、关于后端返回的 json 数据**
 
 对于一个采用驼峰命名法命名的变量，比如 userId，转换后返回前端的 json 属性名是 userId，没有问题。
 
@@ -179,6 +153,14 @@ return RestfulResponse.success(
 
 一般可以考虑在后端变量命名时，不让第二个字符大写，或者采用 `@JsonProperty("uId")` 进行解决。
 
+**5. 建立适当的索引**
+
+有些索引建立了反而会降低效率，比如写多于读的场景：在本项目中，对于一个加入小组的请求，写入到 t_req 表之后， 
+撤销请求操作和处理请求操作都可能是较为频繁的，也就是增删行操作较多，可能导致索引频繁地进行重建。
+
+在查询用户所加入的小组时，可以建立联合索引。由于某个小组隶属于某个活动，在 t_uat 表中，可以将用户编号，活动编号，小组编号（u_id, a_id, t_id）三者
+建立一个联合索引，这样可以较好地提高效率。
+
 ### 后端开发步骤
 
 将 `application.pub.yaml` 重命名为 `application.yaml`，然后开始编辑。（“xxxxxx...”为需编辑内容）
@@ -190,6 +172,7 @@ return RestfulResponse.success(
 - 对象存储相关字段
 - 本地静态资源存储位置
 - token 密钥和过期时间（单位：s）
+- redis 基本配置
 
 然后执行 `init.sql` 初始化数据库。
 
@@ -256,6 +239,8 @@ url: jdbc:mysql://mysqldb/form_team_talent?serverTimezone=UTC&useUnicode=true&ch
 - /docker/mysql/conf:/etc/mysql/conf.d # 配置挂载
 - /docker/mysql/init:/docker-entrypoint-initdb.d # 初始化sql挂载
 - /docker/app/form-team-talent:/docker/app/form-team-talent # 存放静态文件，jar包，外部配置等
+- /docker/redis/data:/data # redis 数据挂载
+- /docker/redis/redis.conf:/usr/local/etc/redis/redis.conf # redis 配置文件挂载
 
 注：挂载规则是{主机目录}:{容器目录}。
 

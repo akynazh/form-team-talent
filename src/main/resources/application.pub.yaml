@@ -14,6 +14,18 @@ spring:
     resources:
 # 本地静态资源存储位置
       static-locations: xxxxx
+  redis:
+    database: 5
+    host: localhost
+    port: 6379
+    #    password:
+    timeout: 5000
+    jedis:
+      pool:
+        max-idle: 500
+        min-idle: 50
+        max-active: 1000
+        max-wait: 2000
 
 # 用于方便地获取外部静态地址，值等同于web.resources.static-locations中file:（如果有）后面的部分
 staticPath: xxxxx

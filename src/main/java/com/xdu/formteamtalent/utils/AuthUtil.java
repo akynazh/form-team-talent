@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xdu.formteamtalent.entity.User;
 import com.xdu.formteamtalent.service.UserService;
 import io.jsonwebtoken.Claims;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
+@Slf4j
 public class AuthUtil {
     private static String getOpenIdUrl;
     private static String appId;
@@ -64,12 +66,15 @@ public class AuthUtil {
     public static Boolean checkToken(HttpServletRequest request) {
         String token = request.getHeader("auth");
         if (token == null) { // token不存在
+            log.error("token 不存在");
             return false;
         }
         Claims claims = JwtUtil.getClaimsByToken(token);
-        if (claims == null || JwtUtil.isTokenExpired(claims.getExpiration())) { // token错误或过期
+        if (claims == null || JwtUtil.isTokenExpired(claims.getExpiration())) { // token 错误或过期
+            log.error("token 错误或过期");
             return false;
         }
+        log.info("token 验证通过");
         return true;
     }
 }

@@ -1,14 +1,12 @@
 package com.xdu.formteamtalent.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.xdu.formteamtalent.entity.JoinRequest;
-import com.xdu.formteamtalent.entity.Team;
-import com.xdu.formteamtalent.entity.UAT;
-import com.xdu.formteamtalent.entity.User;
+import com.xdu.formteamtalent.entity.*;
 import com.xdu.formteamtalent.global.RestfulResponse;
 import com.xdu.formteamtalent.mapper.JoinRequestMapper;
 import com.xdu.formteamtalent.service.*;
 import com.xdu.formteamtalent.utils.AuthUtil;
+import com.xdu.formteamtalent.utils.RedisHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +25,7 @@ public class JoinRequestController {
     private final UATService uatService;
     private final UserService userService;
     private final JoinRequestMapper joinRequestMapper;
+    private final RedisHelper redisHelper;
 
     @Autowired
     public JoinRequestController(JoinRequestService joinRequestService,
@@ -34,17 +33,23 @@ public class JoinRequestController {
                                  ActivityService activityService,
                                  UATService uatService,
                                  UserService userService,
-                                 JoinRequestMapper joinRequestMapper) {
+                                 JoinRequestMapper joinRequestMapper,
+                                 RedisHelper redisHelper) {
         this.joinRequestService = joinRequestService;
         this.teamService = teamService;
         this.activityService = activityService;
         this.uatService = uatService;
         this.userService = userService;
         this.joinRequestMapper = joinRequestMapper;
+        this.redisHelper = redisHelper;
     }
 
     @PostMapping("/send")
     public RestfulResponse sendRequest(@RequestBody JoinRequest joinRequest, HttpServletRequest request) {
+        String requestId = joinRequest.getId(); // 请求 id 需要在前端根据 from_id to_id a_id t_id 生成，保证唯一性
+        if (redisHelper.checkReqExistsByReqId(requestId)) {
+            return RestfulResponse.fail(403, "请勿重复操作");
+        }
         String userId = AuthUtil.getUserId(request);
         // 查看是否已经加入了
         QueryWrapper<UAT> wrapper = new QueryWrapper<>();
@@ -55,13 +60,12 @@ public class JoinRequestController {
             return RestfulResponse.fail(403, "不可重复加入哦");
         }
         // 获取用户和小组详细信息
-        User user = userService.getOne(new QueryWrapper<User>().eq("u_id", userId));
-        Team team = teamService.getOne(new QueryWrapper<Team>().eq("t_id", joinRequest.getTId()));
+        User user = redisHelper.getUserByUId(userId);
+        Team team = redisHelper.getTeamByTId(joinRequest.getTId());
         // 查看人数是否已满
         if (team.getTCount().equals(team.getTTotal())) {
             return RestfulResponse.fail(403, "人数已满=_=");
         }
-
         joinRequest.setAgree(0);
         joinRequest.setStatus(1);
         joinRequest.setSendDate(String.valueOf(System.currentTimeMillis()));
@@ -69,20 +73,16 @@ public class JoinRequestController {
         joinRequest.setTName(team.getTName());
         joinRequest.setFromId(userId);
         joinRequest.setToId(team.getTLeaderId());
-
-        JoinRequest checkRequest = joinRequestMapper.checkRequestExist(joinRequest.getFromId(), joinRequest.getToId(),
-                joinRequest.getAId(), joinRequest.getTId());
-        if (checkRequest != null && checkRequest.getStatus() == 1) {
-            return RestfulResponse.fail(403, "已经发过请求啦");
-        }
+//        JoinRequest checkRequest = joinRequestMapper.checkRequestExist(joinRequest.getFromId(), joinRequest.getToId(),
+//                joinRequest.getAId(), joinRequest.getTId());
         joinRequestService.save(joinRequest);
         return RestfulResponse.success();
     }
 
     @PostMapping("/handle")
     @Transactional
-    public RestfulResponse handleRequest(@RequestParam Long id, @RequestParam Integer agree, HttpServletRequest request) {
-        JoinRequest one = joinRequestService.getOne(new QueryWrapper<JoinRequest>().eq("id", id));
+    public RestfulResponse handleRequest(@RequestParam String id, @RequestParam Integer agree, HttpServletRequest request) {
+        JoinRequest one = redisHelper.getJoinReqByReqId(id);
         if (one.getToId().equals(AuthUtil.getUserId(request))) {
             one.setStatus(0);
             one.setAgree(agree);
@@ -105,6 +105,7 @@ public class JoinRequestController {
                 team.setTCount(team.getTCount() + 1);
                 teamService.updateById(team);
             }
+            redisHelper.removeReqCacheByReqId(one.getId());
             return RestfulResponse.success();
         } else {
             return RestfulResponse.fail(403, "没有权限");
@@ -113,10 +114,11 @@ public class JoinRequestController {
 
     @PostMapping("/remove/{id}")
     public RestfulResponse removeRequest(@PathVariable String id, HttpServletRequest request) {
-        JoinRequest one = joinRequestService.getOne(new QueryWrapper<JoinRequest>().eq("id", id));
+        JoinRequest one = redisHelper.getJoinReqByReqId(id);
         if (one != null) {
             if (one.getFromId().equals(AuthUtil.getUserId(request))) {
                 joinRequestService.removeById(id);
+                redisHelper.removeReqCacheByReqId(one.getId());
                 return RestfulResponse.success();
             } else {
                 return RestfulResponse.fail(403, "没有权限");
@@ -124,14 +126,6 @@ public class JoinRequestController {
         } else {
             return RestfulResponse.fail(404, "不存在该记录");
         }
-    }
-
-    private List<JoinRequest> removeOpenId(List<JoinRequest> list) {
-        for (JoinRequest req : list) {
-            req.setFromId("");
-            req.setToId("");
-        }
-        return list;
     }
 
     /**
@@ -150,9 +144,10 @@ public class JoinRequestController {
             return RestfulResponse.fail(404, "参数错误");
         }
         String uId = AuthUtil.getUserId(request);
+
         List<JoinRequest> requests = joinRequestMapper.getMyRequest(uId);
         if (status == 2 && type == 2) {
-            return RestfulResponse.success(removeOpenId(requests));
+            return RestfulResponse.success(requests);
         }
 
         // 过滤出符合type的
@@ -162,14 +157,14 @@ public class JoinRequestController {
 
         if (status == 2)
             return RestfulResponse.success(
-                    removeOpenId(requests.stream().filter(pType).collect(Collectors.toList()))
+                    requests.stream().filter(pType).collect(Collectors.toList())
             );
         if (type == 2)
             return RestfulResponse.success(
-                    removeOpenId(requests.stream().filter(pStatus).collect(Collectors.toList()))
+                    requests.stream().filter(pStatus).collect(Collectors.toList())
             );
         return RestfulResponse.success(
-                removeOpenId(requests.stream().filter(pStatus).filter(pType).collect(Collectors.toList()))
+                requests.stream().filter(pStatus).filter(pType).collect(Collectors.toList())
         );
     }
 }

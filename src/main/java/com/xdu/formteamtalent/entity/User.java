@@ -19,6 +19,8 @@ public class User implements Serializable {
     @TableId
     @JsonProperty("uId")
     private String uId;
+    @JsonProperty("uPwd")
+    private String uPwd;
     @JsonProperty("uName")
     private String uName;
     @JsonProperty("uStuNum")

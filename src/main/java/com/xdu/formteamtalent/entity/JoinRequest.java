@@ -15,9 +15,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @TableName("t_req")
 public class JoinRequest {
-    @TableId(type = IdType.AUTO)
     @JsonProperty("id")
-    private Long id;
+    private String id;
     @JsonProperty("fromId")
     private String fromId;
     @JsonProperty("toId")

@@ -6,44 +6,53 @@ import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xdu.formteamtalent.entity.*;
 import com.xdu.formteamtalent.global.RestfulResponse;
+import com.xdu.formteamtalent.mapper.ActivityMapper;
 import com.xdu.formteamtalent.service.*;
 import com.xdu.formteamtalent.utils.QrcodeUtil;
 import com.xdu.formteamtalent.utils.AuthUtil;
+import com.xdu.formteamtalent.utils.RedisHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/activity")
 public class ActivityController {
+    private final Integer MAX_PUBLIC_ACTIVITY_COUNT = 100;
     private final JoinRequestService joinRequestService;
     private final TeamService teamService;
     private final ActivityService activityService;
     private final UATService uatService;
     private final UserService userService;
+    private final ActivityMapper activityMapper;
+
+    private final RedisHelper redisHelper;
+
 
     @Value("${enableCloud}")
     private Integer enableCloud;
 
     @Autowired
     public ActivityController(JoinRequestService joinRequestService,
-                                 TeamService teamService,
-                                 ActivityService activityService,
-                                 UATService uatService,
-                                 UserService userService) {
+                              TeamService teamService,
+                              ActivityService activityService,
+                              UATService uatService,
+                              UserService userService,
+                              ActivityMapper activityMapper,
+                              RedisHelper redisHelper) {
         this.joinRequestService = joinRequestService;
         this.teamService = teamService;
         this.activityService = activityService;
         this.uatService = uatService;
         this.userService = userService;
+        this.activityMapper = activityMapper;
+        this.redisHelper = redisHelper;
     }
+
 
     @PostMapping("/add")
     @Transactional
@@ -67,19 +76,14 @@ public class ActivityController {
         activity.setAQrcodePath(visitPath);
         activity.setStatus(1);
         activityService.save(activity);
-        activity.setAHolderId("");
-
         return RestfulResponse.success(activity);
     }
 
     @PostMapping("/remove")
     @Transactional
     public RestfulResponse removeActivity(HttpServletRequest request, @RequestParam("aId") String aId) {
-        QueryWrapper<Activity> wrapper = new QueryWrapper<>();
-        wrapper.eq("a_holder_id", AuthUtil.getUserId(request));
-        wrapper.eq("a_id", aId);
-        Activity activity = activityService.getOne(wrapper);
-        if (activity != null) {
+        Activity activity = redisHelper.getActivityByAId(aId);
+        if (activity != null && Objects.equals(activity.getAHolderId(), AuthUtil.getUserId(request))) {
             String qrcodePath = QrcodeUtil.getQrcodeRealPathByAId(aId);
             if (FileUtil.exist(qrcodePath)) {
                 FileUtil.del(qrcodePath);
@@ -88,6 +92,7 @@ public class ActivityController {
             joinRequestService.remove(new QueryWrapper<JoinRequest>().eq("a_id", aId));
             teamService.remove(new QueryWrapper<Team>().eq("a_id", aId));
             activityService.removeById(aId);
+            redisHelper.removeActivityCacheByAId(aId);
             return RestfulResponse.success();
         } else {
             return RestfulResponse.fail(403, "无权限删除该活动");
@@ -96,11 +101,10 @@ public class ActivityController {
 
     @PostMapping("/update")
     public RestfulResponse updateActivity(HttpServletRequest request, @RequestBody Activity activity) {
-        QueryWrapper<Activity> wrapper = new QueryWrapper<>();
-        wrapper.eq("a_holder_id", AuthUtil.getUserId(request));
-        wrapper.eq("a_id", activity.getAId());
-        if (activityService.getOne(wrapper) != null) {
+        Activity activity1 = redisHelper.getActivityByAId(activity.getAId());
+        if (activity1 != null && Objects.equals(activity1.getAHolderId(), AuthUtil.getUserId(request))) {
             activityService.updateById(activity);
+            redisHelper.removeActivityCacheByAId(activity.getAId());
             return RestfulResponse.success();
         } else {
             return RestfulResponse.fail(403, "无权限修改该活动");
@@ -109,21 +113,17 @@ public class ActivityController {
 
     @GetMapping("/get/pub")
     public RestfulResponse getPublicActivity() {
-        QueryWrapper<Activity> wrapper = new QueryWrapper<>();
-        wrapper.eq("a_is_public", 1);
-        wrapper.eq("status", 1);
-        List<Activity> activities = activityService.list(wrapper);
-        for (Activity activity : activities) {
-            activity.setAHolderId("");
-        }
+        List<Activity> activities = activityMapper.getPublicActivity(MAX_PUBLIC_ACTIVITY_COUNT);
         return RestfulResponse.success(activities);
     }
 
     @GetMapping("/get/id")
     public RestfulResponse getActivityById(@RequestParam("aId") String aId, HttpServletRequest request) {
-        Activity activity = activityService.getOne(new QueryWrapper<Activity>().eq("a_id", aId));
+        Activity activity = redisHelper.getActivityByAId(aId);
+        if (activity == null) {
+            return RestfulResponse.fail(404, "不存在该活动");
+        }
         boolean owner = activity.getAHolderId().equals(AuthUtil.getUserId(request));
-        activity.setAHolderId("");
         String qrcodePath = QrcodeUtil.getQrcodeRealPathByAId(aId);
         if (!FileUtil.exist(qrcodePath)) {
             QrcodeUtil.generateQrcodeByAId(aId);
@@ -147,11 +147,8 @@ public class ActivityController {
         // 获取我加入的活动
         List<UAT> list1 = uatService.list(new QueryWrapper<UAT>().eq("u_id", uId));
         for (UAT uat : list1) {
-            Activity activity = activityService.getOne(new QueryWrapper<Activity>().eq("a_id", uat.getAId()));
+            Activity activity = redisHelper.getActivityByAId(uat.getAId());
             set.add(activity);
-        }
-        for (Activity activity: set) {
-            activity.setAHolderId("");
         }
         return RestfulResponse.success(set);
     }
