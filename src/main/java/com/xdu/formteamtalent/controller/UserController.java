@@ -3,11 +3,14 @@ package com.xdu.formteamtalent.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.xdu.formteamtalent.entity.*;
-import com.xdu.formteamtalent.global.RestfulResponse;
+import com.xdu.formteamtalent.entity.RestfulResponse;
 import com.xdu.formteamtalent.service.*;
 import com.xdu.formteamtalent.utils.JwtUtil;
 import com.xdu.formteamtalent.utils.AuthUtil;
 import com.xdu.formteamtalent.utils.RedisHelper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +21,10 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @Slf4j
 @RequestMapping("/api/user")
+@Api(tags = "用户操作接口")
+/**
+ * 用户操作接口
+ */
 public class UserController {
     private final JoinRequestService joinRequestService;
     private final TeamService teamService;
@@ -42,13 +49,18 @@ public class UserController {
     }
 
     /**
-     * 验证用户
+     * web 端验证用户
      *
-     * @param check 验证token是否合格
+     * @param user  用户
+     * @param check 若值为 1 则验证 token 是否合格
+     * @param req
+     * @param resp
+     * @return RestfulResponse
      */
     @PostMapping("/auth")
-    public RestfulResponse auth(@RequestBody User user,
-                                @RequestParam(value = "check", defaultValue = "") String check,
+    @ApiOperation(value = "web 端验证用户", notes = "验证用户, 如果携带了 token 则验证 token, 否则验证请求体中的用户 id 和密码")
+    public RestfulResponse auth(@RequestBody @ApiParam(value = "用户") User user,
+                                @RequestParam(value = "check", defaultValue = "") @ApiParam(value = "是否携带 token, 1 是 | 0 否", required = true) String check,
                                 HttpServletRequest req,
                                 HttpServletResponse resp) {
         if (check.equals("1")) {
@@ -74,11 +86,15 @@ public class UserController {
      * 用于微信小程序端验证
      *
      * @param code  微信授权码
-     * @param check 验证token是否合格
+     * @param check 若值为 1 则验证 token 是否合格
+     * @param req
+     * @param resp
+     * @return RestfulResponse
      */
     @PostMapping("/authwx")
-    public RestfulResponse authwx(@RequestParam(value = "code", defaultValue = "") String code,
-                                  @RequestParam(value = "check", defaultValue = "") String check,
+    @ApiOperation(value = "用于微信小程序端验证", notes = "验证用户, 如果携带了 token 则验证 token, 否则验证微信授权码")
+    public RestfulResponse authwx(@RequestParam(value = "code", defaultValue = "") @ApiParam(value = "微信授权码") String code,
+                                  @RequestParam(value = "check", defaultValue = "") @ApiParam(value = "是否携带 token, 1 是 | 0 否", required = true) String check,
                                   HttpServletRequest req,
                                   HttpServletResponse resp) {
         if (check.equals("1")) {
@@ -104,8 +120,16 @@ public class UserController {
         }
     }
 
+    /**
+     * 更新用户信息
+     *
+     * @param request
+     * @param user
+     * @return RestfulResponse
+     */
     @PostMapping("/update")
-    public RestfulResponse update(HttpServletRequest request, @RequestBody User user) {
+    @ApiOperation(value = "更新用户信息")
+    public RestfulResponse update(HttpServletRequest request, @RequestBody @ApiParam(value = "用户", required = true) User user) {
         UpdateWrapper<User> wrapper = new UpdateWrapper<>();
         String userId = AuthUtil.getUserId(request);
         wrapper.eq("u_id", userId);
@@ -117,10 +141,13 @@ public class UserController {
     /**
      * 退出某个小组（活动）
      *
-     * @param tId 小组 id
+     * @param request
+     * @param tId     小组 id
+     * @return RestfulResponse
      */
     @PostMapping("/leave/team")
-    public RestfulResponse leaveTeam(HttpServletRequest request, @RequestParam("tId") String tId) {
+    @ApiOperation(value = "退出某个小组（活动）")
+    public RestfulResponse leaveTeam(HttpServletRequest request, @RequestParam("tId") @ApiParam(value = "小组编号", required = true) String tId) {
         String uId = AuthUtil.getUserId(request);
         QueryWrapper<UAT> wrapper = new QueryWrapper<>();
         wrapper.eq("t_id", tId);
@@ -129,7 +156,14 @@ public class UserController {
         return RestfulResponse.success();
     }
 
+    /**
+     * 获取用户信息
+     *
+     * @param request
+     * @return RestfulResponse 数据对象为单个用户对象
+     */
     @GetMapping("/get/info")
+    @ApiOperation(value = "获取用户信息")
     public RestfulResponse getUserInfo(HttpServletRequest request) {
         return RestfulResponse.success(redisHelper.getUserByUId(AuthUtil.getUserId(request)));
     }

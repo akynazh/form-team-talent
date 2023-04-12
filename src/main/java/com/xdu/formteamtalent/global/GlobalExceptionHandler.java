@@ -1,5 +1,6 @@
 package com.xdu.formteamtalent.global;
 
+import com.xdu.formteamtalent.entity.RestfulResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;

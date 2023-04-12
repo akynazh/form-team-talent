@@ -4,10 +4,13 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xdu.formteamtalent.entity.*;
-import com.xdu.formteamtalent.global.RestfulResponse;
+import com.xdu.formteamtalent.entity.RestfulResponse;
 import com.xdu.formteamtalent.service.*;
 import com.xdu.formteamtalent.utils.AuthUtil;
 import com.xdu.formteamtalent.utils.RedisHelper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -20,6 +23,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/team")
+@Api(tags = "小组操作接口")
+/**
+ * 小组操作接口
+ */
 public class TeamController {
     private final JoinRequestService joinRequestService;
     private final TeamService teamService;
@@ -45,9 +52,17 @@ public class TeamController {
     }
 
 
+    /**
+     * 添加小组
+     *
+     * @param request
+     * @param team    小组
+     * @return RestfulResponse 数据对象为单个小组对象
+     */
     @PostMapping("/add")
     @Transactional
-    public RestfulResponse addTeam(HttpServletRequest request, @RequestBody Team team) {
+    @ApiOperation(value = "添加小组")
+    public RestfulResponse addTeam(HttpServletRequest request, @RequestBody @ApiParam(value = "小组", required = true) Team team) {
         String uId = AuthUtil.getUserId(request);
         String tId = IdUtil.simpleUUID();
         team.setTLeaderId(uId);
@@ -64,9 +79,17 @@ public class TeamController {
         return RestfulResponse.success(team);
     }
 
+    /**
+     * 删除小组
+     *
+     * @param request
+     * @param tId     小组编号
+     * @return RestfulResponse
+     */
     @PostMapping("/remove")
     @Transactional
-    public RestfulResponse removeTeam(HttpServletRequest request, @RequestParam("tId") String tId) {
+    @ApiOperation(value = "删除小组")
+    public RestfulResponse removeTeam(HttpServletRequest request, @RequestParam("tId") @ApiParam(value = "小组编号", required = true) String tId) {
         Team team = redisHelper.getTeamByTId(tId);
         if (team.getTLeaderId().equals(AuthUtil.getUserId(request))) {
             uatService.remove(new QueryWrapper<UAT>().eq("t_id", tId));
@@ -79,8 +102,16 @@ public class TeamController {
         return RestfulResponse.success();
     }
 
+    /**
+     * 更新小组信息
+     *
+     * @param request
+     * @param team    小组
+     * @return RestfulResponse
+     */
     @PostMapping("/update")
-    public RestfulResponse updateTeam(HttpServletRequest request, @RequestBody Team team) {
+    @ApiOperation(value = "更新小组信息")
+    public RestfulResponse updateTeam(HttpServletRequest request, @RequestBody @ApiParam(value = "小组", required = true) Team team) {
         Team team1 = redisHelper.getTeamByTId(team.getTId());
         if (team1.getTLeaderId().equals(AuthUtil.getUserId(request))) {
             if (team1.getAId().equals(team.getAId())) {
@@ -95,14 +126,29 @@ public class TeamController {
         return RestfulResponse.success();
     }
 
+    /**
+     * 根据活动编号获取小组
+     *
+     * @param aId 活动编号
+     * @return RestfulResponse 数据对象为小组对象组成的列表
+     */
+    @ApiOperation(value = "根据活动编号获取小组")
     @GetMapping("/get/byAId")
-    public RestfulResponse getTeamsByAId(@RequestParam("aId") String aId) {
+    public RestfulResponse getTeamsByAId(@RequestParam("aId") @ApiParam(value = "活动编号", required = true) String aId) {
         List<Team> list = teamService.list(new QueryWrapper<Team>().eq("a_id", aId));
         return RestfulResponse.success(list);
     }
 
+    /**
+     * 获取指定小组
+     *
+     * @param tId 小组编号
+     * @param request
+     * @return RestfulResponse 数据对象为小组, 组长名称, 小组成员对象组成的列表, 小组拥有者对象这四个对象组成的 map
+     */
     @GetMapping("/get/id")
-    public RestfulResponse getTeamById(@RequestParam("tId") String tId, HttpServletRequest request) {
+    @ApiOperation(value = "获取小组")
+    public RestfulResponse getTeamById(@RequestParam("tId") @ApiParam(value = "小组编号", required = true) String tId, HttpServletRequest request) {
         Team team = redisHelper.getTeamByTId(tId);
         User leader = redisHelper.getUserByUId(team.getTLeaderId());
         String leaderName = leader.getUName();
@@ -126,6 +172,13 @@ public class TeamController {
         return RestfulResponse.success(map);
     }
 
+    /**
+     * 获取我的小组
+     *
+     * @param request
+     * @return RestfulResponse
+     */
+    @ApiOperation(value = "获取我的小组")
     @GetMapping("/get/my")
     public RestfulResponse getMyTeam(HttpServletRequest request) {
         QueryWrapper<UAT> wrapper = new QueryWrapper<>();

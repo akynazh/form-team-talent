@@ -2,11 +2,14 @@ package com.xdu.formteamtalent.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xdu.formteamtalent.entity.*;
-import com.xdu.formteamtalent.global.RestfulResponse;
+import com.xdu.formteamtalent.entity.RestfulResponse;
 import com.xdu.formteamtalent.mapper.JoinRequestMapper;
 import com.xdu.formteamtalent.service.*;
 import com.xdu.formteamtalent.utils.AuthUtil;
 import com.xdu.formteamtalent.utils.RedisHelper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +21,7 @@ import java.util.stream.Collectors;
 
 @RequestMapping("/api/req")
 @RestController
+@Api(tags = "请求操作接口")
 public class JoinRequestController {
     private final JoinRequestService joinRequestService;
     private final TeamService teamService;
@@ -44,8 +48,16 @@ public class JoinRequestController {
         this.redisHelper = redisHelper;
     }
 
+    /**
+     * 发送请求
+     *
+     * @param joinRequest 请求
+     * @param request
+     * @return RestfulResponse
+     */
     @PostMapping("/send")
-    public RestfulResponse sendRequest(@RequestBody JoinRequest joinRequest, HttpServletRequest request) {
+    @ApiOperation(value = "发送请求")
+    public RestfulResponse sendRequest(@RequestBody @ApiParam(value = "请求", required = true) JoinRequest joinRequest, HttpServletRequest request) {
         String requestId = joinRequest.getId(); // 请求 id 需要在前端根据 from_id to_id a_id t_id 生成，保证唯一性
         if (redisHelper.checkReqExistsByReqId(requestId)) {
             return RestfulResponse.fail(403, "请勿重复操作");
@@ -79,9 +91,20 @@ public class JoinRequestController {
         return RestfulResponse.success();
     }
 
+    /**
+     * 处理请求
+     *
+     * @param id      请求编号
+     * @param agree   是否同意 1 是 | 0 否
+     * @param request
+     * @return RestfulResponse
+     */
     @PostMapping("/handle")
     @Transactional
-    public RestfulResponse handleRequest(@RequestParam String id, @RequestParam Integer agree, HttpServletRequest request) {
+    @ApiOperation(value = "处理请求")
+    public RestfulResponse handleRequest(@RequestParam @ApiParam(value = "请求编号", required = true) String id,
+                                         @RequestParam @ApiParam(value = "是否同意 1 是 | 0 否", required = true) Integer agree,
+                                         HttpServletRequest request) {
         JoinRequest one = redisHelper.getJoinReqByReqId(id);
         if (one.getToId().equals(AuthUtil.getUserId(request))) {
             one.setStatus(0);
@@ -112,8 +135,16 @@ public class JoinRequestController {
         }
     }
 
+    /**
+     * 撤销请求
+     *
+     * @param id      请求编号
+     * @param request
+     * @return RestfulResponse
+     */
+    @ApiOperation(value = "撤销请求")
     @PostMapping("/remove/{id}")
-    public RestfulResponse removeRequest(@PathVariable String id, HttpServletRequest request) {
+    public RestfulResponse removeRequest(@PathVariable @ApiParam(value = "请求编号", required = true) String id, HttpServletRequest request) {
         JoinRequest one = redisHelper.getJoinReqByReqId(id);
         if (one != null) {
             if (one.getFromId().equals(AuthUtil.getUserId(request))) {
@@ -131,14 +162,15 @@ public class JoinRequestController {
     /**
      * 获得与我相关的请求
      *
-     * @param type    非必要，0：我发出的请求 1：发给我的请求 2：所有请求（默认）
-     * @param status  非必要，0：已处理的请求 1：未处理的请求 2：所有请求（默认）
+     * @param type    请求类型, 非必要，0：我发出的请求 1：发给我的请求 2：所有请求（默认）
+     * @param status  请求状态, 非必要，0：已处理的请求 1：未处理的请求 2：所有请求（默认）
      * @param request 请求
-     * @return json
+     * @return RestfulResponse 数据对象为请求对象列表
      */
     @GetMapping("/get")
-    public RestfulResponse getMyRequest(@RequestParam(defaultValue = "2") Integer type,
-                                        @RequestParam(defaultValue = "2") Integer status,
+    @ApiOperation(value = "获得与我相关的请求")
+    public RestfulResponse getMyRequest(@RequestParam(defaultValue = "2") @ApiParam(value = "请求类型, 0：我发出的请求 1：发给我的请求 2：所有请求（默认）") Integer type,
+                                        @RequestParam(defaultValue = "2") @ApiParam(value = "请求状态, 0：已处理的请求 1：未处理的请求 2：所有请求（默认）") Integer status,
                                         HttpServletRequest request) {
         if ((type != 0 && type != 1 && type != 2) || (status != 0 && status != 1 && status != 2)) {
             return RestfulResponse.fail(404, "参数错误");

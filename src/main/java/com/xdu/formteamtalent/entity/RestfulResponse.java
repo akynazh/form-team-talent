@@ -1,5 +1,7 @@
-package com.xdu.formteamtalent.global;
+package com.xdu.formteamtalent.entity;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,9 +13,13 @@ import java.io.Serializable;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@ApiModel("通用返回数据")
 public class RestfulResponse implements Serializable {
+    @ApiModelProperty("状态码")
     private Integer code;
+    @ApiModelProperty("返回消息")
     private String msg;
+    @ApiModelProperty("数据对象")
     private Object obj;
 
     public RestfulResponse(Integer code, String msg) {

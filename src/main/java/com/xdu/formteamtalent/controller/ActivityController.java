@@ -5,12 +5,15 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xdu.formteamtalent.entity.*;
-import com.xdu.formteamtalent.global.RestfulResponse;
+import com.xdu.formteamtalent.entity.RestfulResponse;
 import com.xdu.formteamtalent.mapper.ActivityMapper;
 import com.xdu.formteamtalent.service.*;
 import com.xdu.formteamtalent.utils.QrcodeUtil;
 import com.xdu.formteamtalent.utils.AuthUtil;
 import com.xdu.formteamtalent.utils.RedisHelper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +24,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/activity")
+@Api(tags = "活动操作接口")
 public class ActivityController {
     private final Integer MAX_PUBLIC_ACTIVITY_COUNT = 100;
     private final JoinRequestService joinRequestService;
@@ -54,9 +58,18 @@ public class ActivityController {
     }
 
 
+    /**
+     * 添加活动
+     *
+     * @param request
+     * @param activity 活动
+     * @return RestfulResponse 数据对象为单个活动对象
+     */
     @PostMapping("/add")
     @Transactional
-    public RestfulResponse addActivity(HttpServletRequest request, @RequestBody Activity activity) {
+    @ApiOperation(value = "添加活动")
+    public RestfulResponse addActivity(HttpServletRequest request,
+                                       @RequestBody @ApiParam(value = "活动", required = true) Activity activity) {
         String aId = IdUtil.simpleUUID();
         QrcodeUtil.generateQrcodeByAId(aId);
         String visitPath = QrcodeUtil.getQrcodeVisitPathByAId(aId);
@@ -79,9 +92,18 @@ public class ActivityController {
         return RestfulResponse.success(activity);
     }
 
+    /**
+     * 删除活动
+     *
+     * @param request
+     * @param aId     活动编号
+     * @return RestfulResponse
+     */
     @PostMapping("/remove")
     @Transactional
-    public RestfulResponse removeActivity(HttpServletRequest request, @RequestParam("aId") String aId) {
+    @ApiOperation(value = "删除活动")
+    public RestfulResponse removeActivity(HttpServletRequest request,
+                                          @RequestParam("aId") @ApiParam(value = "活动编号", required = true) String aId) {
         Activity activity = redisHelper.getActivityByAId(aId);
         if (activity != null && Objects.equals(activity.getAHolderId(), AuthUtil.getUserId(request))) {
             String qrcodePath = QrcodeUtil.getQrcodeRealPathByAId(aId);
@@ -99,8 +121,17 @@ public class ActivityController {
         }
     }
 
+    /**
+     * 更新活动
+     *
+     * @param request
+     * @param activity 活动
+     * @return RestfulResponse
+     */
     @PostMapping("/update")
-    public RestfulResponse updateActivity(HttpServletRequest request, @RequestBody Activity activity) {
+    @ApiOperation(value = "更新活动")
+    public RestfulResponse updateActivity(HttpServletRequest request,
+                                          @RequestBody @ApiParam(value = "活动", required = true) Activity activity) {
         Activity activity1 = redisHelper.getActivityByAId(activity.getAId());
         if (activity1 != null && Objects.equals(activity1.getAHolderId(), AuthUtil.getUserId(request))) {
             activityService.updateById(activity);
@@ -111,14 +142,29 @@ public class ActivityController {
         }
     }
 
+    /**
+     * 获取公共活动
+     *
+     * @return RestfulResponse 数据对象为活动对象列表
+     */
     @GetMapping("/get/pub")
+    @ApiOperation(value = "获取公共活动")
     public RestfulResponse getPublicActivity() {
         List<Activity> activities = activityMapper.getPublicActivity(MAX_PUBLIC_ACTIVITY_COUNT);
         return RestfulResponse.success(activities);
     }
 
+    /**
+     * 获取指定活动
+     *
+     * @param aId     活动编号
+     * @param request
+     * @return RestfulResponse 数据对象为单个活动对象，活动拥有者组成的 map
+     */
     @GetMapping("/get/id")
-    public RestfulResponse getActivityById(@RequestParam("aId") String aId, HttpServletRequest request) {
+    @ApiOperation(value = "获取指定活动")
+    public RestfulResponse getActivityById(@RequestParam("aId") @ApiParam(value = "活动编号", required = true) String aId,
+                                           HttpServletRequest request) {
         Activity activity = redisHelper.getActivityByAId(aId);
         if (activity == null) {
             return RestfulResponse.fail(404, "不存在该活动");
@@ -137,8 +183,12 @@ public class ActivityController {
 
     /**
      * 获取我加入或创建的活动
+     *
+     * @param request
+     * @return RestfulResponse
      */
     @GetMapping("/get/my")
+    @ApiOperation(value = "获取我加入或创建的活动")
     public RestfulResponse getMyActivity(HttpServletRequest request) {
         // 获取我创建的活动
         String uId = AuthUtil.getUserId(request);

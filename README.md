@@ -26,7 +26,8 @@
 
 #### 一、后端技术概览：
 
-主要通过 Java 实现，支持通过 Docker 快速部署。使用微信云托管部署服务，使用腾讯云COS（或阿里云OSS）存储静态文件，通过 Redis 实现缓存。
+主要通过 Java 实现，支持通过 Docker 快速部署。使用微信云托管部署服务，使用腾讯云COS（或阿里云OSS）存储静态文件，
+通过 Redis 实现缓存，通过 Swagger3 构建 api 文档。
 
 - SpringBoot
 - Docker & Docker-compose
@@ -38,6 +39,7 @@
 - Quartz
 - OkHttp
 - qcloud.cos / aliyun.oss
+- Swagger3
 
 #### 二、前端技术概览：
 
@@ -74,65 +76,7 @@
 
 ![f1](image/framework.png)
 
-**3、JavaScript 中嵌套异步编程：**
-
-我们知道，只有在 async 函数中才能使用 await 字段，而 async 函数总是返回 Promise 对象，如果你需要在 Promise 对象中进行 await 呢？如果直接写，会报错：
-
-```
-await is only valid in async functions and the top level bodies of modules
-```
-
-这是作用域的问题导致的，在 Promise 中处在了另一个作用域中，从而检测不到外层的 async。
-
-但由于可以在 Promise 内调用 async 函数，所以封装一个函数不就好了？如下：
-
-```js
-# 封装的函数
-async function sendAuth(code) {
-  return await app.call({
-    url: '/api/user/auth?code=' + code,
-    method: 'POST',
-  })
-}
-
-# 调用封装的 async 函数
-async function auth(pageUrl = "", redirect = 1) {
-  wx.showLoading({
-    title: "尝试登录..."
-  })
-  return new Promise((resolve, reject) => {
-    wx.login({
-      success(res1) {
-        sendAuth(res1.code).then(
-          res => {
-            if (res.data.code == 200) {
-              wx.hideLoading({
-                success: () => { wx.showToast({ title: '登录成功' }) }
-              })
-              wx.setStorageSync('auth', res.header.auth)
-              if (pageUrl != "") goToPage(pageUrl, redirect)
-              resolve()
-            } else {
-              wx.hideLoading({
-                success: () => { alertFail(`${res.data.msg}`) },
-              })
-              reject()
-            }
-          }
-        )
-      },
-      fail() {
-        wx.hideLoading({
-          success: () => { alertFail("请检查网络") },
-        })
-        reject()
-      }
-    })
-  })
-}
-```
-
-**4、关于后端返回的 json 数据**
+**3、关于后端返回的 json 数据**
 
 对于一个采用驼峰命名法命名的变量，比如 userId，转换后返回前端的 json 属性名是 userId，没有问题。
 
@@ -153,7 +97,7 @@ async function auth(pageUrl = "", redirect = 1) {
 
 一般可以考虑在后端变量命名时，不让第二个字符大写，或者采用 `@JsonProperty("uId")` 进行解决。
 
-**5. 建立适当的索引**
+**4. 建立适当的索引**
 
 有些索引建立了反而会降低效率，比如写多于读的场景：在本项目中，对于一个加入小组的请求，写入到 t_req 表之后， 
 撤销请求操作和处理请求操作都可能是较为频繁的，也就是增删行操作较多，可能导致索引频繁地进行重建。
@@ -173,10 +117,9 @@ async function auth(pageUrl = "", redirect = 1) {
 - 本地静态资源存储位置
 - token 密钥和过期时间（单位：s）
 - redis 基本配置
+- 是否开启 swagger （生产环境下建议关闭）
 
-然后执行 `init.sql` 初始化数据库。
-
-之后，即可开始开发。
+执行 `init.sql` 初始化数据库，之后即可开始开发。
 
 ### 前端开发步骤
 
@@ -214,6 +157,8 @@ that.cloud = new wx.cloud.Cloud({
 ```
 
 之后，即可开始开发。
+
+注：后端 api 地址为 `localhost:端口号/swagger-ui/index.html`
 
 ### 部署步骤
 

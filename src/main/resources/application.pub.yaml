@@ -1,24 +1,27 @@
 spring:
+  # mysql 数据库配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: xxxxx
+    username: root
     password: xxxxx
     url: jdbc:mysql://127.0.0.1:3306/form_team_talent?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
+  # 应用名称
   application:
     name: form-team-talent
+  # 文件上传限制
   servlet:
     multipart:
       max-file-size: 10MB
       max-request-size: 20MB
+  # 本地静态资源存储位置指定
   web:
     resources:
-# 本地静态资源存储位置
       static-locations: xxxxx
+  # redis 数据库配置
   redis:
     database: 5
     host: localhost
     port: 6379
-    #    password:
     timeout: 5000
     jedis:
       pool:
@@ -27,17 +30,20 @@ spring:
         max-active: 1000
         max-wait: 2000
 
-# 用于方便地获取外部静态地址，值等同于web.resources.static-locations中file:（如果有）后面的部分
+
+# 用于方便地获取外部静态地址，值等同于 web.resources.static-locations 中 file:（如果有）后面的部分
 staticPath: xxxxx
 
+# mybatis-plus 数据转换
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
 
+# 应用运行端口
 server:
   port: 8080
 
-# 微信小程序的 appId 和 appSecret
+# 微信小程序的 appId 和 appSecret, 如果只通过 web 端认证则无需编辑
 wx:
   appId: xxxxx
   appSecret: xxxxx
@@ -47,21 +53,23 @@ wx:
 auth:
   jwt:
     secret: xxxxx
-    expire: xxxxx
+    expire: 3600
 
+# 是否使用云存储静态文件
 # 当值为0时，不使用云
 # 当值为1时，使用阿里云对象存储进行文件存储，对应bucket需要绑定域名
 # 当值为2时，使用腾讯云对象存储进行文件存储
-
-enableCloud: 2
-
-# 阿里云对象存储字段，当 enableCloud 为1时需要编辑
-aliAccessKeyId: "xxxxx"
-aliAccessKeySecret: "xxxxx"
-aliBucketName: "xxxxx"
-
+enableCloud: 0
+# 阿里云对象存储字段，当 enableCloud 为 1 时需要编辑
+aliAccessKeyId: xxxxx
+aliAccessKeySecret: xxxxx
+aliBucketName: xxxxx
 # 腾讯云对象存储字段，当 enableCloud 为2时需要编辑
-tcSecretId: "xxxxx"
-tcSecretKey: "xxxxx"
-tcRegion: "xxxxx"
-tcBucketName: "xxxxx"
+tcSecretId: xxxxx
+tcSecretKey: xxxxx
+tcRegion: xxxxx
+tcBucketName: xxxxx
+
+# 是否开启 swagger
+swagger:
+  enable: true # 是否开启 swagger
