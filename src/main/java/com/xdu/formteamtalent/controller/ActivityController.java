@@ -3,6 +3,8 @@ package com.xdu.formteamtalent.controller;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.IdUtil;
+import co.elastic.clients.elasticsearch._types.query_dsl.QueryBuilders;
+import co.elastic.clients.elasticsearch.core.UpdateByQueryRequest;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.xdu.formteamtalent.entity.*;
 import com.xdu.formteamtalent.entity.RestfulResponse;
@@ -14,13 +16,23 @@ import com.xdu.formteamtalent.utils.RedisHelper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.elasticsearch.common.unit.Fuzziness;
+import org.elasticsearch.index.query.MultiMatchQueryBuilder;
+import org.elasticsearch.index.similarity.ScriptedSimilarity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.elasticsearch.client.elc.NativeQuery;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
+import org.springframework.data.elasticsearch.core.query.*;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/activity")
@@ -33,9 +45,8 @@ public class ActivityController {
     private final UATService uatService;
     private final UserService userService;
     private final ActivityMapper activityMapper;
-
     private final RedisHelper redisHelper;
-
+    private final ElasticsearchOperations elasticsearchOperations;
 
     @Value("${enableCloud}")
     private Integer enableCloud;
@@ -47,7 +58,7 @@ public class ActivityController {
                               UATService uatService,
                               UserService userService,
                               ActivityMapper activityMapper,
-                              RedisHelper redisHelper) {
+                              RedisHelper redisHelper, ElasticsearchOperations elasticsearchOperations) {
         this.joinRequestService = joinRequestService;
         this.teamService = teamService;
         this.activityService = activityService;
@@ -55,6 +66,7 @@ public class ActivityController {
         this.userService = userService;
         this.activityMapper = activityMapper;
         this.redisHelper = redisHelper;
+        this.elasticsearchOperations = elasticsearchOperations;
     }
 
 
@@ -89,6 +101,7 @@ public class ActivityController {
         activity.setAQrcodePath(visitPath);
         activity.setStatus(1);
         activityService.save(activity);
+        elasticsearchOperations.save(activity);
         return RestfulResponse.success(activity);
     }
 
@@ -115,6 +128,7 @@ public class ActivityController {
             teamService.remove(new QueryWrapper<Team>().eq("a_id", aId));
             activityService.removeById(aId);
             redisHelper.removeActivityCacheByAId(aId);
+            elasticsearchOperations.delete(aId, Activity.class);
             return RestfulResponse.success();
         } else {
             return RestfulResponse.fail(403, "无权限删除该活动");
@@ -132,10 +146,14 @@ public class ActivityController {
     @ApiOperation(value = "更新活动")
     public RestfulResponse updateActivity(HttpServletRequest request,
                                           @RequestBody @ApiParam(value = "活动", required = true) Activity activity) {
-        Activity activity1 = redisHelper.getActivityByAId(activity.getAId());
-        if (activity1 != null && Objects.equals(activity1.getAHolderId(), AuthUtil.getUserId(request))) {
+        Activity dbActivity = redisHelper.getActivityByAId(activity.getAId());
+        if (dbActivity != null && Objects.equals(dbActivity.getAHolderId(), AuthUtil.getUserId(request))) {
             activityService.updateById(activity);
             redisHelper.removeActivityCacheByAId(activity.getAId());
+            if (activity.getAName() != null) {
+                dbActivity.setAName(activity.getAName());
+                elasticsearchOperations.save(dbActivity);
+            }
             return RestfulResponse.success();
         } else {
             return RestfulResponse.fail(403, "无权限修改该活动");
@@ -201,5 +219,26 @@ public class ActivityController {
             set.add(activity);
         }
         return RestfulResponse.success(set);
+    }
+
+    /**
+     * 通过名字搜索活动
+     *
+     * @return RestfulResponse
+     */
+    @GetMapping("/search/{name}")
+    @ApiOperation(value = "通过名字搜索活动")
+    public RestfulResponse searchActivityByName(@PathVariable String name) {
+        Query query = NativeQuery.builder()
+                .withQuery(q -> q
+                        .fuzzy(m -> m
+                                .field("aName")
+                                .value(name)
+                        )
+                )
+                .build();
+        SearchHits<Activity> searchHits = elasticsearchOperations.search(query, Activity.class);
+        ArrayList<Activity> activities = new ArrayList<>(searchHits.getSearchHits().stream().map(hit -> hit.getContent()).collect(Collectors.toList()));
+        return RestfulResponse.success(activities);
     }
 }

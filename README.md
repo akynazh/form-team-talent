@@ -27,12 +27,12 @@
 #### 一、后端技术概览：
 
 主要通过 Java 实现，支持通过 Docker 快速部署。使用微信云托管部署服务，使用腾讯云COS（或阿里云OSS）存储静态文件，
-通过 Redis 实现缓存，通过 Swagger3 构建 api 文档。
+通过 Redis 实现缓存，通过 Swagger3 构建 api 文档，通过 ElasticSearch 实现活动搜索功能。
 
-- SpringBoot
+- SpringBoot 2.7.5
 - Docker & Docker-compose
-- MySQL
-- Redis
+- MySQL 5.7.35
+- Redis 3.0.354
 - MybatisPlus
 - Hutool
 - JWT
@@ -40,6 +40,7 @@
 - OkHttp
 - qcloud.cos / aliyun.oss
 - Swagger3
+- ElasticSearch 7.17.3
 
 #### 二、前端技术概览：
 
@@ -102,8 +103,41 @@
 有些索引建立了反而会降低效率，比如写多于读的场景：在本项目中，对于一个加入小组的请求，写入到 t_req 表之后， 
 撤销请求操作和处理请求操作都可能是较为频繁的，也就是增删行操作较多，可能导致索引频繁地进行重建。
 
-在查询用户所加入的小组时，可以建立联合索引。由于某个小组隶属于某个活动，在 t_uat 表中，可以将用户编号，活动编号，小组编号（u_id, a_id, t_id）三者
-建立一个联合索引，这样可以较好地提高效率。
+这里对 t_uat 表索引的设计进行说明。
+
+当用户获取自己所加入的活动或小组时，需要根据用户 id 进行查询，所以可以建立用户 id 的索引。
+
+当一个用户申请加入某个小组时，需要查询用户是否已经加入了该小组，但由于用户不能加入同一活动下的其它小组，所以只需要根据用户 id，活动 id 进行查询即可，可以用这两者建立一个联合索引：`CREATE INDEX t_uat_idx_join ON t_uat(a_id, u_id);`
+
+同时，有了这个索引，当要查询某个活动所含小组时，无需再建立 活动 id 的索引，因为 mysql 当前使用默认引擎为 innodb，索引底层数据结构为 B+ 树，根据 B+ 树的最左匹配原则，使用该索引可以命中活动 id 对应的条目。
+
+### 数据库设计
+
+#### Mysql
+
+![ER](./image/db_er.png)
+
+* t_user：用户表，记录用户基本信息，其中，用户 id 为主键。
+* t_activity：活动表，记录活动基本信息，其中，活动 id 为主键，活动创始人 id 外键约束于 t_user。
+* t_team：小组表，记录小组基本信息，其中，小组 id 为主键，隶属活动 id 外键约束于 t_activity，小组创始人 id 外键约束于 t_user。
+* t_uat：参与情况表，记录用户加入小组（活动）情况，其中，id 为主键，用户 id 外键约束于 t_user，活动 id 外键约束于 t_activity，小组 id 外键约束于 t_team。
+* t_req：请求表，记录用户所发送请求，其中，请求 id 为主键，发送者 id 和 目标者 id 外键约束于 t_user，请求对应活动 id 和小组 id 外键约束于 t_activity 和 t_team。
+
+#### Redis
+
+本项目对用户，活动，小组，请求，参与情况等条目均做了缓存优化。
+
+以用户为例，将用户信息进行缓存，键为 “user:{uId}”，值为经过 Json 序列化的对象字串。
+
+用户每次获取个人信息，都会首先访问 Redis 缓存，如果命中缓存，则将值反序列化后得到对象信息，直接返回。如果用户更新个人信息，则直接删除缓存。
+
+#### ElasticSearch
+
+本项目针对活动实现了搜索功能，用户可以根据活动名进行模糊搜索活动。
+
+索引名设置为 activity，文档 _id 设置为活动 id。
+
+在进行新增活动时，同时将结果插入到 ElasticSearch 中，删除活动时则同时删除 ElasticSearch。而在更新活动时，仅当活动名发生更改时，对 ElasticSearch 中的对应活动进行更改。查询活动时，将查询所有活动名中含有对应查询字段的活动。
 
 ### 后端开发步骤
 
@@ -117,6 +151,7 @@
 - 本地静态资源存储位置
 - token 密钥和过期时间（单位：s）
 - redis 基本配置
+- elasticsearch 基本配置
 - 是否开启 swagger （生产环境下建议关闭）
 
 执行 `init.sql` 初始化数据库，之后即可开始开发。
@@ -164,36 +199,9 @@ that.cloud = new wx.cloud.Cloud({
 
 #### 方法1、通过 docker 部署
 
-首先， docker 拉取 `mysql:5.7`
+将 `docker-compose-pub.yaml` 重命名为 `docker-compose.yaml`，然后编辑数据库密码。
 
-接着，编辑配置文件中 mysql 地址如下：
-
-```
-url: jdbc:mysql://mysqldb/form_team_talent?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
-```
-
-接着，编辑 `publish.sh` 中数据库密码（默认指定的是 root 的密码）。
-
-最后，运行 `publish.sh -u`（-u 字段是为了重新生成 jar包），然后加入 mysql 容器运行数据库初始化脚本 `init.sql` 即可。
-
-#### 方法2、通过 docker-compose 部署
-
-首先，由于需要挂载文件卷，用于容器与主机之间共享文件，选用linux主机上的 `/docker/**` 作为共享点。
-
-- /docker/mysql/data:/var/lib/mysql # 数据挂载
-- /docker/mysql/conf:/etc/mysql/conf.d # 配置挂载
-- /docker/mysql/init:/docker-entrypoint-initdb.d # 初始化sql挂载
-- /docker/app/form-team-talent:/docker/app/form-team-talent # 存放静态文件，jar包，外部配置等
-- /docker/redis/data:/data # redis 数据挂载
-- /docker/redis/redis.conf:/usr/local/etc/redis/redis.conf # redis 配置文件挂载
-
-注：挂载规则是{主机目录}:{容器目录}。
-
-创建完以上对应目录后：
-
-将 `init.sql` 放到 `/docker/mysql/init` 目录下。
-
-将 `docker-compose-pub.yaml` 重命名为 `docker-compose.yaml`，然后编辑数据库密码即可（默认指定的是 root 的密码）。
+创建 `docker-compose.yaml` 所涉及到的挂载卷目录，并将 `init.sql` 放到 `/docker/mysql/init` 目录下。
 
 接着，编辑配置文件中 mysql 地址如下：
 
@@ -203,7 +211,7 @@ url: jdbc:mysql://mysqldb/form_team_talent?serverTimezone=UTC&useUnicode=true&ch
 
 最后，执行 `./publish.sh -u` （-u 字段是为了重新生成 jar包）。
 
-#### 方法3、通过微信云托管部署
+#### 方法2、通过微信云托管部署
 
 在数据库界面创建账号（对应数据库用户和密码），进入数据库管理界面，运行数据库初始化脚本 `init.sql` 即可。
 
@@ -213,9 +221,9 @@ url: jdbc:mysql://mysqldb/form_team_talent?serverTimezone=UTC&useUnicode=true&ch
 url: jdbc:mysql://数据库内网地址/form_team_talent?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
 ```
 
-重新生成 jar 包。
+接着进行 ElasticSearch 和 Redis 服务的部署。
 
-最后，进入服务界面，创建服务，将jar包上传并部署（或采用 docker 的方式）。
+最后，重新生成 jar 包，进入服务界面，创建服务，将jar包上传并部署。
 
 <h3 id="show">小程序展示</h3>
 

@@ -66,10 +66,10 @@ public class JoinRequestController {
         // 查看是否已经加入了
         QueryWrapper<UAT> wrapper = new QueryWrapper<>();
         wrapper.eq("a_id", joinRequest.getAId());
-        wrapper.eq("t_id", joinRequest.getTId());
+//        wrapper.eq("t_id", joinRequest.getTId());
         wrapper.eq("u_id", userId);
         if (uatService.getOne(wrapper) != null) {
-            return RestfulResponse.fail(403, "不可重复加入哦");
+            return RestfulResponse.fail(403, "已经加入该小组或加入了其它小组");
         }
         // 获取用户和小组详细信息
         User user = redisHelper.getUserByUId(userId);
@@ -113,10 +113,10 @@ public class JoinRequestController {
             if (agree == 1) {
                 QueryWrapper<UAT> wrapper = new QueryWrapper<>();
                 wrapper.eq("u_id", one.getFromId());
-                wrapper.eq("t_id", one.getTId());
+//                wrapper.eq("t_id", one.getTId());
                 wrapper.eq("a_id", one.getAId());
                 if (uatService.getOne(wrapper) != null) {
-                    return RestfulResponse.fail(404, "不可重复加入");
+                    return RestfulResponse.fail(404, "已经加入该小组或加入了其它小组");
                 }
                 UAT uat = new UAT();
                 uat.setUId(one.getFromId());

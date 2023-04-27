@@ -68,10 +68,8 @@ CREATE TABLE t_uat (
    FOREIGN KEY (t_id) REFERENCES t_team(t_id)
 );
 ALTER TABLE t_uat CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
-CREATE INDEX t_uat_idx_join ON t_uat(a_id, t_id, u_id);
-CREATE INDEX t_uat_idx_a_id ON t_uat(a_id);
-CREATE INDEX  t_uat_idx_t_id ON t_uat(t_id);
-CREATE INDEX t_uat_idx_leave_team ON t_uat(t_id, u_id);
+CREATE INDEX t_uat_idx_join ON t_uat(a_id, u_id);
+CREATE INDEX  t_uat_idx_t_id ON t_uat(u_id);
 
 DROP TABLE IF EXISTS t_req;
 CREATE TABLE t_req (
@@ -93,8 +91,5 @@ CREATE TABLE t_req (
     FOREIGN KEY (t_id) REFERENCES t_team(t_id)
 );
 ALTER TABLE t_req CONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;
-CREATE INDEX t_req_idx_new_req ON t_req(from_id, to_id, a_id, t_id);
-CREATE INDEX t_req_idx_a_id ON t_req(a_id);
-CREATE INDEX t_req_idx_t_id ON t_req(t_id);
 CREATE INDEX  t_req_idx_from_id ON t_req(from_id);
 CREATE INDEX  t_req_idx_to_id ON t_req(to_id);

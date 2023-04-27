@@ -10,6 +10,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.io.Serializable;
 
@@ -19,7 +23,9 @@ import java.io.Serializable;
 @AllArgsConstructor
 @TableName("t_activity")
 @ApiModel("活动")
+@Document(indexName = "activity")
 public class Activity implements Serializable {
+    @Id
     @TableId
     @JsonProperty("aId")
     @ApiModelProperty("活动编号")
@@ -27,6 +33,7 @@ public class Activity implements Serializable {
 
     @JsonProperty("aName")
     @ApiModelProperty("活动名称")
+    @Field(type = FieldType.Text)
     private String aName;
 
     @JsonProperty("aHolderId")
@@ -35,10 +42,11 @@ public class Activity implements Serializable {
 
     @JsonProperty("aDesc")
     @ApiModelProperty("活动描述")
+    @Field(type = FieldType.Text)
     private String aDesc;
 
     @JsonProperty("aEndDate")
-    @ApiModelProperty("活动截止时间")
+    @ApiModelProperty("活动截止时间 | 毫秒级时间戳")
     private String aEndDate;
 
     @JsonProperty("aIsPublic")
@@ -50,6 +58,6 @@ public class Activity implements Serializable {
     private String aQrcodePath;
 
     @JsonProperty("status")
-    @ApiModelProperty("活动当前状态")
+    @ApiModelProperty("活动当前状态, 1 进行中 | 0 已结束")
     private Integer status;
 }

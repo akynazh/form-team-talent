@@ -72,11 +72,17 @@ public class UserController {
         if (user.getUId() == null || user.getUPwd() == null) {
             return RestfulResponse.fail(404, "缺失字段值");
         }
-        if (redisHelper.getUserByUId(user.getUId()) == null) {
+        User dbUser = redisHelper.getUserByUId(user.getUId());
+        if (dbUser == null) {
             log.info("新注册用户: " + user);
             userService.save(user);
+        } else {
+            if (!dbUser.getUPwd().equals(user.getUPwd())) {
+                log.info("密码错误");
+                return RestfulResponse.fail(403, "密码错误");
+            }
         }
-        String token = JwtUtil.createToken(user.getUPwd());
+        String token = JwtUtil.createToken(user.getUId());
         resp.setHeader("auth", token);
         resp.setHeader("Access-Control-Expose-Headers", "auth");
         return RestfulResponse.success();
@@ -165,6 +171,7 @@ public class UserController {
     @GetMapping("/get/info")
     @ApiOperation(value = "获取用户信息")
     public RestfulResponse getUserInfo(HttpServletRequest request) {
+        System.out.println(request.toString());
         return RestfulResponse.success(redisHelper.getUserByUId(AuthUtil.getUserId(request)));
     }
 }

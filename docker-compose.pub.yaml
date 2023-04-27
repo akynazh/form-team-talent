@@ -26,11 +26,25 @@ services:
     volumes:
       - /docker/redis/data:/data
       - /docker/redis/redis.conf:/usr/local/etc/redis/redis.conf
+  elasticsearch:
+    image: elasticsearch:7.17.3
+    container_name: elasticsearch
+    user: root
+    environment:
+      - "cluster.name=elasticsearch" #设置集群名称为elasticsearch
+      - "discovery.type=single-node" #以单一节点模式启动
+      - "ES_JAVA_OPTS=-Xms512m -Xmx1024m" #设置使用jvm内存大小
+    volumes:
+      - /docker/elasticsearch/plugins:/usr/share/elasticsearch/plugins #插件文件挂载
+      - /docker/elasticsearch/data:/usr/share/elasticsearch/data #数据文件挂载
+    ports:
+      - 9200:9200
+      - 9300:9300
   form-team-talent:
     container_name: form-team-talent
     build:
       context: .
-      dockerfile: Dockerfile_dkc
+      dockerfile: Dockerfile
     volumes:
       - /docker/app/form-team-talent:/docker/app/form-team-talent
     depends_on:

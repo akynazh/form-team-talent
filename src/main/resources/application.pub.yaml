@@ -3,7 +3,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: xxxxx
+    password: ?????
     url: jdbc:mysql://127.0.0.1:3306/form_team_talent?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8
   # 应用名称
   application:
@@ -16,7 +16,7 @@ spring:
   # 本地静态资源存储位置指定
   web:
     resources:
-      static-locations: xxxxx
+      static-locations: ?????
   # redis 数据库配置
   redis:
     database: 5
@@ -29,10 +29,14 @@ spring:
         min-idle: 50
         max-active: 1000
         max-wait: 2000
-
+  # elasticsearch 配置
+  elasticsearch:
+    uris: "http://localhost:9200"
+    connection-timeout: 1
+    socket-timeout: 30
 
 # 用于方便地获取外部静态地址，值等同于 web.resources.static-locations 中 file:（如果有）后面的部分
-staticPath: xxxxx
+staticPath: ?????
 
 # mybatis-plus 数据转换
 mybatis-plus:
@@ -45,15 +49,15 @@ server:
 
 # 微信小程序的 appId 和 appSecret, 如果只通过 web 端认证则无需编辑
 wx:
-  appId: xxxxx
-  appSecret: xxxxx
+  appId: ?????
+  appSecret: ?????
   getOpenIdUrl: https://api.weixin.qq.com/sns/jscode2session
 
 # token 密钥和过期时间（单位：s）
 auth:
   jwt:
-    secret: xxxxx
-    expire: 3600
+    secret: ?????
+    expire: 604800
 
 # 是否使用云存储静态文件
 # 当值为0时，不使用云
@@ -61,14 +65,14 @@ auth:
 # 当值为2时，使用腾讯云对象存储进行文件存储
 enableCloud: 0
 # 阿里云对象存储字段，当 enableCloud 为 1 时需要编辑
-aliAccessKeyId: xxxxx
-aliAccessKeySecret: xxxxx
-aliBucketName: xxxxx
+aliAccessKeyId: ?????
+aliAccessKeySecret: ?????
+aliBucketName: ?????
 # 腾讯云对象存储字段，当 enableCloud 为2时需要编辑
-tcSecretId: xxxxx
-tcSecretKey: xxxxx
-tcRegion: xxxxx
-tcBucketName: xxxxx
+tcSecretId: ?????
+tcSecretKey: ?????
+tcRegion: ?????
+tcBucketName: ?????
 
 # 是否开启 swagger
 swagger:

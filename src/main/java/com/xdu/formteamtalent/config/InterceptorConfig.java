@@ -24,6 +24,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/api/user/auth")
                 .excludePathPatterns("/api/user/authwx")
                 .excludePathPatterns("/api/activity/get/pub")
+                .excludePathPatterns("/api/activity/search/**")
                 .excludePathPatterns("/api/error/**")
                 // 二维码访问
                 .excludePathPatterns("/qrcode/**")
