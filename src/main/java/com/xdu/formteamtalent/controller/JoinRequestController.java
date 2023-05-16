@@ -59,14 +59,14 @@ public class JoinRequestController {
     @ApiOperation(value = "发送请求")
     public RestfulResponse sendRequest(@RequestBody @ApiParam(value = "请求", required = true) JoinRequest joinRequest, HttpServletRequest request) {
         String requestId = joinRequest.getId(); // 请求 id 需要在前端根据 from_id to_id a_id t_id 生成，保证唯一性
-        if (redisHelper.checkReqExistsByReqId(requestId)) {
+        if (redisHelper.getJoinReqByReqId(requestId) != null) {
             return RestfulResponse.fail(403, "请勿重复操作");
         }
         String userId = AuthUtil.getUserId(request);
         // 查看是否已经加入了
         QueryWrapper<UAT> wrapper = new QueryWrapper<>();
         wrapper.eq("a_id", joinRequest.getAId());
-//        wrapper.eq("t_id", joinRequest.getTId());
+        wrapper.eq("t_id", joinRequest.getTId());
         wrapper.eq("u_id", userId);
         if (uatService.getOne(wrapper) != null) {
             return RestfulResponse.fail(403, "已经加入该小组或加入了其它小组");
@@ -113,7 +113,7 @@ public class JoinRequestController {
             if (agree == 1) {
                 QueryWrapper<UAT> wrapper = new QueryWrapper<>();
                 wrapper.eq("u_id", one.getFromId());
-//                wrapper.eq("t_id", one.getTId());
+                wrapper.eq("t_id", one.getTId());
                 wrapper.eq("a_id", one.getAId());
                 if (uatService.getOne(wrapper) != null) {
                     return RestfulResponse.fail(404, "已经加入该小组或加入了其它小组");
@@ -127,6 +127,7 @@ public class JoinRequestController {
                 Team team = teamService.getOne(new QueryWrapper<Team>().eq("t_id", one.getTId()));
                 team.setTCount(team.getTCount() + 1);
                 teamService.updateById(team);
+                redisHelper.removeTeamCacheByTId(team.getTId());
             }
             redisHelper.removeReqCacheByReqId(one.getId());
             return RestfulResponse.success();

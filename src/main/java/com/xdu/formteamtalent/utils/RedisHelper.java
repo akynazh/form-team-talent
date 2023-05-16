@@ -122,10 +122,6 @@ public class RedisHelper {
         redisTemplate.delete(REQ_PRE + reqId);
     }
 
-    public boolean checkReqExistsByReqId(String reqId) {
-        return redisTemplate.opsForValue().get(REQ_PRE + reqId) != null;
-    }
-
     public UAT getUATByIds(String aId, String tId, String uId) {
         String uatId = UAT_PRE + aId + tId + uId;
         String uatStr = redisTemplate.opsForValue().get(uatId);

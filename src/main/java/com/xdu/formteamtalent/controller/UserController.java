@@ -60,7 +60,7 @@ public class UserController {
     @PostMapping("/auth")
     @ApiOperation(value = "web 端验证用户", notes = "验证用户, 如果携带了 token 则验证 token, 否则验证请求体中的用户 id 和密码")
     public RestfulResponse auth(@RequestBody @ApiParam(value = "用户") User user,
-                                @RequestParam(value = "check", defaultValue = "") @ApiParam(value = "是否携带 token, 1 是 | 0 否", required = true) String check,
+                                @RequestParam(value = "check", defaultValue = "0") @ApiParam(value = "是否携带 token, 1 是 | 0 否, 默认为否", required = true) String check,
                                 HttpServletRequest req,
                                 HttpServletResponse resp) {
         if (check.equals("1")) {

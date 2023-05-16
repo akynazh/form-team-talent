@@ -1,0 +1,462 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "form_team_talent",
+    "dateExported": "2023-05-16T09:14:22.346Z",
+    "version": "1.1",
+    "folders": [
+        {
+            "_id": "a21c8b4f-1843-407c-9cab-5aeececcccc3",
+            "name": "user",
+            "containerId": "",
+            "created": "2023-04-24T12:23:12.871Z",
+            "sortNum": 10000,
+            "settings": {}
+        },
+        {
+            "_id": "1df750c5-90d0-4897-9a28-d92bd92a65c5",
+            "name": "activity",
+            "containerId": "",
+            "created": "2023-04-24T12:23:24.847Z",
+            "sortNum": 20000,
+            "settings": {}
+        },
+        {
+            "_id": "1a09dc09-1d50-49c5-b0c9-d33a6aefc5dd",
+            "name": "team",
+            "containerId": "",
+            "created": "2023-05-14T15:37:20.516Z",
+            "sortNum": 30000
+        },
+        {
+            "_id": "0d6adbfd-5bb4-427a-989c-82ef37c0c222",
+            "name": "req",
+            "containerId": "",
+            "created": "2023-05-14T15:37:31.344Z",
+            "sortNum": 40000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "3a1599ab-5c1d-4bc5-8f2c-86563635a224",
+            "colId": "470755c1-8a96-41ba-9b4a-0b8dd591ed9f",
+            "containerId": "a21c8b4f-1843-407c-9cab-5aeececcccc3",
+            "name": "auth_id_pwd",
+            "url": "/api/user/auth",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-04-09T12:50:54.910Z",
+            "modified": "2023-05-16T08:54:16.358Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"uId\": \"testtt\",\n  \"uPwd\": \"658766\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "49385ddf-9555-4940-97c7-b06e00966765",
+            "colId": "470755c1-8a96-41ba-9b4a-0b8dd591ed9f",
+            "containerId": "1df750c5-90d0-4897-9a28-d92bd92a65c5",
+            "name": "add_activity",
+            "url": "/api/activity/add",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-04-24T12:21:52.750Z",
+            "modified": "2023-05-16T08:41:37.462Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"aDesc\": \"test5\",\n  \"aEndDate\": \"1782539630000\",\n  \"aHolderId\": \"akynazh@qq.com\",\n  \"aId\": \"\",\n  \"aIsPublic\": 1,\n  \"aName\": \"烤全猪活动1223\",\n  \"aQrcodePath\": \"\",\n  \"status\": 1\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "1b4b40a0-b82b-4fd4-8960-c9e0c1c34db7",
+            "colId": "470755c1-8a96-41ba-9b4a-0b8dd591ed9f",
+            "containerId": "a21c8b4f-1843-407c-9cab-5aeececcccc3",
+            "name": "auth_token",
+            "url": "/api/user/auth?check=1",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-04-09T12:53:04.641Z",
+            "modified": "2023-05-16T08:30:12.099Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "check",
+                    "value": "1",
+                    "isPath": false
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "108abded-b44c-4119-a45a-444a5feb64dd",
+            "colId": "470755c1-8a96-41ba-9b4a-0b8dd591ed9f",
+            "containerId": "1df750c5-90d0-4897-9a28-d92bd92a65c5",
+            "name": "remove_activity",
+            "url": "/api/activity/remove?aId=58b2061ed8b14b53beca3e45b230fb54",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-04-24T16:18:47.399Z",
+            "modified": "2023-05-16T08:39:51.052Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "aId",
+                    "value": "58b2061ed8b14b53beca3e45b230fb54",
+                    "isPath": false
+                }
+            ],
+            "tests": []
+        },
+        {
+            "_id": "372a57d8-426f-4920-98bb-241876e7f50d",
+            "colId": "470755c1-8a96-41ba-9b4a-0b8dd591ed9f",
+            "containerId": "1df750c5-90d0-4897-9a28-d92bd92a65c5",
+            "name": "search_activity",
+            "url": "/api/activity/search/猪",
+            "method": "GET",
+            "sortNum": 40000,
+            "created": "2023-04-25T03:15:10.750Z",
+            "modified": "2023-05-16T08:39:26.612Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "f2363fd6-9438-4816-b65d-fa6005a3a4ef",
+            "colId": "470755c1-8a96-41ba-9b4a-0b8dd591ed9f",
+            "containerId": "1df750c5-90d0-4897-9a28-d92bd92a65c5",
+            "name": "update_activity",
+            "url": "/api/activity/update",
+            "method": "POST",
+            "sortNum": 50000,
+            "created": "2023-04-27T03:01:36.664Z",
+            "modified": "2023-05-16T08:40:29.495Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"aId\": \"442f78bf674840458b22452a50ab9aa0\",\n  \"aName\": \"updateTest\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "e2a8dd6c-35c5-410a-89b6-4cc7cf240c49",
+            "colId": "470755c1-8a96-41ba-9b4a-0b8dd591ed9f",
+            "containerId": "1df750c5-90d0-4897-9a28-d92bd92a65c5",
+            "name": "get_activity_by_id",
+            "url": "/api/activity/get/id?aId=76a262aa879148adba156621d70ce0b4",
+            "method": "GET",
+            "sortNum": 60000,
+            "created": "2023-04-27T03:03:08.609Z",
+            "modified": "2023-05-16T08:34:41.905Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "aId",
+                    "value": "76a262aa879148adba156621d70ce0b4",
+                    "isPath": false
+                }
+            ],
+            "tests": []
+        },
+        {
+            "_id": "53fdb5ea-83fb-4492-962d-4e68c5d6c339",
+            "colId": "470755c1-8a96-41ba-9b4a-0b8dd591ed9f",
+            "containerId": "a21c8b4f-1843-407c-9cab-5aeececcccc3",
+            "name": "user_update_info",
+            "url": "/api/user/update",
+            "method": "POST",
+            "sortNum": 70000,
+            "created": "2023-05-16T08:28:06.755Z",
+            "modified": "2023-05-16T08:32:15.229Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n    \"uName\": \"peter\",\n    \"uStuNum\": \"20009123safkjsad\",\n    \"uSchool\": \"xdu\",\n    \"uSex\": \"maie\",\n    \"uMajor\": \"cs\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "6f9b2762-d261-48dc-bd2b-7277f3a75a53",
+            "colId": "470755c1-8a96-41ba-9b4a-0b8dd591ed9f",
+            "containerId": "a21c8b4f-1843-407c-9cab-5aeececcccc3",
+            "name": "get_user_info",
+            "url": "/api/user/get/info",
+            "method": "GET",
+            "sortNum": 80000,
+            "created": "2023-05-16T08:29:08.323Z",
+            "modified": "2023-05-16T08:32:21.868Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "5488b118-0754-4fb5-996a-b1a55d514c54",
+            "colId": "470755c1-8a96-41ba-9b4a-0b8dd591ed9f",
+            "containerId": "a21c8b4f-1843-407c-9cab-5aeececcccc3",
+            "name": "leave_team",
+            "url": "/api/user/leave/team?tId=testttt",
+            "method": "POST",
+            "sortNum": 90000,
+            "created": "2023-05-16T08:32:38.429Z",
+            "modified": "2023-05-16T08:33:19.299Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "tId",
+                    "value": "testttt",
+                    "isPath": false
+                }
+            ],
+            "tests": []
+        },
+        {
+            "_id": "51d08782-b9a2-494d-b76d-f3a829c3fdf9",
+            "colId": "470755c1-8a96-41ba-9b4a-0b8dd591ed9f",
+            "containerId": "1df750c5-90d0-4897-9a28-d92bd92a65c5",
+            "name": "get_my_activities",
+            "url": "/api/activity/get/my",
+            "method": "GET",
+            "sortNum": 100000,
+            "created": "2023-05-16T08:34:59.393Z",
+            "modified": "2023-05-16T08:35:08.189Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "25403c85-4386-4760-8ec3-ea1f540fb5f1",
+            "colId": "470755c1-8a96-41ba-9b4a-0b8dd591ed9f",
+            "containerId": "1df750c5-90d0-4897-9a28-d92bd92a65c5",
+            "name": "get_public_activities",
+            "url": "/api/activity/get/pub",
+            "method": "GET",
+            "sortNum": 120000,
+            "created": "2023-05-16T08:36:52.545Z",
+            "modified": "2023-05-16T08:36:59.697Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "11261858-968d-4baa-8730-b3ebaf0c6080",
+            "colId": "470755c1-8a96-41ba-9b4a-0b8dd591ed9f",
+            "containerId": "1a09dc09-1d50-49c5-b0c9-d33a6aefc5dd",
+            "name": "add_team",
+            "url": "/api/team/add",
+            "method": "POST",
+            "sortNum": 130000,
+            "created": "2023-05-16T08:40:46.958Z",
+            "modified": "2023-05-16T08:54:56.264Z",
+            "headers": [
+                {
+                    "name": "auth",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dHQiLCJpYXQiOjE2ODQyMjcyNTYsImV4cCI6MTY4NDgzMjA1Nn0.IPJAR6DmbXyripRMry-Wxct_mTU-GAIXg-i0HTryw6s "
+                }
+            ],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\r\n  \"aId\": \"d29e6d27c9474c9d88eb48918a565bf7\",\r\n  \"tCount\": 3,\r\n  \"tDesc\": \"烤猪小组886\",\r\n  \"tId\": \"\",\r\n  \"tLeaderId\": \"\",\r\n  \"tName\": \"烤猪小组886\",\r\n  \"tTotal\": 0\r\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "1b5ee73f-6128-4458-814e-34da24da4720",
+            "colId": "470755c1-8a96-41ba-9b4a-0b8dd591ed9f",
+            "containerId": "1a09dc09-1d50-49c5-b0c9-d33a6aefc5dd",
+            "name": "get_team_by_id",
+            "url": "/api/team/get/id?tId=c10b3d4f49a54fdfa23ba06c33a55b84",
+            "method": "GET",
+            "sortNum": 140000,
+            "created": "2023-05-16T08:42:59.567Z",
+            "modified": "2023-05-16T08:43:29.888Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "tId",
+                    "value": "c10b3d4f49a54fdfa23ba06c33a55b84",
+                    "isPath": false
+                }
+            ],
+            "tests": []
+        },
+        {
+            "_id": "f94a4569-6ba1-4381-a63f-bea696ef5bad",
+            "colId": "470755c1-8a96-41ba-9b4a-0b8dd591ed9f",
+            "containerId": "1a09dc09-1d50-49c5-b0c9-d33a6aefc5dd",
+            "name": "get_team_by_aId",
+            "url": "/api/team/get/byAId?aId=d29e6d27c9474c9d88eb48918a565bf7",
+            "method": "GET",
+            "sortNum": 150000,
+            "created": "2023-05-16T08:43:56.495Z",
+            "modified": "2023-05-16T08:44:10.043Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "aId",
+                    "value": "d29e6d27c9474c9d88eb48918a565bf7",
+                    "isPath": false
+                }
+            ],
+            "tests": []
+        },
+        {
+            "_id": "06e16fb8-b815-44c8-84a8-5ce067f645a5",
+            "colId": "470755c1-8a96-41ba-9b4a-0b8dd591ed9f",
+            "containerId": "1a09dc09-1d50-49c5-b0c9-d33a6aefc5dd",
+            "name": "get_my_teams",
+            "url": "/api/team/get/my",
+            "method": "GET",
+            "sortNum": 160000,
+            "created": "2023-05-16T08:44:48.647Z",
+            "modified": "2023-05-16T08:44:56.412Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "ab35a8dc-f920-4d39-9a3a-5281788b5fa6",
+            "colId": "470755c1-8a96-41ba-9b4a-0b8dd591ed9f",
+            "containerId": "1a09dc09-1d50-49c5-b0c9-d33a6aefc5dd",
+            "name": "remove_team",
+            "url": "/api/team/remove?tId=a2e91670779e4801b95d1561dcd606b4",
+            "method": "POST",
+            "sortNum": 170000,
+            "created": "2023-05-16T08:45:09.086Z",
+            "modified": "2023-05-16T08:45:34.071Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "tId",
+                    "value": "a2e91670779e4801b95d1561dcd606b4",
+                    "isPath": false
+                }
+            ],
+            "tests": []
+        },
+        {
+            "_id": "ac2ea9ce-97df-4d3d-a915-88b9d592f142",
+            "colId": "470755c1-8a96-41ba-9b4a-0b8dd591ed9f",
+            "containerId": "1a09dc09-1d50-49c5-b0c9-d33a6aefc5dd",
+            "name": "update_team",
+            "url": "/api/team/update",
+            "method": "POST",
+            "sortNum": 180000,
+            "created": "2023-05-16T08:45:48.528Z",
+            "modified": "2023-05-16T08:47:50.529Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\r\n  \"aId\": \"d29e6d27c9474c9d88eb48918a565bf7\",\r\n  \"tId\": \"c10b3d4f49a54fdfa23ba06c33a55b84\",\r\n  \"tDesc\": \"烤猪烤猪\",\r\n  \"tName\": \"烤猪小组369\"\r\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "a69cd6d8-9381-4710-a2ad-f5e5fc27ab94",
+            "colId": "470755c1-8a96-41ba-9b4a-0b8dd591ed9f",
+            "containerId": "0d6adbfd-5bb4-427a-989c-82ef37c0c222",
+            "name": "get_my_req",
+            "url": "/api/req/get",
+            "method": "GET",
+            "sortNum": 190000,
+            "created": "2023-05-16T08:51:21.460Z",
+            "modified": "2023-05-16T08:51:24.306Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "0a1a6a52-bc3d-4486-84fa-bcb106161a1b",
+            "colId": "470755c1-8a96-41ba-9b4a-0b8dd591ed9f",
+            "containerId": "0d6adbfd-5bb4-427a-989c-82ef37c0c222",
+            "name": "send_req",
+            "url": "/api/req/send",
+            "method": "POST",
+            "sortNum": 200000,
+            "created": "2023-05-16T08:51:38.799Z",
+            "modified": "2023-05-16T09:01:24.572Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\r\n  \"aId\": \"d29e6d27c9474c9d88eb48918a565bf7\",\r\n  \"content\": \"请求加入该小组, 球球了~\",\r\n  \"id\": \"test1\",\r\n  \"tId\": \"2c4814e653f144d5ada0236a65b41de0\"\r\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "48ef34ff-bfe8-4e51-bbaf-8282e6f8048c",
+            "colId": "470755c1-8a96-41ba-9b4a-0b8dd591ed9f",
+            "containerId": "0d6adbfd-5bb4-427a-989c-82ef37c0c222",
+            "name": "remove_req",
+            "url": "/api/req/remove/test1",
+            "method": "POST",
+            "sortNum": 210000,
+            "created": "2023-05-16T09:10:32.193Z",
+            "modified": "2023-05-16T09:11:02.378Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "1879c7f1-c2a4-4c41-a46d-7f3212b32ce8",
+            "colId": "470755c1-8a96-41ba-9b4a-0b8dd591ed9f",
+            "containerId": "0d6adbfd-5bb4-427a-989c-82ef37c0c222",
+            "name": "handle_req",
+            "url": "/api/req/handle?id=test1&agree=1",
+            "method": "POST",
+            "sortNum": 220000,
+            "created": "2023-05-16T09:11:21.408Z",
+            "modified": "2023-05-16T09:12:30.519Z",
+            "headers": [
+                {
+                    "name": "auth",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dHQiLCJpYXQiOjE2ODQyMjgzNDIsImV4cCI6MTY4NDgzMzE0Mn0.6tloDeZBRMUptoD9mOAW93pSZ_fI73-sHEuKCF5I5Ns "
+                }
+            ],
+            "params": [
+                {
+                    "name": "id",
+                    "value": "test1",
+                    "isPath": false
+                },
+                {
+                    "name": "agree",
+                    "value": "1",
+                    "isPath": false
+                }
+            ],
+            "tests": []
+        }
+    ],
+    "settings": {
+        "headers": [
+            {
+                "name": "auth",
+                "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJha3luYXpoQHFxLmNvbSIsImlhdCI6MTY4NDIyNTU3MywiZXhwIjoxNjg0ODMwMzczfQ.97eOEplE4-FyP-Irb8MUg1_omwiIyWcGhL8xhGg3MCA "
+            }
+        ],
+        "options": {
+            "baseUrl": "localhost:8080"
+        }
+    }
+}

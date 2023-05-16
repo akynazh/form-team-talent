@@ -239,6 +239,7 @@ public class ActivityController {
                 .build();
         SearchHits<Activity> searchHits = elasticsearchOperations.search(query, Activity.class);
         ArrayList<Activity> activities = new ArrayList<>(searchHits.getSearchHits().stream().map(hit -> hit.getContent()).collect(Collectors.toList()));
-        return RestfulResponse.success(activities);
+        List<Activity> pubActivities = activities.stream().filter(a -> a.getAIsPublic() == 1).collect(Collectors.toList());
+        return RestfulResponse.success(pubActivities);
     }
 }

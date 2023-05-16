@@ -1,0 +1,535 @@
+{
+    "info": {
+        "name": "form_team_talent",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "description": ""
+    },
+    "item": [
+        {
+            "name": "user",
+            "item": [
+                {
+                    "name": "auth_id_pwd",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "/api/user/auth",
+                            "path": [
+                                "user",
+                                "auth"
+                            ],
+                            "host": [
+                                "api"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"uId\": \"testtt\",\n  \"uPwd\": \"658766\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "auth_token",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "/api/user/auth?check=1",
+                            "query": [
+                                {
+                                    "key": "check",
+                                    "value": "1"
+                                }
+                            ],
+                            "variable": [],
+                            "path": [
+                                "user",
+                                "auth"
+                            ],
+                            "host": [
+                                "api"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{}"
+                        }
+                    }
+                },
+                {
+                    "name": "user_update_info",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "/api/user/update",
+                            "path": [
+                                "user",
+                                "update"
+                            ],
+                            "host": [
+                                "api"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n    \"uName\": \"peter\",\n    \"uStuNum\": \"20009123safkjsad\",\n    \"uSchool\": \"xdu\",\n    \"uSex\": \"maie\",\n    \"uMajor\": \"cs\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "get_user_info",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "/api/user/get/info",
+                            "path": [
+                                "user",
+                                "get",
+                                "info"
+                            ],
+                            "host": [
+                                "api"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "leave_team",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "/api/user/leave/team?tId=testttt",
+                            "query": [
+                                {
+                                    "key": "tId",
+                                    "value": "testttt"
+                                }
+                            ],
+                            "variable": [],
+                            "path": [
+                                "user",
+                                "leave",
+                                "team"
+                            ],
+                            "host": [
+                                "api"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "activity",
+            "item": [
+                {
+                    "name": "add_activity",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "/api/activity/add",
+                            "path": [
+                                "activity",
+                                "add"
+                            ],
+                            "host": [
+                                "api"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"aDesc\": \"test5\",\n  \"aEndDate\": \"1782539630000\",\n  \"aHolderId\": \"akynazh@qq.com\",\n  \"aId\": \"\",\n  \"aIsPublic\": 1,\n  \"aName\": \"烤全猪活动1223\",\n  \"aQrcodePath\": \"\",\n  \"status\": 1\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "remove_activity",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "/api/activity/remove?aId=58b2061ed8b14b53beca3e45b230fb54",
+                            "query": [
+                                {
+                                    "key": "aId",
+                                    "value": "58b2061ed8b14b53beca3e45b230fb54"
+                                }
+                            ],
+                            "variable": [],
+                            "path": [
+                                "activity",
+                                "remove"
+                            ],
+                            "host": [
+                                "api"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "search_activity",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "/api/activity/search/猪",
+                            "path": [
+                                "activity",
+                                "search",
+                                "猪"
+                            ],
+                            "host": [
+                                "api"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "update_activity",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "/api/activity/update",
+                            "path": [
+                                "activity",
+                                "update"
+                            ],
+                            "host": [
+                                "api"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\n  \"aId\": \"442f78bf674840458b22452a50ab9aa0\",\n  \"aName\": \"updateTest\"\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "get_activity_by_id",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "/api/activity/get/id?aId=76a262aa879148adba156621d70ce0b4",
+                            "query": [
+                                {
+                                    "key": "aId",
+                                    "value": "76a262aa879148adba156621d70ce0b4"
+                                }
+                            ],
+                            "variable": [],
+                            "path": [
+                                "activity",
+                                "get",
+                                "id"
+                            ],
+                            "host": [
+                                "api"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "get_my_activities",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "/api/activity/get/my",
+                            "path": [
+                                "activity",
+                                "get",
+                                "my"
+                            ],
+                            "host": [
+                                "api"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "get_public_activities",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "/api/activity/get/pub",
+                            "path": [
+                                "activity",
+                                "get",
+                                "pub"
+                            ],
+                            "host": [
+                                "api"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "team",
+            "item": [
+                {
+                    "name": "add_team",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "/api/team/add",
+                            "path": [
+                                "team",
+                                "add"
+                            ],
+                            "host": [
+                                "api"
+                            ]
+                        },
+                        "header": [
+                            {
+                                "key": "auth",
+                                "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dHQiLCJpYXQiOjE2ODQyMjcyNTYsImV4cCI6MTY4NDgzMjA1Nn0.IPJAR6DmbXyripRMry-Wxct_mTU-GAIXg-i0HTryw6s "
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\r\n  \"aId\": \"d29e6d27c9474c9d88eb48918a565bf7\",\r\n  \"tCount\": 3,\r\n  \"tDesc\": \"烤猪小组886\",\r\n  \"tId\": \"\",\r\n  \"tLeaderId\": \"\",\r\n  \"tName\": \"烤猪小组886\",\r\n  \"tTotal\": 0\r\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "get_team_by_id",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "/api/team/get/id?tId=c10b3d4f49a54fdfa23ba06c33a55b84",
+                            "query": [
+                                {
+                                    "key": "tId",
+                                    "value": "c10b3d4f49a54fdfa23ba06c33a55b84"
+                                }
+                            ],
+                            "variable": [],
+                            "path": [
+                                "team",
+                                "get",
+                                "id"
+                            ],
+                            "host": [
+                                "api"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "get_team_by_aId",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "/api/team/get/byAId?aId=d29e6d27c9474c9d88eb48918a565bf7",
+                            "query": [
+                                {
+                                    "key": "aId",
+                                    "value": "d29e6d27c9474c9d88eb48918a565bf7"
+                                }
+                            ],
+                            "variable": [],
+                            "path": [
+                                "team",
+                                "get",
+                                "byAId"
+                            ],
+                            "host": [
+                                "api"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "get_my_teams",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "/api/team/get/my",
+                            "path": [
+                                "team",
+                                "get",
+                                "my"
+                            ],
+                            "host": [
+                                "api"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "remove_team",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "/api/team/remove?tId=a2e91670779e4801b95d1561dcd606b4",
+                            "query": [
+                                {
+                                    "key": "tId",
+                                    "value": "a2e91670779e4801b95d1561dcd606b4"
+                                }
+                            ],
+                            "variable": [],
+                            "path": [
+                                "team",
+                                "remove"
+                            ],
+                            "host": [
+                                "api"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "update_team",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "/api/team/update",
+                            "path": [
+                                "team",
+                                "update"
+                            ],
+                            "host": [
+                                "api"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\r\n  \"aId\": \"d29e6d27c9474c9d88eb48918a565bf7\",\r\n  \"tId\": \"c10b3d4f49a54fdfa23ba06c33a55b84\",\r\n  \"tDesc\": \"烤猪烤猪\",\r\n  \"tName\": \"烤猪小组369\"\r\n}"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "req",
+            "item": [
+                {
+                    "name": "get_my_req",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "/api/req/get",
+                            "path": [
+                                "req",
+                                "get"
+                            ],
+                            "host": [
+                                "api"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "send_req",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "/api/req/send",
+                            "path": [
+                                "req",
+                                "send"
+                            ],
+                            "host": [
+                                "api"
+                            ]
+                        },
+                        "body": {
+                            "mode": "raw",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            },
+                            "raw": "{\r\n  \"aId\": \"d29e6d27c9474c9d88eb48918a565bf7\",\r\n  \"content\": \"请求加入该小组, 球球了~\",\r\n  \"id\": \"test1\",\r\n  \"tId\": \"2c4814e653f144d5ada0236a65b41de0\"\r\n}"
+                        }
+                    }
+                },
+                {
+                    "name": "remove_req",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "/api/req/remove/test1",
+                            "path": [
+                                "req",
+                                "remove",
+                                "test1"
+                            ],
+                            "host": [
+                                "api"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "handle_req",
+                    "request": {
+                        "method": "POST",
+                        "url": {
+                            "raw": "/api/req/handle?id=test1&agree=1",
+                            "query": [
+                                {
+                                    "key": "id",
+                                    "value": "test1"
+                                },
+                                {
+                                    "key": "agree",
+                                    "value": "1"
+                                }
+                            ],
+                            "variable": [],
+                            "path": [
+                                "req",
+                                "handle"
+                            ],
+                            "host": [
+                                "api"
+                            ]
+                        },
+                        "header": [
+                            {
+                                "key": "auth",
+                                "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dHQiLCJpYXQiOjE2ODQyMjgzNDIsImV4cCI6MTY4NDgzMzE0Mn0.6tloDeZBRMUptoD9mOAW93pSZ_fI73-sHEuKCF5I5Ns "
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}
