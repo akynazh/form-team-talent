@@ -226,8 +226,8 @@ url: jdbc:mysql://数据库内网地址/form_team_talent?serverTimezone=UTC&useU
 
 ### 测试步骤
 
-- 可通过 thunder client 进行测试，将 `api_test_ftt_thunderclient.json` 导入即可
-- 可通过 postman 进行测试，将 `api_test_ftt_postman.json` 导入即可
+- 可通过 thunder client 进行测试，将 `test/api_test_ftt_thunderclient.json` 导入即可
+- 可通过 postman 进行测试，将 `test/api_test_ftt_postman.json` 导入即可
 
 <h3 id="show">小程序界面展示</h3>
 
