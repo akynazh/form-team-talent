@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>活动详情</title>
+    <link rel="stylesheet" href="./styles/actdetail.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./scripts/actdetail.js"></script>
+</head>
+<body>
+	
+    <div class="inforborder">
+        <header>
+            <span class="ttitle" id="acttitle"></span>
+            <a href=""><button class="button" onclick="window.history.back(); return false;">返回</button></a>
+        </header>
+        <div class="actinfoborder">
+            <div class="actcontent">活动详情：    <div id="actintro"></div></div>
+            <div class="timeandxingzhi">
+                <div class="text">活动性质： <div id="actpro"></div></div>
+                <div class="text">截止时间： <div id="acttime"></div></div>
+            </div>
+        </div>
+        <a href="#"><button class="upda" id="updaaact" onclick="upaaact()">修改活动信息</button></a>
+        <button id="deletact" class="upda" onclick="showPopup()">删除活动</button>
+        <div id="overlay">
+          <div class="popup">
+            <p class="popup_title">提示</p>
+            <p class="popup_content">确认删除活动</p>
+            <div class="popup_btn">
+              <button class="cancelBtn" onclick="hidePopup()">取消</button>
+              <button class="confirmBtn" onclick="deleteact()">确认</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="titlehoder">
+            <div class="titletext">小组列表</div>
+            <a href="creategroup.html"><button class="addgroup">添加小组</button></a>
+        </div>
+        <div class="grouplisthoder" id="gglist">
+            
+        </div>
+
+
+     
+    </div>
+    
+</body>
+
+
+
+
+
+
+</html>

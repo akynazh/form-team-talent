@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>修改个人信息</title>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="./styles/changeperson.css">
+    
+</head>
+<body>
+	
+    <div class="inforborder">
+        <header>
+            <span class="title">请在下方完善信息</span>
+        </header>
+       
+        <div class="personinfo">
+            <span class="font">用户ID：</span>
+            <span class="font" id="userid"></span>
+        </div>
+        <div class="personinfo">
+            <span class="font">姓名：</span>
+            <textarea class="inp" id="usernamechange">请输入姓名</textarea>
+        </div>
+        <div class="personinfo">
+            <span class="font">性别：</span>
+            <textarea class="inp" id="usersexchange">请输入性别（男/女/其他）</textarea>
+        </div>
+        <div class="personinfo">
+            <span class="font">学号：</span>
+            <textarea class="inp" id="userstunumchange">请输入学号</textarea>
+        </div>
+        <div class="personinfo">
+            <span class="font">学校：</span>
+            <textarea class="inp" id="userschoolchange">请输入学校</textarea>
+        </div>
+        <div class="personinfo">
+            <span class="font">专业：</span>
+            <textarea class="inp" id="usermajorchange">请输入专业</textarea>
+        </div>
+        <a >
+            <button class="button" onclick="submit()">提交</button>
+        </a>
+    </div>
+    <script src="./scripts/changeperson.js"></script>
+</body>
+</html>

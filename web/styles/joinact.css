@@ -1,0 +1,228 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	font-size: 62.5%;
+	background-color: #fff4e3;
+}
+header {
+	width: 100%;
+	height: 150px;
+	margin: 0 auto;
+	padding: 0 0 0 0;
+	position: relative;
+	background: url("../images/wrapback.png") no-repeat;
+	overflow: hidden; 
+}
+
+.top_wrap {
+	width: 100%;
+	height: 50px;
+}
+.logo_wrap {
+    width: 200px;
+    float: left;
+    margin: 35px 0 0 0; }
+.logo{
+	margin-left: 200px;
+	height: 100px;
+	width: 100px;
+}
+.guide_wrap{
+	margin-left: 50%;
+	height: 100px;
+	width: 500px;
+	background-color:aqua;
+}
+
+nav {
+	width: 100%;
+	overflow: hidden; }
+  
+	.top_wrap {
+	  width: 1002px;
+	  margin: 0 auto; }
+  
+	.logo_wrap {
+	  width: 200px;
+	  float: left;
+	  margin: 35px 0 0 0; }
+ a{
+		text-decoration:none;
+	}
+
+ul.menu_li {
+	list-style-type:none;
+	float: right;
+	margin-bottom: 0; }
+	ul.menu_li li.active, ul.menu_li li.active a {
+	  background: #30e3ca;
+	  color: #fff; }
+	ul.menu_li li:before {
+	  content: "";
+	  position: absolute;
+	  z-index: -1;
+	  top: 0;
+	  left: 0;
+	  right: 0;
+	  bottom: 0;
+	  background: #30e3ca;
+	  transform: scaleY(0);
+	  -ms-transform: scaleY(0);
+	  -moz-transform: scaleY(0);
+	  -webkit-transform: scaleY(0);
+	  -o-transform: scaleY(0);
+	  -webkit-transform-origin: 50% 0;
+	  transform-origin: 50% 0;
+	  transition: transform 0.4s ease-out;
+	  -moz-transition: transform 0.4s ease-out;
+	  -webkit-transition: transform 0.4s ease-out;
+	  -o-transition: transform 0.4s ease-out; }
+	ul.menu_li li:hover:before, ul.menu_li .li:focus:before, ul.menu_li li:active:before {
+	  transform: scaleY(1);
+	  -ms-transform: scaleY(1);
+	  -moz-transform: scaleY(1);
+	  -webkit-transform: scaleY(1);
+	  -o-transform: scaleY(1);
+	  color: #fff; }
+	ul.menu_li li:hover a, ul.menu_li li:focus a, ul.menu_li li:active a {
+	  color: #fff; }
+	ul.menu_li li {
+	  width: 120px;
+	  height: 140px;
+	  margin: 0 2px;
+	  float: left;
+	  text-align: center;
+	  transform: translateZ(0);
+	  -ms-transform: translateZ(0);
+	  -moz-transform: translateZ(0);
+	  -webkit-transform: translateZ(0);
+	  -o-transform: translateZ(0);
+	  position: relative; }
+	  ul.menu_li li a {
+		color: #4D3A12;
+		font-size: 1.8rem;
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		-ms-transform: translate(-50%, -50%);
+		-moz-transform: translate(-50%, -50%);
+		-webkit-transform: translate(-50%, -50%);
+		-o-transform: translate(-50%, -50%);
+		white-space: nowrap; }
+		ul.menu_li li a span {
+		  display: block;
+		  font-size: 1.4rem;
+		  line-height: 2.6rem; }
+  
+
+
+
+.sousuohoder{
+	margin-left: 300px;
+	margin-top: 50px;
+}
+.container {
+  
+
+    width: 1000px;
+
+
+}
+
+.parent {
+    position: relative;
+
+
+}
+
+.search {
+    width: 800px;
+
+    height: 60px;
+
+	
+
+    border-radius: 18px;
+
+    outline: none;
+
+    border: 3px solid #000;
+
+    padding-left: 20px;
+
+    position: absolute;
+
+}
+.search{
+	font-size: 30px;
+}
+.reshoder{
+	margin-left: 300px;
+	margin-top: 120px;
+	width: 800px;
+	border: 3px solid #000;
+	border-radius: 10px;
+	padding-left: 20px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	display: none;
+}
+.reslist1{
+	font-size: 25px;
+	color: rgb(7, 7, 19);
+}
+.reslist{
+	font-size: 25px;
+	color: rgb(82, 82, 188);
+}
+.pubhoder{
+	margin-left: 300px;
+	margin-top: 50px;
+	
+}
+.pubtext{
+	margin-left: 10px;
+	font-size:40px;
+}
+.listhoder{
+	margin-top: 20px;
+	width: 800px;
+	border: 3px solid #000;
+	border-radius: 10px;
+	padding-left: 20px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+.publist{
+	font-size: 30px;
+	margin-bottom: 20px;
+	color: rgb(82, 82, 188);
+}
+
+.button1{
+	float:left;
+	width:96px;
+	height:40px;
+	color:white;
+	background-color:red;/*将按钮背景设置为红色，字体设置为白*/
+	border:none;
+	outline:none;/*取消边框和外边框将按钮边框去掉*/
+	background-color: #000;
+}
+.input1{
+	float:left;
+	width:400px;/*宽400*/
+	height:38px;/*高38（因为文本框内外边框要占用1像素所以总体高度减2，其他盒子同理）*/
+	outline:none;
+	border:none;/*取消文本框内外边框*/
+}
+.box1{
+	width:500px;
+	height:40px;
+	border:2px solid red;
+	margin:auto;
+}

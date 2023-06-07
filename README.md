@@ -6,6 +6,8 @@
 
 [点击查看小程序展示](#show)
 
+PS: 现已支持浏览器端访问，代码位于 web 目录下。
+
 ### 团队分工情况
 
 - jzh：40%，后端代码和部分前端代码
@@ -46,10 +48,12 @@
 
 主要由 JavaScript 实现。
 
-只有微信小程序端，通过微信官方API和 **Vant Weapp** 框架搭建UI。
+微信小程序端，通过微信官方API和 **Vant Weapp** 框架搭建UI。
 
 - WeChat API
 - Vant Weapp
+
+浏览器端，通过 npm，axios 等进行构建。
 
 #### 三、关键技术点和问题：
 
@@ -162,17 +166,14 @@
 
 `mini-program-cloud` 也为小程序开发目录，若后端使用了微信云托管，需通过该文件夹开发。
 
+`web` 为浏览器端界面开发目录。
+
 ```
-cd mini-program # or cd mini-program-cloud
-npm init
+cd mini-program # or cd mini-program-cloud or cd web
 npm install
 ```
 
-然后，使用微信开发者工具进行npm构建即可。
-
-接着，编辑 `app.js`，如下：
-
-如果在 `mini-program` 开发，将“xxxxxx”替换为后端服务地址即可。
+接着，如果在 `mini-program` 开发，编辑 `app.js`，将“xxxxxx”替换为后端服务地址即可。
 
 ```js
 App({
@@ -182,7 +183,7 @@ App({
 })
 ```
 
-如果在 `mini-program-cloud` 开发，则需编辑如下内容（先将 app.pub.js 重命名为 app.js）：
+如果在 `mini-program-cloud` 开发，编辑 `app.js` 如下（先将 app.pub.js 重命名为 app.js）：
 
 ```js
 that.cloud = new wx.cloud.Cloud({
@@ -190,8 +191,6 @@ that.cloud = new wx.cloud.Cloud({
   resourceEnv: 'xxxxxxxxxxxxxxxxxx', // 微信云托管的环境ID
 })
 ```
-
-之后，即可开始开发。
 
 注：后端 api 地址为 `localhost:端口号/swagger-ui/index.html`
 
@@ -230,7 +229,7 @@ url: jdbc:mysql://数据库内网地址/form_team_talent?serverTimezone=UTC&useU
 - 可通过 thunder client 进行测试，将 `api_test_ftt_thunderclient.json` 导入即可
 - 可通过 postman 进行测试，将 `api_test_ftt_postman.json` 导入即可
 
-<h3 id="show">小程序展示</h3>
+<h3 id="show">小程序界面展示</h3>
 
 **主页**
 
@@ -270,8 +269,6 @@ url: jdbc:mysql://数据库内网地址/form_team_talent?serverTimezone=UTC&useU
 
 Github: [akynazh](https://github.com/akynazh)
 
-QQ: 1945561232
-
 Wechat: akynazh
 
-Mail: 1945561232@qq.com
+Mail: akynazh@qq.com

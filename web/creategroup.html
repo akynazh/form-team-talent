@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>创建小组</title>
+    <link rel="stylesheet" href="./styles/creategroup.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./scripts/creategroup.js"></script>
+</head>
+
+
+<body>
+    <header>
+        <div class="title">创建小组</div>
+    </header>
+<div class="allhoder">
+    
+  
+<div class="content">
+    <div class="qustext">小组名称：</div>
+    <textarea class="qus" id="teamtitle">请输入小组名称</textarea>
+</div>
+
+<div class="content">
+    <div class="qustext">小组描述：</div>
+    <textarea class="int" id="teamintro">请描述小组</textarea>
+</div>
+<div class="content">
+    <div class="qustext">小组人数：</div>
+    <select style="width: 65px; font-size:20px" id="teampnum">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+        <option>6</option>
+        <option>7</option>
+        <option>8</option>
+        <option>9</option>
+        <option>10</option>
+    </select>
+</div>
+<a>
+    <button class="button" onclick="submit()">提交</button>
+</a>
+<a >
+    <button class="button" onclick="javascript:history.back()">返回</button>
+</a>
+</div>
+</body>
+
+</html>

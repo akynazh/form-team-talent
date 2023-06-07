@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>更新活动信息</title>
+    <link rel="stylesheet" href="./styles/updaact.css">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="./scripts/updaact.js"></script>
+</head>
+
+
+<body>
+    <header>
+        <div class="title">更新活动</div>
+    </header>
+<div class="allhoder">
+    
+  
+<div class="content">
+    <div class="qustext" >活动题目：</div>
+    <textarea class="qus" id="acttitle"></textarea>
+</div>
+<div class="content">
+    <div class="qustext">活动简介：</div>
+    <textarea class="int" id="actintro"></textarea>
+</div>
+<div class="content">
+    <div class="qustext">截止时间：</div>
+    <input class="timeselct" id="acttime" type="datetime-local" />
+</div>
+<div class="content">
+    <div class="qustext">是否公开：</div>
+    <select style="width: 65px;font-size:20px" id="actpro">
+        <option>公开</option>
+        <option>私有</option>
+    </select>
+</div>
+<a >
+    <button class="button" onclick="submit()">提交</button>
+</a>
+<a >
+    <button class="button"onclick="window.history.back(); return false;"> 返回</button>
+</a>
+</div>
+</body>
+
+</html>

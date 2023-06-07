@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <meta charset="UTF-8">
+	<title>登录</title>
+    <link rel="stylesheet" href="./styles/login.css">
+    <script src="./scripts/login.js"></script>
+</head>
+<body>
+	<header>
+		<nav>
+            <div class="top_wrap">
+                <div class="logo_wrap">
+                    <img src="./images/teamworklogo.png" class="logo">
+                </div>
+                <ul class="menu_li">
+                    <li><a href="index.html">主页<br><span>HOME</span></a></li>
+                    <li><a href="joinact.html">加入活动<br><span>JOIN</span></a></li>
+                    <li><a href="createact.html">创建活动<br><span>CREATE</span></a></li>
+                    <li  class="active"><a href="person.html">个人信息<br><span>PERSON</span></a></li>
+                </ul>
+                <div class="menu_catalog" id="show_list_btn">
+                    <i></i>
+                </div>
+            </div>    
+        </nav>
+	</header>
+    
+	<div class="login_box">
+		<h1 class="title">欢迎登录</h1>
+		<input class="input_box" type="text" id="id_bu"  placeholder="请输入id(5位以上字符或数字)">
+		<input class="input_box" type="password" id="pwd_bu" placeholder="请输入密码(5位以上字符或数字)">
+		<input class="button_box" type="button" value="登录" onclick="login()">
+	</div>
+
+
+</body>
+</html>
