@@ -6,8 +6,6 @@
 
 [点击查看小程序展示](#show)
 
-PS: 现已支持浏览器端访问，代码位于 web 目录下。
-
 ### 团队分工情况
 
 - jzh：40%，后端代码和部分前端代码
@@ -166,10 +164,8 @@ PS: 现已支持浏览器端访问，代码位于 web 目录下。
 
 `mini-program-cloud` 也为小程序开发目录，若后端使用了微信云托管，需通过该文件夹开发。
 
-`web` 为浏览器端界面开发目录。
-
 ```
-cd mini-program # or cd mini-program-cloud or cd web
+cd mini-program # or cd mini-program-cloud
 npm install
 ```
 
@@ -268,7 +264,5 @@ url: jdbc:mysql://数据库内网地址/form_team_talent?serverTimezone=UTC&useU
 ### 联系与交流
 
 Github: [akynazh](https://github.com/akynazh)
-
-Wechat: akynazh
 
 Mail: akynazh@qq.com
