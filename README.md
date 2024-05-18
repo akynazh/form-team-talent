@@ -265,4 +265,4 @@ url: jdbc:mysql://数据库内网地址/form_team_talent?serverTimezone=UTC&useU
 
 Github: [akynazh](https://github.com/akynazh)
 
-Mail: akynazh@qq.com
+Mail: akynazh@gmail.com
