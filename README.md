@@ -266,3 +266,10 @@ url: jdbc:mysql://数据库内网地址/form_team_talent?serverTimezone=UTC&useU
 Github: [akynazh](https://github.com/akynazh)
 
 Mail: akynazh@gmail.com
+
+### 致谢
+
+<a href="https://www.jetbrains.com/">
+<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" alt="JetBrains Logo (Main) logo." style="width: 200px;"></a>
+
+感谢 JetBrains 对该项目的大力支持！
